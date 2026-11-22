@@ -14,10 +14,12 @@ export type Item = {
   prompt: Msg;
   /** The strategy, said in words: shown in guided practice and after a mistake. */
   hint: Msg;
-  /** What the voice reads (the prompt with its numbers). */
+  /** Picture always shown with the exercise. */
   visual?: Visual;
+  /** Picture of the strategy with these same numbers: shown in guided practice and after a mistake. */
+  aid?: Visual;
 } & (
-  | { kind: 'place'; min: number; max: number; marks: number[]; labels: number[]; target: number; tol: number }
+  | { kind: 'place'; min: number; max: number; marks: number[]; labels: number[]; target: number; tol: number; aidMarks?: number[]; aidLabels?: number[] }
   | { kind: 'choice'; options: number[]; answer: number }
   | { kind: 'number'; answer: number }
 );

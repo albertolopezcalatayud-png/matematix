@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { STATIONS, isRight, stationById } from '@/data/stations';
+import { STATIONS, isRight, itemKey, stationById } from '@/data/stations';
 import { rng } from '@/engine/rng';
+import { GUIDED, INDEPENDENT, pickItems } from '@/engine/session';
 import type { Item } from '@/engine/types';
 import { useT } from '@/i18n';
 import { statusOf, useApp } from '@/stores/app';
@@ -10,7 +11,6 @@ import { PlaceOnLine, VisualView } from '@/components/Visuals';
 import { describe } from '@/components/describe';
 import { TopBar, RestReminder } from '@/components/Layout';
 
-const GUIDED = 2, INDEPENDENT = 5;
 
 /** One station: worked example, then 2 guided, then 5 on your own. The order never changes, so the child knows what comes next. */
 export default function Lesson() {
@@ -25,14 +25,9 @@ export default function Lesson() {
   const seed = useMemo(() => (Date.now() ^ (run * 7919)) >>> 0, [run, station.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const model = useMemo(() => station.model(rng(seed)), [station, seed]);
-  const items = useMemo(() => {
-    const out: { item: Item; support: Item; guided: boolean }[] = [];
-    for (let i = 0; i < GUIDED + INDEPENDENT; i++) {
-      const s = (seed + i * 1013) >>> 0, guided = i < GUIDED;
-      out.push({ item: station.make(rng(s), guided), support: station.make(rng(s), true), guided });
-    }
-    return out;
-  }, [station, seed]);
+  const markSeen = useApp((s) => s.markSeen);
+  const items = useMemo(() => pickItems(station, seed, new Set(useApp.getState().seen[station.id] ?? [])), [station, seed]);
+  useEffect(() => { markSeen(station.id, items.map((x) => itemKey(x.item))); }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [stage, setStage] = useState<'model' | 'items' | 'end'>(progress && progress.sessions > 0 ? 'items' : 'model');
   const [step, setStep] = useState(0);
@@ -109,10 +104,10 @@ export default function Lesson() {
   );
 }
 
-function Exercise({ entry, onDone }: { entry: { item: Item; support: Item; guided: boolean }; onDone: (firstTry: boolean) => void }) {
+function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; onDone: (firstTry: boolean) => void }) {
   const { t, m, lang } = useT();
   const voice = useApp((s) => s.voice);
-  const { item, support, guided } = entry;
+  const { item, guided } = entry;
   const [value, setValue] = useState<number | null>(null);
   const [typed, setTyped] = useState('');
   const [tries, setTries] = useState(0);
@@ -132,7 +127,7 @@ function Exercise({ entry, onDone }: { entry: { item: Item; support: Item; guide
   };
   const locked = state === 'right' || state === 'shown';
   const showSupport = guided || state === 'wrong' || state === 'shown';
-  const visual = showSupport && support.kind === item.kind && support.visual && answerOf() === (support.kind === 'place' ? support.target : support.answer) ? support.visual : item.visual;
+  const visual = showSupport ? item.aid ?? item.visual : item.visual;
   const good = state === 'right' ? true : state === 'wrong' || state === 'shown' ? false : null;
 
   return (
@@ -154,7 +149,7 @@ function Exercise({ entry, onDone }: { entry: { item: Item; support: Item; guide
         <>
           <p className="text-sm text-[var(--color-muted)]">{t('tap_line')}</p>
           <PlaceOnLine
-            v={{ type: 'line', min: item.min, max: item.max, marks: showSupport && support.kind === 'place' ? support.marks : item.marks, labels: showSupport && support.kind === 'place' ? support.labels : item.labels }}
+            v={{ type: 'line', min: item.min, max: item.max, marks: showSupport ? item.aidMarks ?? item.marks : item.marks, labels: showSupport ? item.aidLabels ?? item.labels : item.labels }}
             value={state === 'shown' ? item.target : value} onChange={(n) => { setValue(n); if (state === 'wrong') setState('ask'); }} locked={locked} good={good} label={prompt}
           />
         </>

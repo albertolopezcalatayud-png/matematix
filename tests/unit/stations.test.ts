@@ -35,7 +35,10 @@ describe.each(STATIONS.map((s) => [s.id, s] as const))('station %s', (_id, st) =
     for (let seed = 0; seed < N; seed++) {
       for (const guided of [true, false]) {
         const it = st.make(rng(seed), guided);
-        checkMsg(it.prompt); checkMsg(it.hint); checkVisual(it.visual);
+        checkMsg(it.prompt); checkMsg(it.hint); checkVisual(it.visual); checkVisual(it.aid);
+        // the strategy pictures never land on the answer of a typed exercise (the child makes the last step)
+        if (it.kind === 'number' && it.prompt.key !== 'qHowManyJumps') for (const v of [it.visual, it.aid]) if (v?.type === 'line' && v.jumps?.length) expect(v.jumps.at(-1)![1], `${st.id} ${JSON.stringify(it.prompt)}`).not.toBe(it.answer);
+        if (it.kind === 'place' && it.aidMarks) { expect(it.aidMarks.length).toBeGreaterThan(it.marks.length); }
         const a = answerOf(it);
         expect(Number.isInteger(a)).toBe(true);
         expect(a).toBeGreaterThanOrEqual(0);
@@ -52,9 +55,6 @@ describe.each(STATIONS.map((s) => [s.id, s] as const))('station %s', (_id, st) =
           expect(it.labels.includes(it.target) && it.marks.length <= 3).toBe(false);
         }
       }
-      // guided and independent versions use the same numbers (the support picture matches the exercise)
-      const g = st.make(rng(seed), true), i = st.make(rng(seed), false);
-      if (st.id !== 'A6') expect(answerOf(g)).toBe(answerOf(i));
     }
   });
 });
@@ -74,4 +74,36 @@ test('the voice reads symbols as words', async () => {
   expect(speakable('es', '8 + 5 = ?')).toBe('8 más 5 es igual a cuánto');
   expect(speakable('ca', '7 − 1 = ?')).toBe('7 menys 1 és igual a quant');
   expect(speakable('en', '3 × 5 = ?')).toBe('3 times 5 equals what');
+});
+
+import { itemKey } from '../../src/data/stations';
+test('each station has many different exercises (so they are not repeated)', () => {
+  const counts: Record<string, number> = {};
+  for (const st of STATIONS) {
+    const keys = new Set<string>();
+    for (let seed = 0; seed < 200000; seed++) keys.add(itemKey(st.make(rng(seed), false)));
+    counts[st.id] = keys.size;
+  }
+  console.log('VARIANTS ' + JSON.stringify(counts) + ' TOTAL ' + Object.values(counts).reduce((a, b) => a + b, 0));
+  for (const [id, n] of Object.entries(counts)) expect(n, id).toBeGreaterThanOrEqual(100);
+});
+
+import { pickItems } from '../../src/engine/session';
+import { SEEN_MAX } from '../../src/stores/app';
+test('a child practising every day does not meet the same exercise again until the station runs out of new ones', () => {
+  const report: string[] = [];
+  for (const st of STATIONS) {
+    let seen: string[] = [];
+    let firstRepeatSession = 0;
+    for (let session = 1; session <= 400 && !firstRepeatSession; session++) {
+      const items = pickItems(st, session * 99991, new Set(seen));
+      const keys = items.filter((x) => !x.guided).map((x) => itemKey(x.item));
+      if (keys.some((k) => seen.includes(k))) firstRepeatSession = session;
+      seen = [...seen, ...items.map((x) => itemKey(x.item))].slice(-SEEN_MAX);
+    }
+    report.push(`${st.id}:${firstRepeatSession || '>400'}`);
+    // at least 15 sessions (3 weeks of daily practice) with no repeated exercise in any station
+    expect(firstRepeatSession === 0 || firstRepeatSession > 15, `${st.id} repeats at session ${firstRepeatSession}`).toBe(true);
+  }
+  console.log('FIRST_REPEAT ' + report.join(' '));
 });

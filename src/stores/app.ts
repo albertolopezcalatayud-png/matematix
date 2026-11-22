@@ -21,6 +21,9 @@ interface AppState {
   progress: Record<string, StationProgress>;
   /** Minutes of practice per day (YYYY-MM-DD). Only numbers, nothing about the child. */
   minutes: Record<string, number>;
+  /** Fingerprints (numbers only) of the exercises already shown in each station, so they are not repeated. */
+  seen: Record<string, string[]>;
+  markSeen: (station: string, keys: string[]) => void;
   set: (p: Partial<AppState>) => void;
   record: (station: string, rightFirst: number, total: number) => void;
   addMinutes: (m: number) => void;
@@ -29,11 +32,13 @@ interface AppState {
 
 export const today = () => new Date().toLocaleDateString('sv-SE');
 const MASTER_RIGHT = 4;
+/** How many past exercises per station are remembered (about 120 sessions). */
+export const SEEN_MAX = 600;
 
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
-      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, suggested: null, last: null, progress: {}, minutes: {},
+      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
       record: (station, rightFirst, total) => set((s) => {
         const cur = s.progress[station] ?? { goodDays: [], best: 0, sessions: 0 };
@@ -42,7 +47,11 @@ export const useApp = create<AppState>()(
         return { last: station, progress: { ...s.progress, [station]: { goodDays: good, best: Math.max(cur.best, rightFirst), sessions: cur.sessions + 1 } } };
       }),
       addMinutes: (m) => set((s) => ({ minutes: { ...s.minutes, [today()]: (s.minutes[today()] ?? 0) + m } })),
-      reset: () => set({ suggested: null, last: null, progress: {}, minutes: {} }),
+      markSeen: (station, keys) => set((s) => {
+        const fresh = new Set(keys);
+        return { seen: { ...s.seen, [station]: [...(s.seen[station] ?? []).filter((k) => !fresh.has(k)), ...keys].slice(-SEEN_MAX) } };
+      }),
+      reset: () => set({ suggested: null, last: null, progress: {}, minutes: {}, seen: {} }),
     }),
     { name: 'matematix', version: 1 },
   ),

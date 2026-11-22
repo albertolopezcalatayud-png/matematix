@@ -106,15 +106,21 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
   p.on('request', (r) => { if (!r.url().startsWith('http://localhost')) requests.push(r.url()); });
   await p.goto(BASE); await p.getByTestId('lang-es').click();
   await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('matematix')); s.state.progress = { A2: { goodDays: ['2026-11-01'], best: 5, sessions: 1 } }; localStorage.setItem('matematix', JSON.stringify(s)); });
-  await p.goto(BASE + '#/estacion/A2'); await p.reload(); await p.waitForTimeout(400);
+  await p.reload(); await p.waitForTimeout(300);
+  await p.goto(BASE + '#/estacion/A2'); await p.waitForTimeout(400);
   for (let k = 0; k < 7; k++) { await answer(p, true); await p.waitForTimeout(100); await p.getByTestId('next').click(); await p.waitForTimeout(100); }
   ok((await p.getByText('Ya la dominas').count()) === 1, 'a second good day masters the station');
+  const seen1 = await p.evaluate(() => JSON.parse(localStorage.getItem('matematix')).state.seen.A2.length);
+  await p.getByRole('button', { name: 'Otra vez' }).click(); await p.waitForTimeout(400);
+  const seen2 = await p.evaluate(() => JSON.parse(localStorage.getItem('matematix')).state.seen.A2);
+  ok(seen1 === 7 && seen2.length === 14 && new Set(seen2).size === 14, `"Again" brings 7 exercises not seen before (${seen1} then ${seen2.length}, ${new Set(seen2).size} different)`);
   const stored = await p.evaluate(() => localStorage.getItem('matematix'));
   ok(!/name|nombre|email/i.test(stored), 'only numbers are stored');
   ok(requests.length === 0, `no request leaves the device (${requests.join(' ')})`);
   // dark mode screenshot
   await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('matematix')); s.state.theme = 'dark'; localStorage.setItem('matematix', JSON.stringify(s)); });
-  await p.goto(BASE + '#/estacion/B2'); await p.reload(); await p.waitForTimeout(500);
+  await p.reload(); await p.waitForTimeout(300);
+  await p.goto(BASE + '#/estacion/B2'); await p.waitForTimeout(500);
   await p.screenshot({ path: `${SHOTS}/es-dark.png` });
 
   ok(errs.length === 0, 'no page errors ' + errs.join(' | '));
