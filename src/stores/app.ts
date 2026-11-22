@@ -16,6 +16,13 @@ interface AppState {
   theme: 'auto' | 'light' | 'dark';
   motion: 'auto' | 'reduce';
   rest: boolean;
+  /** Notes and vibration on the number line. */
+  sound: boolean;
+  /** Real-world numbers found on the line (only the numbers). */
+  found: number[];
+  /** How far the line has opened so far (the furthest number reachable). */
+  reach: number;
+  find: (v: number) => void;
   suggested: string | null;
   last: string | null;
   progress: Record<string, StationProgress>;
@@ -38,8 +45,9 @@ export const SEEN_MAX = 600;
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
-      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
+      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
+      find: (v) => set((s) => (s.found.includes(v) ? s : { found: [...s.found, v] })),
       record: (station, rightFirst, total) => set((s) => {
         const cur = s.progress[station] ?? { goodDays: [], best: 0, sessions: 0 };
         const d = today();
@@ -51,9 +59,9 @@ export const useApp = create<AppState>()(
         const fresh = new Set(keys);
         return { seen: { ...s.seen, [station]: [...(s.seen[station] ?? []).filter((k) => !fresh.has(k)), ...keys].slice(-SEEN_MAX) } };
       }),
-      reset: () => set({ suggested: null, last: null, progress: {}, minutes: {}, seen: {} }),
+      reset: () => set({ suggested: null, last: null, progress: {}, minutes: {}, seen: {}, found: [], reach: 20 }),
     }),
-    { name: 'matematix', version: 1 },
+    { name: 'matematix', version: 1, merge: (persisted, current) => ({ ...current, ...(persisted as object) }) },
   ),
 );
 

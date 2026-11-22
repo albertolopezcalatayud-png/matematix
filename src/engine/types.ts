@@ -21,8 +21,11 @@ export type Item = {
 } & (
   | { kind: 'place'; min: number; max: number; marks: number[]; labels: number[]; target: number; tol: number; aidMarks?: number[]; aidLabels?: number[] }
   | { kind: 'choice'; options: number[]; answer: number }
-  | { kind: 'number'; answer: number }
+  | { kind: 'number'; answer: number; thread?: Thread }
 );
+
+/** Answer by stretching a thread along the line: from `start`, in jumps of `step`, inside [min, max]. */
+export interface Thread { min: number; max: number; start: number; step: number }
 
 export type Phase = 'model' | 'guided' | 'independent';
 

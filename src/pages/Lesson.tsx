@@ -8,6 +8,7 @@ import { useT } from '@/i18n';
 import { statusOf, useApp } from '@/stores/app';
 import { speak, stopSpeech } from '@/services/speech';
 import { PlaceOnLine, VisualView } from '@/components/Visuals';
+import { ThreadInput } from '@/components/ThreadInput';
 import { describe } from '@/components/describe';
 import { TopBar, RestReminder } from '@/components/Layout';
 
@@ -110,6 +111,15 @@ function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; o
   const { item, guided } = entry;
   const [value, setValue] = useState<number | null>(null);
   const [typed, setTyped] = useState('');
+  const th = item.kind === 'number' ? item.thread : undefined;
+  const [pos, setPos] = useState(th?.start ?? 0);
+  // "Make 10 first": if the child rests on a ten for a moment while stretching, the app recognises the strategy
+  const [tenStop, setTenStop] = useState<number | null>(null);
+  useEffect(() => {
+    if (!th || pos === th.start || pos % 10 !== 0 || th.step !== 1) return;
+    const id = window.setTimeout(() => setTenStop(pos), 350);
+    return () => window.clearTimeout(id);
+  }, [pos, th]);
   const [tries, setTries] = useState(0);
   const [state, setState] = useState<'ask' | 'right' | 'wrong' | 'shown'>('ask');
   const okMsg = useMemo(() => `ok_${1 + Math.floor(Math.random() * 3)}`, []);
@@ -118,7 +128,7 @@ function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; o
   useEffect(() => { if (voice) void speak(lang, prompt); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const answerOf = () => (item.kind === 'place' ? item.target : item.answer);
-  const current = item.kind === 'number' ? (typed === '' ? null : Number(typed)) : value;
+  const current = th ? (pos === th.start ? null : pos) : item.kind === 'number' ? (typed === '' ? null : Number(typed)) : value;
   const check = (v = current) => {
     if (v == null) return;
     if (isRight(item, v)) { setState('right'); if (voice) void speak(lang, t(okMsg)); }
@@ -139,11 +149,11 @@ function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; o
 
       {(guided || state !== 'ask') && (
         <p className={`rounded-2xl p-3 text-base ${state === 'ask' ? 'bg-[var(--color-sky-pale)]' : state === 'right' ? 'bg-[var(--color-mint-pale)]' : 'bg-[var(--color-peach-pale)]'}`} data-testid="feedback" aria-live="polite">
-          {state === 'right' ? t(okMsg) : state === 'wrong' ? `${t('try_again')} ${m(item.hint)}` : state === 'shown' ? `${t('answer_was', { n: answerOf() })} ${m(item.hint)}` : `💡 ${m(item.hint)}`}
+          {state === 'right' ? `${t(okMsg)}${tenStop != null && th && item.kind === 'number' && tenStop !== item.answer && Math.min(th.start, item.answer) < tenStop && tenStop < Math.max(th.start, item.answer) ? ' ' + t('stopped_ten', { t: tenStop }) : ''}` : state === 'wrong' ? `${t('try_again')} ${m(item.hint)}` : state === 'shown' ? `${t('answer_was', { n: answerOf() })} ${m(item.hint)}` : `💡 ${m(item.hint)}`}
         </p>
       )}
 
-      {item.kind !== 'place' && visual && <VisualView v={visual} describe={describe(t, visual)} />}
+      {item.kind !== 'place' && !th && visual && <VisualView v={visual} describe={describe(t, visual)} />}
 
       {item.kind === 'place' && (
         <>
@@ -167,7 +177,15 @@ function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; o
         </div>
       )}
 
-      {item.kind === 'number' && (
+      {th && (
+        <>
+          <p className="text-sm text-[var(--color-muted)]">{t('thread_help', { a: th.start })}</p>
+          <ThreadInput th={th} value={state === 'shown' && item.kind === 'number' ? item.answer : pos} locked={locked} good={good} showTen={guided || state !== 'ask'}
+            onChange={(v) => { setPos(v); if (state === 'wrong') setState('ask'); }} label={prompt} moreLabel={t('jump_more')} backLabel={t('jump_back')} />
+        </>
+      )}
+
+      {item.kind === 'number' && !th && (
         <div className="space-y-2">
           <div className="text-center text-4xl font-extrabold rounded-2xl border-2 border-[var(--color-border)] min-h-16 flex items-center justify-center" aria-live="polite" data-testid="typed" aria-label={t('type_answer')}>
             {state === 'shown' ? item.answer : typed || <span className="text-[var(--color-muted)] text-2xl">?</span>}

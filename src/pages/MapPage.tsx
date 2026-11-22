@@ -13,7 +13,7 @@ export default function MapPage() {
   const suggested = useApp((s) => s.suggested);
   return (
     <div className="min-h-dvh pb-10">
-      <TopBar title={t('map_title')} back="/" />
+      <TopBar title={t('w_list')} back="/mapa" />
       <main className="max-w-xl mx-auto px-4 space-y-5">
         <p className="text-base">{t('map_intro')}</p>
         <Link to="/punto-de-partida" className="btn btn-ghost w-full">🧭 {t('find_start')}</Link>

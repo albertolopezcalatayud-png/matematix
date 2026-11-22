@@ -21,6 +21,19 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
       const vals = await btns.evaluateAll((els) => els.map((e) => Number(e.dataset.value)));
       const target = right ? ans : vals.find((v) => v !== ans);
       await btns.nth(vals.indexOf(target)).click();
+    } else if (kind === 'number' && await p.getByTestId('thread').count()) {
+      // the thread: half the jumps dragging with the finger, the rest with the button (both ways must work)
+      const th = p.getByTestId('thread');
+      const start = Number(await th.getAttribute('data-start')), step = Number(await th.getAttribute('data-step'));
+      const min = Number(await th.getAttribute('data-min')), max = Number(await th.getAttribute('data-max'));
+      const target = right ? ans : (ans + step <= max ? ans + step : ans - step);
+      const box = await th.boundingBox(), W = 360, PAD = 20;
+      const xOf = (v) => box.x + ((PAD + ((v - min) / (max - min)) * (W - 2 * PAD)) / W) * box.width;
+      const mid = start + Math.trunc((target - start) / step / 2) * step;
+      await p.mouse.move(xOf(start), box.y + box.height * 0.66); await p.mouse.down(); await p.mouse.move(xOf(mid), box.y + box.height * 0.66, { steps: 6 }); await p.mouse.up();
+      let now = Number(await th.getAttribute('aria-valuenow'));
+      while (now !== target) { await p.getByTestId(target > now ? 'jump-more' : 'jump-back').click(); now = Number(await th.getAttribute('aria-valuenow')); }
+      await p.getByTestId('check').click();
     } else if (kind === 'number') {
       const v = String(right ? ans : ans + 1);
       for (const d of v) await p.locator('[data-testid=keypad] button', { hasText: new RegExp(`^${d}$`) }).click();
@@ -56,10 +69,14 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     ok(await p.getByTestId('sp-result').count() === 1, `${code}: starting point gives a suggestion after a miss (no marks shown)`);
     await p.screenshot({ path: `${SHOTS}/${code}-3-result.png` });
     await p.getByRole('button', { name: { es: 'Ver el mapa', ca: 'Veure el mapa', en: 'See the map' }[code] }).click(); await p.waitForTimeout(300);
-    ok((await p.getByText(words.map).count()) > 0 && (await p.locator('[data-testid^=station-]').count()) === 12, `${code}: map with 12 stations`);
-    ok((await p.getByText(/★/).count()) === 1, `${code}: the suggested station is marked`);
-    await noOverflow(p, `${code} map`);
-    await p.screenshot({ path: `${SHOTS}/${code}-4-map.png`, fullPage: true });
+    ok((await p.getByTestId('world').count()) === 1, `${code}: the map is the number line`);
+    ok((await p.locator('[data-testid^=mk-]').count()) >= 4, `${code}: stations and discoveries on the line (${await p.locator('[data-testid^=mk-]').count()})`);
+    ok((await p.locator('.mk-sugg').count()) === 1, `${code}: the suggested station is marked on the line`);
+    await noOverflow(p, `${code} world`);
+    await p.screenshot({ path: `${SHOTS}/${code}-4-world.png` });
+    await p.goto(BASE + '#/estaciones'); await p.waitForTimeout(300);
+    ok((await p.locator('[data-testid^=station-]').count()) === 12, `${code}: list with 12 stations`);
+    await p.screenshot({ path: `${SHOTS}/${code}-4-list.png`, fullPage: true });
 
     // A station of each kind: place (A2), tens/number or choice (A4), number with keypad (B5)
     for (const id of code === 'es' ? ['A2', 'A4', 'B5', 'A1', 'A6', 'B3'] : ['A2', 'B5']) {
@@ -94,6 +111,7 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     // progress
     await p.goto(BASE + '#/progreso'); await p.waitForTimeout(300);
     ok((await p.getByText({ es: 'En camino', ca: 'En camí', en: 'On the way' }[code]).count()) >= 2, `${code}: progress shows the stations practised`);
+    ok((await p.getByTestId('lit-strip').count()) === 1, `${code}: the lit-up strip is there`);
     await p.screenshot({ path: `${SHOTS}/${code}-5-progress.png`, fullPage: true });
     await p.goto(BASE + '#/ajustes'); await p.waitForTimeout(300);
     await p.screenshot({ path: `${SHOTS}/${code}-6-settings.png`, fullPage: true });

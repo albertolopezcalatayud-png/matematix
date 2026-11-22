@@ -76,3 +76,21 @@ button { font: inherit; color: inherit; }
 .card { background: var(--color-card); border: 1px solid var(--color-border); border-radius: 24px; padding: 1rem; }
 .pop { animation: pop .25s ease-out; }
 @keyframes pop { from { transform: scale(.96); opacity: .4; } to { transform: scale(1); opacity: 1; } }
+
+/* ── The living number line ── */
+.world-bg { background: linear-gradient(180deg, #FFF6EA 0%, #FDE9F0 50%, #ECE8FF 100%); }
+:root[data-theme="dark"] .world-bg { background: linear-gradient(180deg, #232038 0%, #1E1B33 55%, #191A2C 100%); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .world-bg { background: linear-gradient(180deg, #232038 0%, #1E1B33 55%, #191A2C 100%); } }
+.chip { background: color-mix(in srgb, var(--color-card) 80%, transparent); border-radius: 999px; padding: 4px 10px; font-size: .75rem; font-weight: 800; white-space: nowrap; }
+.ib { display: inline-grid; place-items: center; min-width: 44px; height: 44px; border-radius: 14px; border: 0; background: color-mix(in srgb, var(--color-card) 85%, transparent); font-size: 1.15rem; cursor: pointer; color: var(--color-fg); }
+.mk { transform: translate(-50%, -100%); border: 0; border-radius: 14px; padding: 6px 10px; font: 700 .74rem/1.2 var(--font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; box-shadow: 0 4px 12px #22203a24; min-height: 32px; }
+.mk::after { content: ""; position: absolute; left: 50%; bottom: -1px; width: 6px; height: 6px; transform: translate(-50%, 50%) rotate(45deg); background: inherit; }
+.mk-a { background: var(--color-fg); color: var(--color-bg); }
+.mk-b { background: var(--color-accent); color: var(--color-bg); }
+.mk-done { box-shadow: 0 0 0 3px #FFC861, 0 4px 12px #22203a24; }
+.mk-sugg { outline: 3px dashed var(--color-accent); outline-offset: 3px; }
+.mk-fog { opacity: .55; }
+.mk-find { transform: translate(-50%, 0); background: var(--color-card); color: var(--color-fg); border: 1.5px solid var(--color-border); }
+.mk-find::after { top: -1px; bottom: auto; transform: translate(-50%, -50%) rotate(45deg); border-left: 1.5px solid var(--color-border); border-top: 1.5px solid var(--color-border); }
+.mk-q { min-width: 34px; font-size: .95rem; font-weight: 900; color: var(--color-accent); }
+.mk-more { background: var(--color-card); color: var(--color-accent); border: 2px dashed var(--color-accent); font-weight: 900; font-size: .85rem; }

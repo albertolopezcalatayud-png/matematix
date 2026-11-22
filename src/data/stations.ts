@@ -49,7 +49,7 @@ function jumpOn(r: () => number, L: LineV): Item {
   const right = r() < 0.5, b = int(r, 1, Math.min(5, (L.max - L.min) / 2));
   const a = right ? int(r, L.min, L.max - b) : int(r, L.min + b, L.max);
   return { kind: 'number', answer: right ? a + b : a - b, prompt: { key: right ? 'qJumpR' : 'qJumpL', vars: { a, b } }, hint: { key: right ? 'hJumpR' : 'hJumpL' },
-    visual: { ...L, point: a }, aid: { ...L, point: a } };
+    aid: { ...L, point: a }, thread: { min: L.min, max: L.max, start: a, step: 1 } };
 }
 
 /* ───────────── Island A: the number line and number sense ───────────── */
@@ -178,11 +178,11 @@ const B1: Station = {
   make: (r, guided): Item => {
     const n = guided ? int(r, 1, 19) : int(r, 1, 99), f = int(r, 0, guided ? 1 : 4);
     const lo = Math.max(0, Math.floor((n - 1) / 10) * 10), L = line(lo, lo + 20, 1, 5, { point: n });
-    const show = guided ? L : undefined;
-    if (f === 0) return { kind: 'number', answer: n + 1, prompt: { key: 'qPlus1', vars: { n } }, hint: { key: 'hPlus1', vars: { n } }, visual: show, aid: L };
-    if (f === 1) return { kind: 'number', answer: n - 1, prompt: { key: 'qMinus1', vars: { n } }, hint: { key: 'hMinus1', vars: { n } }, visual: show, aid: L };
-    if (f === 2) return { kind: 'number', answer: n + 1, prompt: { key: 'qAfter', vars: { n } }, hint: { key: 'hPlus1', vars: { n } }, aid: L };
-    if (f === 3) return { kind: 'number', answer: n - 1, prompt: { key: 'qBefore', vars: { n } }, hint: { key: 'hMinus1', vars: { n } }, aid: L };
+    const th = { min: lo, max: lo + 20, start: n, step: 1 };
+    if (f === 0) return { kind: 'number', answer: n + 1, prompt: { key: 'qPlus1', vars: { n } }, hint: { key: 'hPlus1', vars: { n } }, aid: L, thread: th };
+    if (f === 1) return { kind: 'number', answer: n - 1, prompt: { key: 'qMinus1', vars: { n } }, hint: { key: 'hMinus1', vars: { n } }, aid: L, thread: th };
+    if (f === 2) return { kind: 'number', answer: n + 1, prompt: { key: 'qAfter', vars: { n } }, hint: { key: 'hPlus1', vars: { n } }, aid: L, thread: th };
+    if (f === 3) return { kind: 'number', answer: n - 1, prompt: { key: 'qBefore', vars: { n } }, hint: { key: 'hMinus1', vars: { n } }, aid: L, thread: th };
     return { kind: 'number', answer: n - 1, prompt: { key: 'qMissingFirst', vars: { b: 1, c: n } }, hint: { key: 'hMinus1', vars: { n } }, aid: L };
   },
 };
@@ -242,8 +242,9 @@ const B4: Station = {
       return { kind: 'number', answer: total - x, prompt: { key: 'qSub', vars: { a: total, b: x } }, hint: { key: 'hB4s', vars: { a, d: 2 * a, k, c: total } },
         aid: line(0, Math.ceil(total / 10) * 10, tensCase ? 10 : 1, 10, { point: total }) };
     }
+    const lo4 = Math.floor(x / 10) * 10;
     return { kind: 'number', answer: x + y, prompt: { key: 'qAdd', vars: { a: x, b: y } }, hint: { key: 'hB4', vars: { a, d: 2 * a, k } },
-      visual: guided ? aid : undefined, aid };
+      visual: guided ? aid : undefined, aid, thread: !tensCase && y <= 10 ? { min: lo4, max: lo4 + 30, start: x, step: 1 } : undefined };
   },
 };
 
@@ -261,11 +262,11 @@ const B5: Station = {
       const u = int(r, 6, 9), a = 10 * t + u, b = int(r, 11 - u, 9), up = 10 - u, ten = 10 * t + 10;
       // only the first jump is drawn: the child makes the second one
       return { kind: 'number', answer: a + b, prompt: { key: 'qAdd', vars: { a, b } }, hint: { key: 'hB5', vars: { a, up, rest: b - up, ten } },
-        visual: guided ? line(10 * t, 10 * t + 20, 1, 10, { point: a, jumps: [[a, ten]] }) : undefined, aid: line(10 * t, 10 * t + 20, 1, 10, { point: a, jumps: [[a, ten]] }) };
+        aid: line(10 * t, 10 * t + 20, 1, 10, { point: a, jumps: [[a, ten]] }), thread: { min: 10 * t, max: 10 * t + 20, start: a, step: 1 } };
     }
     const u = int(r, 1, 5), c = 10 * (t + 1) + u, b = int(r, u + 1, 9), ten = 10 * (t + 1);
     return { kind: 'number', answer: c - b, prompt: { key: 'qSub', vars: { a: c, b } }, hint: { key: 'hB5s', vars: { c, u, ten, rest: b - u } },
-      aid: line(10 * t, 10 * t + 20, 1, 10, { point: c, jumps: [[c, ten]] }) };
+      aid: line(10 * t, 10 * t + 20, 1, 10, { point: c, jumps: [[c, ten]] }), thread: { min: 10 * t, max: 10 * t + 20, start: c, step: 1 } };
   },
 };
 
@@ -280,8 +281,9 @@ const B6: Station = {
     const L = line(0, k * 10, k, k === 2 ? 4 : k === 3 ? 6 : k === 4 ? 8 : k === 5 ? 10 : 20);
     // only the first jumps are drawn: the child makes the rest
     const aid: Visual = { ...L, jumps: range(0, Math.min(2, n - 1) - 1).map((i) => [i * k, (i + 1) * k] as [number, number]) };
-    if (f === 0) return { kind: 'number', answer: m, prompt: { key: 'qTimes', vars: { n, k } }, hint: { key: 'hB6', vars: { n, k } }, visual: guided ? aid : undefined, aid };
-    if (f === 1) return { kind: 'number', answer: m, prompt: { key: 'qTimes', vars: { n: k, k: n } }, hint: { key: 'hB6', vars: { n, k } }, aid };
+    const th6 = { min: 0, max: k * 10, start: 0, step: k };
+    if (f === 0) return { kind: 'number', answer: m, prompt: { key: 'qTimes', vars: { n, k } }, hint: { key: 'hB6', vars: { n, k } }, aid, thread: th6 };
+    if (f === 1) return { kind: 'number', answer: m, prompt: { key: 'qTimes', vars: { n: k, k: n } }, hint: { key: 'hB6', vars: { n, k } }, aid, thread: th6 };
     if (f === 2) return { kind: 'number', answer: n, prompt: { key: 'qHowManyJumps', vars: { k, m } }, hint: { key: 'hJumps', vars: { k, m } }, aid };
     const start = int(r, 0, 6) * k, s = [start, start + k, start + 2 * k].join(', ');
     return { kind: 'number', answer: start + 3 * k, prompt: { key: 'qSeq', vars: { k, s } }, hint: { key: 'hSeq', vars: { k } },

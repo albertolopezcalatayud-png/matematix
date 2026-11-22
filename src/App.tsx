@@ -5,6 +5,7 @@ import { useApp } from '@/stores/app';
 import Home from '@/pages/Home';
 import Language from '@/pages/Language';
 import MapPage from '@/pages/MapPage';
+import World from '@/pages/World';
 import Lesson from '@/pages/Lesson';
 import StartPoint from '@/pages/StartPoint';
 import Progress from '@/pages/Progress';
@@ -44,7 +45,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/idioma" element={<Language />} />
-        <Route path="/mapa" element={lang ? <MapPage /> : <Navigate to="/idioma" />} />
+        <Route path="/mapa" element={lang ? <World /> : <Navigate to="/idioma" />} />
+        <Route path="/estaciones" element={lang ? <MapPage /> : <Navigate to="/idioma" />} />
         <Route path="/estacion/:id" element={lang ? <LessonFresh /> : <Navigate to="/idioma" />} />
         <Route path="/punto-de-partida" element={lang ? <StartPoint /> : <Navigate to="/idioma" />} />
         <Route path="/progreso" element={<Progress />} />

@@ -38,6 +38,14 @@ describe.each(STATIONS.map((s) => [s.id, s] as const))('station %s', (_id, st) =
         checkMsg(it.prompt); checkMsg(it.hint); checkVisual(it.visual); checkVisual(it.aid);
         // the strategy pictures never land on the answer of a typed exercise (the child makes the last step)
         if (it.kind === 'number' && it.prompt.key !== 'qHowManyJumps') for (const v of [it.visual, it.aid]) if (v?.type === 'line' && v.jumps?.length) expect(v.jumps.at(-1)![1], `${st.id} ${JSON.stringify(it.prompt)}`).not.toBe(it.answer);
+        if (it.kind === 'number' && it.thread) {
+          const th = it.thread;
+          expect(th.start).toBeGreaterThanOrEqual(th.min); expect(th.start).toBeLessThanOrEqual(th.max);
+          expect(it.answer, `${st.id} thread answer inside the line`).toBeGreaterThanOrEqual(th.min); expect(it.answer).toBeLessThanOrEqual(th.max);
+          expect(it.answer).not.toBe(th.start);
+          expect(Number.isInteger((it.answer - th.start) / th.step), `${st.id} reachable in whole jumps`).toBe(true);
+          expect(th.max - th.min, 'short enough to drag with a finger').toBeLessThanOrEqual(30 * th.step);
+        }
         if (it.kind === 'place' && it.aidMarks) { expect(it.aidMarks.length).toBeGreaterThan(it.marks.length); }
         const a = answerOf(it);
         expect(Number.isInteger(a)).toBe(true);
