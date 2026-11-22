@@ -9,9 +9,9 @@ const W = 360, PAD = 20, Y = 92;
  * Every jump draws an arc, plays its note (each ten is an octave) and gives a tiny vibration. Buttons and arrow keys do
  * the same for anyone who finds dragging hard. The tens glow: stopping there is the strategy ("make 10 first").
  */
-export function ThreadInput({ th, value, onChange, locked, good, showTen, label, moreLabel, backLabel }: {
+export function ThreadInput({ th, value, onChange, locked, good, showTen, label, moreLabel, backLabel, moreShort, backShort }: {
   th: Thread; value: number; onChange: (v: number) => void; locked: boolean; good: boolean | null; showTen: boolean;
-  label: string; moreLabel: string; backLabel: string;
+  label: string; moreLabel: string; backLabel: string; moreShort: string; backShort: string;
 }) {
   const ref = useRef<SVGSVGElement>(null);
   const dragging = useRef(false);
@@ -70,11 +70,11 @@ export function ThreadInput({ th, value, onChange, locked, good, showTen, label,
         )}
       </svg>
       <div className="flex items-center gap-2">
-        <button className="btn btn-ghost !px-3 text-sm" disabled={locked || value <= min} onClick={() => go(value - step)} aria-label={backLabel} data-testid="jump-back">◀ {backLabel}</button>
-        <span className="flex-1 text-center text-xl font-extrabold text-[var(--color-accent)]" aria-live="polite" data-testid="jumps">
+        <button className="btn btn-ghost !px-4 whitespace-nowrap shrink-0" disabled={locked || value <= min} onClick={() => go(value - step)} aria-label={backLabel} data-testid="jump-back">◀ {backShort}</button>
+        <span className="flex-1 text-center text-xl font-extrabold text-[var(--color-accent)] whitespace-nowrap" aria-live="polite" data-testid="jumps">
           {n === 0 ? '' : step === 1 ? `${start} ${n > 0 ? '+' : '−'} ${Math.abs(n)}` : `${Math.abs(n)} × ${step}`}
         </span>
-        <button className="btn btn-ghost !px-3 text-sm" disabled={locked || value >= max} onClick={() => go(value + step)} aria-label={moreLabel} data-testid="jump-more">{moreLabel} ▶</button>
+        <button className="btn btn-ghost !px-4 whitespace-nowrap shrink-0" disabled={locked || value >= max} onClick={() => go(value + step)} aria-label={moreLabel} data-testid="jump-more">{moreShort} ▶</button>
       </div>
     </div>
   );

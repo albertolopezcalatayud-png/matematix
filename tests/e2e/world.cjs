@@ -11,7 +11,14 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
   const p = await c.newPage(); p.on('pageerror', (e) => errs.push(e.message));
   await p.goto(BASE); await p.getByTestId('lang-es').click(); await p.waitForTimeout(200);
   await p.goto(BASE + '#/mapa'); await p.waitForTimeout(500);
+  ok((await p.getByTestId('tour').count()) === 1, 'first visit: guided tour');
+  await p.screenshot({ path: `${SHOTS}/w-tour1.png` });
+  await p.getByTestId('tour-next').click(); await p.waitForTimeout(200);
   const world = p.getByTestId('world'); const box = await world.boundingBox();
+  await p.mouse.click(box.x + box.width * 0.4, box.y + box.height * 0.55); await p.waitForTimeout(300);
+  ok((await p.getByText(/próxima estación/).count()) === 1, 'tapping the line moves the tour on to the next station');
+  await p.screenshot({ path: `${SHOTS}/w-tour3.png` });
+  await p.getByTestId('tour-next').click(); await p.waitForTimeout(200);
   ok(Number(await world.getAttribute('data-reach')) === 20, 'a new child: the line is open up to 20');
   // zoom out as far as allowed: stops near the open part
   for (let i = 0; i < 6; i++) { await p.getByTestId('zout').click(); await p.waitForTimeout(350); }
@@ -35,9 +42,10 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
   await p.screenshot({ path: `${SHOTS}/w-find-ok.png` });
   // a station marker opens the station
   await p.getByTestId('zhome').click(); await p.waitForTimeout(500);
-  await p.locator('[data-testid=mk-B5]').click(); await p.waitForTimeout(150);
+  await p.locator('.mk-sugg').click(); await p.waitForTimeout(150);
   await p.getByTestId('w-go').click(); await p.waitForTimeout(400);
-  ok(/estacion\/B5/.test(p.url()), 'a station on the line opens that station');
+  ok(/estacion\/A1/.test(p.url()), 'the next station is on the line and opens');
+  await p.goto(BASE + '#/estacion/B5'); await p.waitForTimeout(400);
   // the thread: 8 + 5, resting on 10 is recognised
   for (let s = 0; s < 6 && (await p.getByTestId('model-text').count()); s++) { await p.getByRole('button', { name: 'Siguiente' }).click(); await p.waitForTimeout(100); }
   await p.evaluate(() => { window.__buzz = 0; });

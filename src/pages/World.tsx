@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { STATIONS, stationById } from '@/data/stations';
-import { FINDS, SPOT, litOf, reachOf, type Find } from '@/data/world';
+import { FINDS, SPOT, litOf, nextStation, reachOf, type Find } from '@/data/world';
 import { useT } from '@/i18n';
 import { statusOf, useApp } from '@/stores/app';
 import { buzz, tone } from '@/services/sound';
@@ -31,17 +31,24 @@ export default function World() {
   const find = useApp((s) => s.find);
   const reach = useMemo(() => reachOf(progress, suggested), [progress, suggested]);
   const lit = useMemo(() => litOf(progress), [progress]);
+  const last = useApp((s) => s.last);
+  const toured = useApp((s) => s.toured);
+  const next = useMemo(() => nextStation(progress, suggested, last), [progress, suggested, last]);
+  const [tour, setTour] = useState(toured ? -1 : 0);
 
   const fmt = useCallback((v: number) => v.toLocaleString(LOCALE[lang]), [lang]);
   const cv = useRef<HTMLCanvasElement>(null);
   const [view, setView] = useState(() => {
-    const focus = suggested ? SPOT[suggested] : useApp.getState().last ? SPOT[useApp.getState().last!] : 10;
+    const st0 = useApp.getState();
+    const focus = SPOT[nextStation(st0.progress, st0.suggested, st0.last)] ?? 10;
     const span = focus > 20 ? 120 : 24;
     return { c: focus > 20 ? 50 : 10, s: span };
   });
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [probe, setProbe] = useState<number | null>(null);
   const [sheet, setSheet] = useState<Sheet>(null);
+
+  useEffect(() => { if (tour >= 0 && useApp.getState().voice) void speak(lang, t(`tour_${tour + 1}`)); }, [tour]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The line has opened further since last time: say so once
   useEffect(() => {
@@ -131,7 +138,7 @@ export default function World() {
   }, [view, clamp]);
   useEffect(() => { setView((v) => clamp(v.c, v.s)); }, [clamp]);
 
-  const onDown = (e: React.PointerEvent) => { (e.target as Element).setPointerCapture(e.pointerId); ptrs.current.set(e.pointerId, e.nativeEvent.offsetX); gesture.current = { moved: 0, pinch: 0 }; setSheet(null); };
+  const onDown = (e: React.PointerEvent) => { if (tour === 0) return; (e.target as Element).setPointerCapture(e.pointerId); ptrs.current.set(e.pointerId, e.nativeEvent.offsetX); gesture.current = { moved: 0, pinch: 0 }; setSheet(null); };
   const onMove = (e: React.PointerEvent) => {
     const p = ptrs.current; if (!p.has(e.pointerId)) return;
     const prev = p.get(e.pointerId)!, x = e.nativeEvent.offsetX; p.set(e.pointerId, x);
@@ -143,7 +150,7 @@ export default function World() {
     if (p.size === 1 && gesture.current.moved < 6) {
       const v = Math.round(V(e.nativeEvent.offsetX));
       if (v > reach) { setSheet({ kind: 'fog' }); }
-      else { setProbe(v); tone(v, { span: view.s }); buzz(); if (useApp.getState().voice) void speak(lang, v < 0 ? t('w_measure_neg', { n: fmt(v), m: fmt(-v) }) : t('w_measure', { n: fmt(v) })); }
+      else { setProbe(v); tone(v, { span: view.s }); buzz(); if (tour === 1) setTour(2); if (useApp.getState().voice) void speak(lang, v < 0 ? t('w_measure_neg', { n: fmt(v), m: fmt(-v) }) : t('w_measure', { n: fmt(v) })); }
     }
     p.delete(e.pointerId); if (p.size < 2) gesture.current.pinch = 0;
   };
@@ -155,12 +162,15 @@ export default function World() {
   const a = view.c - view.s / 2, b = view.c + view.s / 2;
   for (const s of STATIONS) {
     const v = SPOT[s.id]; if (v < a || v > b || view.s > Math.max(60, v * 12)) continue;
+    if (!(s.id === next || s.id === suggested || (progress[s.id]?.sessions ?? 0) > 0)) continue;
     const st = statusOf(progress[s.id]);
     markers.push({ key: s.id, x: X(v), side: 'up', label: `${st === 'done' ? '★ ' : ''}${m(s.title)}`,
-      cls: `${s.island === 'A' ? 'mk-a' : 'mk-b'} ${st === 'done' ? 'mk-done' : ''} ${suggested === s.id ? 'mk-sugg' : ''} ${v > reach ? 'mk-fog' : ''}`,
+      cls: `${s.island === 'A' ? 'mk-a' : 'mk-b'} ${st === 'done' ? 'mk-done' : ''} ${next === s.id ? 'mk-sugg' : ''} ${v > reach ? 'mk-fog' : ''}`,
       onClick: () => { setSheet({ kind: 'station', id: s.id }); tone(v, { chord: true, span: view.s }); } });
   }
+  const hiddenNear = FINDS.filter((f) => !found.includes(f.v) && f.v <= reach).sort((p, q) => Math.abs(p.v - SPOT[next]) - Math.abs(q.v - SPOT[next])).slice(0, 2).map((f) => f.id);
   for (const f of FINDS) {
+    if (!found.includes(f.v) && !hiddenNear.includes(f.id)) continue;
     if (f.v < a || f.v > b || f.v > reach || view.s > Math.max(40, Math.abs(f.v) * 8) || view.s < Math.abs(f.v) * 0.05) continue;
     const got = found.includes(f.v);
     markers.push({ key: f.id, x: X(f.v), side: 'down', label: got ? `✦ ${t(`fd_${f.id}`)}` : '?', cls: got ? 'mk-find' : 'mk-find mk-q',
@@ -170,7 +180,7 @@ export default function World() {
    *  whatever does not fit is grouped into a "+N" bubble that zooms in on that spot. */
   const placed = (side: 'up' | 'down') => {
     const maxRows = side === 'up' ? 4 : 2;
-    const rank = (k: Mk) => (k.key === suggested ? 0 : k.key === useApp.getState().last ? 1 : progress[k.key]?.sessions ? 2 : 3);
+    const rank = (k: Mk) => (k.key === next ? 0 : k.key === last ? 1 : progress[k.key]?.sessions ? 2 : 3);
     const rows: [number, number][][] = Array.from({ length: maxRows }, () => []);
     const out: (Mk & { row: number; w: number })[] = [];
     const left: Mk[] = [];
@@ -221,10 +231,20 @@ export default function World() {
         <div className="absolute right-3 top-2 flex flex-col gap-2 z-10">
           <button className="ib" aria-label={t('zoom_in')} data-testid="zin" onClick={() => { setSheet(null); glide(clamp(view.c, view.s / 2.5)); }}>＋</button>
           <button className="ib" aria-label={t('zoom_out')} data-testid="zout" onClick={() => { setSheet(null); glide(clamp(view.c, view.s * 2.5)); }}>－</button>
-          <button className="ib" aria-label={t('w_home')} data-testid="zhome" onClick={() => { setSheet(null); const f = suggested ? SPOT[suggested] : 10; glide(clamp(f > 20 ? 50 : 10, f > 20 ? 120 : 24)); }}>⌂</button>
+          <button className="ib" aria-label={t('w_home')} data-testid="zhome" onClick={() => { setSheet(null); const f = SPOT[next] ?? 10; glide(clamp(f > 20 ? 50 : 10, f > 20 ? 120 : 24)); }}>⌂</button>
         </div>
         <p className="absolute left-4 right-4 bottom-3 text-center text-xs text-[var(--color-muted)]">{t('w_hint')}</p>
 
+        {tour >= 0 && (
+          <div className="absolute left-3 right-3 top-2 card shadow-xl z-30 space-y-3 pop" role="dialog" aria-live="polite" data-testid="tour">
+            <p className="text-sm font-bold text-[var(--color-accent)]">{tour + 1} / 3</p>
+            <p className="text-lg font-semibold">{t(`tour_${tour + 1}`)}</p>
+            <div className="grid grid-cols-2 gap-2">
+              <button className="btn btn-ghost" onClick={() => { setTour(-1); set({ toured: true }); }}>{t('tour_skip')}</button>
+              <button className="btn btn-primary" data-testid="tour-next" onClick={() => { if (tour >= 2) { setTour(-1); set({ toured: true }); } else setTour(tour + 1); }}>{tour >= 2 ? t('rest_ok') : t('next')}</button>
+            </div>
+          </div>
+        )}
         {sheet && (
           <div className="absolute left-3 right-3 bottom-3 card shadow-xl z-20 space-y-2 pop" role="dialog" aria-live="polite" data-testid="w-sheet">
             {stSheet && (() => {

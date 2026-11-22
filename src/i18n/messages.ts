@@ -57,7 +57,7 @@ export const MESSAGES = {
   end_more: ['Repítela cuando quieras: cada vez te costará menos.', 'Repeteix-la quan vulgues: cada vegada et costarà menys.', 'Do it again whenever you like: it gets easier every time.'],
   end_base: ['¿Visitamos la estación que la sostiene?', "Visitem l'estació que la sosté?", 'Shall we visit the station it builds on?'],
   again: ['Otra vez', 'Una altra vegada', 'Again'],
-  to_map: ['Al mapa', 'Al mapa', 'To the map'],
+  to_map: ['Mi recta', 'La meua recta', 'My number line'],
   rest: ['Llevas {m} minutos. ¿Un descanso? Puedes seguir en papel.', 'Portes {m} minuts. Un descans? Pots continuar en paper.', "You've been going for {m} minutes. Time for a break? You can carry on on paper."],
   rest_ok: ['Vale', "D'acord", 'OK'],
 
@@ -99,6 +99,14 @@ export const MESSAGES = {
   phase_n: ['{a} de {b}', '{a} de {b}', '{a} of {b}'],
   map_btn: ['Mapa', 'Mapa', 'Map'],
 
+  // Home and first-time tour
+  carry_on: ['Seguir', 'Continuar', 'Carry on'],
+  next_is: ['Ahora toca: {s}', 'Ara toca: {s}', 'Next up: {s}'],
+  my_line: ['Mi recta', 'La meua recta', 'My number line'],
+  tour_1: ['Esta es tu recta. Los números van en orden: el 0 aquí, y cuanto más a la derecha, más grandes.', 'Esta és la teua recta. Els nombres van en orde: el 0 ací, i com més a la dreta, més grans.', 'This is your number line. The numbers go in order: 0 here, and the further right, the bigger they are.'],
+  tour_2: ['Toca la recta en cualquier sitio: verás qué número es y escucharás cómo suena.', 'Toca la recta on vulgues: veuràs quin nombre és i escoltaràs com sona.', 'Tap the line anywhere: you will see which number it is and hear how it sounds.'],
+  tour_3: ['Esta es tu próxima estación. Tócala cuando quieras empezar.', 'Esta és la teua pròxima estació. Toca-la quan vulgues començar.', 'This is your next station. Tap it when you want to start.'],
+  tour_skip: ['Saltar', 'Saltar', 'Skip'],
   // The living number line
   w_title: ['Tu recta', 'La teua recta', 'Your number line'],
   w_hint: ['Arrastra para moverte · usa + y − para acercar o alejar · toca la recta para medir', 'Arrossega per a moure’t · usa + i − per a acostar o allunyar · toca la recta per a mesurar', 'Drag to move · use + and − to zoom in or out · tap the line to measure'],
@@ -120,6 +128,8 @@ export const MESSAGES = {
   thread_help: ['Pon el dedo en el {a} y estira el hilo. También puedes usar los botones.', 'Posa el dit en el {a} i estira el fil. També pots usar els botons.', 'Put your finger on {a} and stretch the thread. You can also use the buttons.'],
   jump_more: ['Un salto más', 'Un bot més', 'One more jump'],
   jump_back: ['Un salto atrás', 'Un bot arrere', 'One jump back'],
+  jump_more_s: ['Saltar', 'Botar', 'Jump'],
+  jump_back_s: ['Atrás', 'Arrere', 'Back'],
   stopped_ten: ['Has parado en el {t}: ese es el truco.', 'Has parat en el {t}: eixe és el truc.', 'You stopped at {t}: that is the trick.'],
   // Lit up and discoveries
   lit_title: ['Lo que he encendido', 'El que he encés', 'What I have lit up'],

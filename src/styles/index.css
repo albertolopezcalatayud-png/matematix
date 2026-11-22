@@ -94,3 +94,5 @@ button { font: inherit; color: inherit; }
 .mk-find::after { top: -1px; bottom: auto; transform: translate(-50%, -50%) rotate(45deg); border-left: 1.5px solid var(--color-border); border-top: 1.5px solid var(--color-border); }
 .mk-q { min-width: 34px; font-size: .95rem; font-weight: 900; color: var(--color-accent); }
 .mk-more { background: var(--color-card); color: var(--color-accent); border: 2px dashed var(--color-accent); font-weight: 900; font-size: .85rem; }
+.mk-sugg { animation: halo 1.8s ease-in-out infinite; }
+@keyframes halo { 0%, 100% { box-shadow: 0 0 0 0 #FFB54799, 0 4px 12px #22203a24; } 50% { box-shadow: 0 0 0 9px #FFB54700, 0 4px 12px #22203a24; } }

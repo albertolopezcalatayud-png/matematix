@@ -22,6 +22,8 @@ interface AppState {
   found: number[];
   /** How far the line has opened so far (the furthest number reachable). */
   reach: number;
+  /** The short first-time tour of the number line has been shown. */
+  toured: boolean;
   find: (v: number) => void;
   suggested: string | null;
   last: string | null;
@@ -45,7 +47,7 @@ export const SEEN_MAX = 600;
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
-      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
+      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
       find: (v) => set((s) => (s.found.includes(v) ? s : { found: [...s.found, v] })),
       record: (station, rightFirst, total) => set((s) => {

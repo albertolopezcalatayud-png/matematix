@@ -42,3 +42,15 @@ export function litOf(progress: Record<string, StationProgress>): [number, numbe
   add('B1', 0, 20); add('B2', 0, 20); add('B3', 0, 10); add('B4', 0, 20); add('B5', 0, 20); add('B6', 0, 50);
   return out;
 }
+
+/** The suggested learning order across both islands (number sense first, then the facts that build on it). */
+export const ORDER = ['A1', 'A2', 'B1', 'B3', 'B2', 'A3', 'B4', 'B5', 'A4', 'A5', 'A6', 'B6'];
+
+/** The station the big "Carry on" button opens: the one in progress, else the suggested one, else the first not mastered. */
+export function nextStation(progress: Record<string, StationProgress>, suggested: string | null, last: string | null): string {
+  if (last && statusOf(progress[last]) === 'doing') return last;
+  if (suggested && statusOf(progress[suggested]) !== 'done') return suggested;
+  const from = suggested ? ORDER.indexOf(suggested) : 0;
+  return ORDER.slice(Math.max(0, from)).find((id) => statusOf(progress[id]) !== 'done')
+    ?? ORDER.find((id) => statusOf(progress[id]) !== 'done') ?? last ?? 'A1';
+}

@@ -181,7 +181,7 @@ function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; o
         <>
           <p className="text-sm text-[var(--color-muted)]">{t('thread_help', { a: th.start })}</p>
           <ThreadInput th={th} value={state === 'shown' && item.kind === 'number' ? item.answer : pos} locked={locked} good={good} showTen={guided || state !== 'ask'}
-            onChange={(v) => { setPos(v); if (state === 'wrong') setState('ask'); }} label={prompt} moreLabel={t('jump_more')} backLabel={t('jump_back')} />
+            onChange={(v) => { setPos(v); if (state === 'wrong') setState('ask'); }} label={prompt} moreLabel={t('jump_more')} backLabel={t('jump_back')} moreShort={t('jump_more_s')} backShort={t('jump_back_s')} />
         </>
       )}
 
