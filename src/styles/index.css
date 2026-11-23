@@ -98,3 +98,4 @@ button { font: inherit; color: inherit; }
 @keyframes halo { 0%, 100% { box-shadow: 0 0 0 0 #FFB54799, 0 4px 12px #22203a24; } 50% { box-shadow: 0 0 0 9px #FFB54700, 0 4px 12px #22203a24; } }
 
 .mk-c { background: var(--color-mint); color: var(--color-bg); }
+.mk-d { background: var(--color-peach); color: var(--color-bg); }

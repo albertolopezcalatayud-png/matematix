@@ -5,7 +5,7 @@ import { nextStation } from '@/data/world';
 import { rng } from '@/engine/rng';
 import { GUIDED, INDEPENDENT, pickItems } from '@/engine/session';
 import type { Item } from '@/engine/types';
-import { useT } from '@/i18n';
+import { fmtScaled, useT } from '@/i18n';
 import { statusOf, useApp } from '@/stores/app';
 import { speak, stopSpeech } from '@/services/speech';
 import { PlaceOnLine, VisualView } from '@/components/Visuals';
@@ -164,7 +164,7 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
     if (v == null) return;
     if (isRight(item, v)) { setState('right'); if (voice) void speak(lang, t(okMsg)); }
     else if (tries === 0 && !oneTry) { setTries(1); setState('wrong'); if (voice) void speak(lang, t('try_again') + ' ' + m(item.hint)); }
-    else { setState('shown'); if (voice) void speak(lang, t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : answerOf() }) + ' ' + m(item.hint)); }
+    else { setState('shown'); if (voice) void speak(lang, t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : item.kind === 'place' ? fmtScaled(lang, item.target, item.scale ?? 1, item.frac) : answerOf() }) + ' ' + m(item.hint)); }
   };
   const locked = state === 'right' || state === 'shown';
   const showSupport = guided || state === 'wrong' || state === 'shown';
@@ -180,7 +180,7 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
 
       {(guided || state !== 'ask') && (
         <p className={`rounded-2xl p-3 text-base ${state === 'ask' ? 'bg-[var(--color-sky-pale)]' : state === 'right' ? 'bg-[var(--color-mint-pale)]' : 'bg-[var(--color-peach-pale)]'}`} data-testid="feedback" aria-live="polite">
-          {state === 'right' ? `${t(okMsg)}${tenStop != null && th && item.kind === 'number' && tenStop !== item.answer && Math.min(th.start, item.answer) < tenStop && tenStop < Math.max(th.start, item.answer) ? ' ' + t('stopped_ten', { t: tenStop }) : ''}` : state === 'wrong' ? `${t('try_again')} ${m(item.hint)}` : state === 'shown' ? `${t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : answerOf() })} ${m(item.hint)}` : `💡 ${m(item.hint)}`}
+          {state === 'right' ? `${t(okMsg)}${tenStop != null && th && item.kind === 'number' && tenStop !== item.answer && Math.min(th.start, item.answer) < tenStop && tenStop < Math.max(th.start, item.answer) ? ' ' + t('stopped_ten', { t: tenStop }) : ''}` : state === 'wrong' ? `${t('try_again')} ${m(item.hint)}` : state === 'shown' ? `${t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : item.kind === 'place' ? fmtScaled(lang, item.target, item.scale ?? 1, item.frac) : answerOf() })} ${m(item.hint)}` : `💡 ${m(item.hint)}`}
         </p>
       )}
 
@@ -190,7 +190,7 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
         <>
           <p className="text-sm text-[var(--color-muted)]">{t('tap_line')}</p>
           <PlaceOnLine
-            v={{ type: 'line', min: item.min, max: item.max, marks: showSupport ? item.aidMarks ?? item.marks : item.marks, labels: showSupport ? item.aidLabels ?? item.labels : item.labels }}
+            v={{ type: 'line', min: item.min, max: item.max, marks: showSupport ? item.aidMarks ?? item.marks : item.marks, labels: showSupport ? item.aidLabels ?? item.labels : item.labels, scale: item.scale, frac: item.frac }}
             value={state === 'shown' ? item.target : value} onChange={(n) => { setValue(n); if (state === 'wrong') setState('ask'); }} locked={locked} good={good} label={prompt}
           />
         </>

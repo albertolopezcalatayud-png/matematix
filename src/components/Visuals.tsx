@@ -1,6 +1,6 @@
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import type { Visual } from '@/engine/types';
-import { useT } from '@/i18n';
+import { fmtScaled, useT } from '@/i18n';
 
 const W = 360, PAD = 22;
 const ACC = 'var(--color-accent)', FG = 'var(--color-fg)', MUTED = 'var(--color-muted)', PEACH = 'var(--color-peach)', MINT = 'var(--color-mint)';
@@ -11,6 +11,8 @@ const xOf = (v: number, min: number, max: number) => PAD + ((v - min) / (max - m
 /** The number line: the one visual model used everywhere (numbers, later fractions, scales and graph axes). */
 export function NumberLine({ v, placed, good, describe }: { v: LineV; placed?: number | null; good?: boolean | null; describe: string }) {
   const { min, max } = v;
+  const { lang } = useT();
+  const f = (n: number) => fmtScaled(lang, n, v.scale ?? 1, v.frac);
   const y = 70;
   return (
     <svg viewBox={`0 0 ${W} 110`} className="w-full max-w-xl mx-auto block" role="img" aria-label={describe}>
@@ -24,7 +26,7 @@ export function NumberLine({ v, placed, good, describe }: { v: LineV; placed?: n
         const big = v.labels.includes(m);
         return <line key={m} x1={xOf(m, min, max)} x2={xOf(m, min, max)} y1={y - (big ? 10 : 6)} y2={y + (big ? 10 : 6)} stroke={FG} strokeWidth={big ? 2.5 : 1.5} />;
       })}
-      {v.labels.map((l) => <text key={l} x={xOf(l, min, max)} y={y + 30} textAnchor="middle" fontSize="15" fontWeight={700} fill={FG}>{l}</text>)}
+      {v.labels.map((l) => <text key={l} x={xOf(l, min, max)} y={y + 30} textAnchor="middle" fontSize="15" fontWeight={700} fill={FG}>{f(l)}</text>)}
       {v.point != null && <path d={`M ${xOf(v.point, min, max)} ${y - 8} l -8 -14 h 16 z`} fill={PEACH} />}
       {placed != null && (
         <g>
@@ -40,6 +42,8 @@ export function PlaceOnLine({ v, value, onChange, locked, good, label }: { v: Li
   const ref = useRef<SVGSVGElement>(null);
   const [focus, setFocus] = useState(false);
   const { min, max } = v;
+  const { lang } = useT();
+  const f = (n: number) => fmtScaled(lang, n, v.scale ?? 1, v.frac);
   const fromEvent = (e: PointerEvent) => {
     const box = ref.current!.getBoundingClientRect();
     const sx = ((e.clientX - box.left) / box.width) * W;
@@ -57,7 +61,7 @@ export function PlaceOnLine({ v, value, onChange, locked, good, label }: { v: Li
     <div className={`rounded-3xl p-2 ${focus ? 'ring-2 ring-[var(--color-accent)]' : ''}`}>
       <svg
         ref={ref} viewBox={`0 0 ${W} 110`} className="w-full max-w-xl mx-auto block touch-none select-none cursor-pointer"
-        role="slider" tabIndex={0} aria-label={label} aria-valuemin={min} aria-valuemax={max} aria-valuenow={value ?? undefined} aria-valuetext={value == null ? '—' : String(value)}
+        role="slider" tabIndex={0} aria-label={label} aria-valuemin={min} aria-valuemax={max} aria-valuenow={value ?? undefined} aria-valuetext={value == null ? '—' : f(value)}
         data-testid="line-input" data-min={min} data-max={max}
         onPointerDown={(e) => { if (!locked) { (e.target as Element).setPointerCapture?.(e.pointerId); onChange(fromEvent(e)); } }}
         onPointerMove={(e) => { if (!locked && e.buttons) onChange(fromEvent(e)); }}
@@ -66,11 +70,11 @@ export function PlaceOnLine({ v, value, onChange, locked, good, label }: { v: Li
         <rect x={0} y={30} width={W} height={70} fill="transparent" />
         <line x1={PAD} y1={70} x2={W - PAD} y2={70} stroke={FG} strokeWidth={4} strokeLinecap="round" />
         {v.marks.map((m) => { const big = v.labels.includes(m); return <line key={m} x1={xOf(m, min, max)} x2={xOf(m, min, max)} y1={70 - (big ? 11 : 6)} y2={70 + (big ? 11 : 6)} stroke={FG} strokeWidth={big ? 2.5 : 1.5} />; })}
-        {v.labels.map((l) => <text key={l} x={xOf(l, min, max)} y={100} textAnchor="middle" fontSize="15" fontWeight={700} fill={FG}>{l}</text>)}
+        {v.labels.map((l) => <text key={l} x={xOf(l, min, max)} y={100} textAnchor="middle" fontSize="15" fontWeight={700} fill={FG}>{f(l)}</text>)}
         {value != null && (
           <g>
             <circle cx={xOf(value, min, max)} cy={70} r={11} fill={good == null ? ACC : good ? MINT : PEACH} stroke="var(--color-card)" strokeWidth={3} />
-            <text x={xOf(value, min, max)} y={44} textAnchor="middle" fontSize="16" fontWeight={800} fill={good == null ? ACC : good ? MINT : PEACH}>{value}</text>
+            <text x={xOf(value, min, max)} y={44} textAnchor="middle" fontSize="16" fontWeight={800} fill={good == null ? ACC : good ? MINT : PEACH}>{f(value)}</text>
           </g>
         )}
       </svg>
@@ -117,7 +121,7 @@ function BarsView({ v, describe }: { v: BarsV; describe: string }) {
               const w = sx(p.v), unk = p.label === '?';
               const el = (
                 <g key={j}>
-                  <rect x={x} y={y} width={Math.max(4, w - 2)} height={rowH} rx={8} fill={unk ? 'var(--color-peach-pale)' : PART_COLOURS[(v.groups ? 0 : j) % 4]} stroke={unk ? 'var(--color-peach)' : 'var(--color-accent)'} strokeWidth={2} strokeDasharray={unk ? '5 4' : undefined} />
+                  <rect x={x} y={y} width={Math.max(4, w - 2)} height={rowH} rx={8} fill={unk ? 'var(--color-peach-pale)' : p.shade === true ? '#B9AEFF' : p.shade === false ? 'var(--color-card)' : PART_COLOURS[(v.groups ? 0 : j) % 4]} stroke={unk ? 'var(--color-peach)' : 'var(--color-accent)'} strokeWidth={2} strokeDasharray={unk ? '5 4' : undefined} />
                   <text x={x + w / 2} y={y + rowH / 2 + 6} textAnchor="middle" fontSize="16" fontWeight={900} fill={unk ? 'var(--color-peach)' : 'var(--color-fg)'}>{p.label}</text>
                 </g>);
               x += w; return el;

@@ -63,7 +63,7 @@ export default function StartPoint() {
             <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => voice && void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>
           </div>
           {item.kind !== 'place' && item.visual && <VisualView v={item.visual} describe={describe(t, item.visual)} />}
-          {item.kind === 'place' && <PlaceOnLine v={{ type: 'line', min: item.min, max: item.max, marks: item.marks, labels: item.labels }} value={value} onChange={setValue} locked={false} good={null} label={prompt} />}
+          {item.kind === 'place' && <PlaceOnLine v={{ type: 'line', min: item.min, max: item.max, marks: item.marks, labels: item.labels, scale: item.scale, frac: item.frac }} value={value} onChange={setValue} locked={false} good={null} label={prompt} />}
           {item.kind === 'choice' && (
             <div className={`grid gap-2 ${item.options.length === 2 || item.options.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`} data-testid="choices">
               {item.options.map((o, k) => <button key={o} data-value={o} className={`btn btn-ghost ${item.optionLabels ? '!text-base !font-bold' : '!text-2xl !font-extrabold'} !min-h-16`} onClick={() => answer(o)}>{item.optionLabels ? m(item.optionLabels[k]) : o}</button>)}
