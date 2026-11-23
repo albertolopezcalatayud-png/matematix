@@ -2,6 +2,7 @@ import type { Item, Msg, Station, Visual } from '@/engine/types';
 import { int, optionsAround, shuffle } from '@/engine/rng';
 import { PROBLEM_STATIONS } from './problems';
 import { FRACTION_STATIONS } from './fractions';
+import { SCIENCE_STATIONS } from './science';
 
 const range = (a: number, b: number, step = 1) => { const out: number[] = []; for (let v = a; v <= b; v += step) out.push(v); return out; };
 type LineV = Extract<Visual, { type: 'line' }>;
@@ -293,12 +294,13 @@ const B6: Station = {
   },
 };
 
-export const STATIONS: Station[] = [A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, ...PROBLEM_STATIONS, ...FRACTION_STATIONS];
+export const STATIONS: Station[] = [A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, ...PROBLEM_STATIONS, ...FRACTION_STATIONS, ...SCIENCE_STATIONS];
 export const ISLANDS = [
   { id: 'A' as const, title: 'isl_A', emoji: '📏' },
   { id: 'B' as const, title: 'isl_B', emoji: '🧩' },
   { id: 'C' as const, title: 'isl_C', emoji: '🧠' },
   { id: 'D' as const, title: 'isl_D', emoji: '🍕' },
+  { id: 'E' as const, title: 'isl_E', emoji: '🔬' },
 ];
 export const stationById = (id: string) => STATIONS.find((s) => s.id === id);
 

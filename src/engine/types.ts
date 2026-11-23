@@ -10,6 +10,12 @@ export type Visual =
   | { type: 'tens'; tens: number; ones: number } // tens rods and ones cubes
   | { type: 'frame'; filled: number } // a ten frame with some cells filled (friends of 10)
   /** The bar model of a word problem: rows of bars split in parts; a part or the total can be "?" */
+  /** The unit staircase: each step down is ×10 (or ×1000 between kg and g); from → to highlighted */
+  | { type: 'ladder'; units: string[]; from: number; to: number; factor?: number }
+  /** A chart: bars (rain, a climograph) or a line (temperature, position–time); x labels can be messages */
+  | { type: 'chart'; kind: 'bar' | 'line'; x: (string | Msg)[]; y: number[]; yMax: number; yStep: number; xTitle?: Msg; yTitle?: Msg; mark?: number; slope?: boolean }
+  /** A balance: what is on each pan stays equal */
+  | { type: 'balance'; left: string; right: string }
   | { type: 'bars'; rows: { parts: { v: number; label: string; shade?: boolean }[]; name?: Msg }[]; total?: string; diff?: string; groups?: boolean };
 
 export type Item = {
@@ -33,7 +39,7 @@ export type Phase = 'model' | 'guided' | 'independent';
 
 export interface Station {
   id: string;
-  island: 'A' | 'B' | 'C' | 'D';
+  island: 'A' | 'B' | 'C' | 'D' | 'E';
   title: Msg;
   /** A worked example: the steps the narrator explains, each with the same visual growing. */
   model: (rng: () => number) => { steps: { say: Msg; visual?: Visual }[] };

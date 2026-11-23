@@ -1,5 +1,5 @@
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import type { Visual } from '@/engine/types';
+import type { Msg, Visual } from '@/engine/types';
 import { fmtScaled, useT } from '@/i18n';
 
 const W = 360, PAD = 22;
@@ -144,9 +144,93 @@ function BarsView({ v, describe }: { v: BarsV; describe: string }) {
   );
 }
 
+/** The unit staircase: going down a step multiplies by 10, going up divides by 10. */
+function LadderView({ v, describe }: { v: Extract<Visual, { type: 'ladder' }>; describe: string }) {
+  const n = v.units.length, sw = 340 / n, sh = 22, lo = Math.min(v.from, v.to), hi = Math.max(v.from, v.to), down = v.to > v.from;
+  return (
+    <svg viewBox={`0 0 360 ${n * sh + 40}`} className="w-full max-w-xl mx-auto block" role="img" aria-label={describe} data-testid="ladder">
+      {v.units.map((u, i) => {
+        const x = 10 + i * sw, y = 10 + i * sh, on = i >= lo && i <= hi, end = i === v.from || i === v.to;
+        return (
+          <g key={u}>
+            <rect x={x} y={y} width={sw - 4} height={n * sh + 20 - i * sh} rx={8} fill={end ? (i === v.from ? 'var(--color-accent-pale)' : 'var(--color-mint-pale)') : on ? 'var(--color-yellow-pale)' : 'var(--color-card)'} stroke={end || on ? 'var(--color-accent)' : 'var(--color-border)'} strokeWidth={end ? 2.5 : 1.5} />
+            <text x={x + (sw - 4) / 2} y={y + 18} textAnchor="middle" fontSize="15" fontWeight={900} fill="var(--color-fg)">{u}</text>
+          </g>
+        );
+      })}
+      {/* the ×10 labels go on top of every step so none is hidden */}
+      {v.units.map((u, i) => {
+        if (!(i < n - 1 && i >= lo && i < hi)) return null;
+        const x = 10 + i * sw, y = 10 + i * sh;
+        return (
+          <g key={`f${u}`}>
+            <rect x={x + sw - 22} y={y + sh + 22} width={40} height={20} rx={10} fill="var(--color-card)" stroke="var(--color-peach)" strokeWidth={1.5} />
+            <text x={x + sw - 2} y={y + sh + 37} textAnchor="middle" fontSize="13" fontWeight={900} fill="var(--color-peach)">{down ? '×' : '÷'}{v.factor ?? 10}</text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+/** Bar or line chart with a labelled grid: reading charts is the skill (rain, temperature, position–time). */
+function ChartView({ v, describe }: { v: Extract<Visual, { type: 'chart' }>; describe: string }) {
+  const { m } = useT();
+  const L = 44, R = 350, T = 30, B = 200, n = v.x.length;
+  const X = (i: number) => L + ((i + 0.5) / n) * (R - L), Y = (y: number) => B - (y / v.yMax) * (B - T);
+  const xl = (x: string | Msg) => (typeof x === 'string' ? x : m(x));
+  const grid: number[] = []; for (let y = 0; y <= v.yMax; y += v.yStep) grid.push(y);
+  const labelEvery = grid.length > 8 ? 2 : 1;
+  return (
+    <svg viewBox="0 0 360 236" className="w-full max-w-xl mx-auto block" role="img" aria-label={describe} data-testid="chart">
+      {grid.map((y, i) => (
+        <g key={y}>
+          <line x1={L} x2={R} y1={Y(y)} y2={Y(y)} stroke="var(--color-border)" strokeWidth={1} />
+          {i % labelEvery === 0 && <text x={L - 6} y={Y(y) + 4} textAnchor="end" fontSize="11" fontWeight={700} fill="var(--color-fg)">{y}</text>}
+        </g>
+      ))}
+      <line x1={L} x2={L} y1={T} y2={B} stroke="var(--color-fg)" strokeWidth={2} />
+      <line x1={L} x2={R} y1={B} y2={B} stroke="var(--color-fg)" strokeWidth={2} />
+      {v.kind === 'bar' && v.y.map((y, i) => <rect key={i} x={X(i) - (R - L) / n * 0.32} y={Y(y)} width={(R - L) / n * 0.64} height={B - Y(y)} rx={4} fill={v.mark === i ? 'var(--color-peach)' : 'var(--color-accent)'} opacity={0.85} />)}
+      {v.kind === 'line' && <polyline points={v.y.map((y, i) => `${X(i)},${Y(y)}`).join(' ')} fill="none" stroke="var(--color-accent)" strokeWidth={3} strokeLinejoin="round" />}
+      {v.kind === 'line' && v.y.map((y, i) => <circle key={i} cx={X(i)} cy={Y(y)} r={v.mark === i ? 6 : 4} fill={v.mark === i ? 'var(--color-peach)' : 'var(--color-accent)'} />)}
+      {v.kind === 'line' && v.slope && v.y.length > 2 && (
+        <g stroke="var(--color-mint)" strokeWidth={2.5} fill="none">
+          <path d={`M ${X(1)} ${Y(v.y[1])} H ${X(2)} V ${Y(v.y[2])}`} strokeDasharray="4 3" />
+        </g>
+      )}
+      {v.x.map((x, i) => <text key={i} x={X(i)} y={B + 16} textAnchor="middle" fontSize="11" fontWeight={700} fill="var(--color-fg)">{xl(x)}</text>)}
+      {v.xTitle && <text x={R} y={B + 32} textAnchor="end" fontSize="11" fill="var(--color-muted)">{m(v.xTitle)}</text>}
+      {v.yTitle && <text x={L - 36} y={12} fontSize="12" fontWeight={700} fill="var(--color-muted)">{m(v.yTitle)}</text>}
+    </svg>
+  );
+}
+
+/** The balance: whatever you do to one pan, you do to the other. */
+function BalanceView({ v, describe }: { v: Extract<Visual, { type: 'balance' }>; describe: string }) {
+  return (
+    <svg viewBox="0 0 360 150" className="w-full max-w-md mx-auto block" role="img" aria-label={describe} data-testid="balance">
+      <path d="M 180 40 L 165 140 H 195 Z" fill="var(--color-border)" />
+      <line x1={50} y1={40} x2={310} y2={40} stroke="var(--color-fg)" strokeWidth={4} strokeLinecap="round" />
+      <circle cx={180} cy={40} r={6} fill="var(--color-fg)" />
+      {[[90, v.left], [270, v.right]].map(([x, txt]) => (
+        <g key={x as number}>
+          <line x1={(x as number) - 50} y1={40} x2={(x as number) - 60} y2={92} stroke="var(--color-muted)" strokeWidth={1.5} />
+          <line x1={(x as number) + 50} y1={40} x2={(x as number) + 60} y2={92} stroke="var(--color-muted)" strokeWidth={1.5} />
+          <rect x={(x as number) - 72} y={86} width={144} height={34} rx={12} fill="var(--color-accent-pale)" stroke="var(--color-accent)" strokeWidth={2} />
+          <text x={x as number} y={109} textAnchor="middle" fontSize="18" fontWeight={900} fill="var(--color-fg)">{txt as string}</text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 export function VisualView({ v, describe }: { v: Visual; describe: string }) {
   if (v.type === 'line') return <NumberLine v={v} describe={describe} />;
   if (v.type === 'bars') return <BarsView v={v} describe={describe} />;
+  if (v.type === 'ladder') return <LadderView v={v} describe={describe} />;
+  if (v.type === 'chart') return <ChartView v={v} describe={describe} />;
+  if (v.type === 'balance') return <BalanceView v={v} describe={describe} />;
   if (v.type === 'dots') {
     const cell = 22, gw = cell * 5 + 24;
     const w = v.groups.length * gw;

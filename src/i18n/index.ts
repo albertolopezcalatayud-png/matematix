@@ -41,6 +41,11 @@ function fractionWords(lang: Lang, a: number, b: number): string {
 /** Turns symbols into words so the voice reads "8 más 5" and not "8 plus sign 5". */
 export function speakable(lang: Lang, text: string): string {
   const w = { es: ['más', 'menos', 'por', 'es igual a', 'cuánto'], ca: ['més', 'menys', 'per', 'és igual a', 'quant'], en: ['plus', 'minus', 'times', 'equals', 'what'] }[lang];
+  const sup = (x: string) => x.split('').map((c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).join('');
+  const pw = { es: ['elevado a', 'por', 'entre'], ca: ['elevat a', 'per', 'entre'], en: ['to the power of', 'times', 'divided by'] }[lang];
+  text = text.replace(/10([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g, (_, e) => `10 ${pw[0]} ${sup(e)}`).replace(/10ⁿ/g, `10 ${pw[0]} n`).replace(/·/g, ` ${pw[1]} `).replace(/÷/g, ` ${pw[2]} `);
+  const U: Record<string, [string, string, string]> = { 'km/h': ['kilómetros por hora', 'quilòmetres per hora', 'kilometres per hour'], 'g/cm³': ['gramos por centímetro cúbico', 'grams per centímetre cúbic', 'grams per cubic centimetre'], 'g/L': ['gramos por litro', 'grams per litre', 'grams per litre'], 'cm³': ['centímetros cúbicos', 'centímetres cúbics', 'cubic centimetres'], '°C': ['grados', 'graus', 'degrees'] };
+  for (const [u, w3] of Object.entries(U)) text = text.split(u).join(w3[lang === 'es' ? 0 : lang === 'ca' ? 1 : 2]);
   return text.replace(/(\d+)\/(\d+)/g, (_, a, b) => fractionWords(lang, Number(a), Number(b))).replace(/\+/g, ` ${w[0]} `).replace(/−/g, ` ${w[1]} `).replace(/×/g, ` ${w[2]} `).replace(/=/g, ` ${w[3]} `).replace(/(^|[\s=])\?(?=\s|$)/g, `$1 ${w[4]}`).replace(/\s+/g, ' ').trim();
 }
 

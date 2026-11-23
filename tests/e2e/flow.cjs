@@ -81,7 +81,7 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     await noOverflow(p, `${code} world`);
     await p.screenshot({ path: `${SHOTS}/${code}-4-world.png` });
     await p.goto(BASE + '#/estaciones'); await p.waitForTimeout(300);
-    ok((await p.locator('[data-testid^=station-]').count()) === 24, `${code}: list with 24 stations`);
+    ok((await p.locator('[data-testid^=station-]').count()) === 30, `${code}: list with 30 stations`);
     await p.screenshot({ path: `${SHOTS}/${code}-4-list.png`, fullPage: true });
 
     // A station of each kind: place (A2), tens/number or choice (A4), number with keypad (B5)
