@@ -7,9 +7,11 @@ import { ORDER } from '@/data/world';
  */
 export interface Placement { lo: number; hi: number; at: number; streak: number; asked: number; done: string | null; allRight: boolean }
 
-export function startPlacement(): Placement {
+/** `from`: start at the chosen school year's station instead of the middle. */
+export function startPlacement(from?: string): Placement {
   const lo = 0, hi = ORDER.length - 1;
-  return { lo, hi, at: Math.floor((lo + hi) / 2), streak: 0, asked: 0, done: null, allRight: false };
+  const i = from ? ORDER.indexOf(from) : -1;
+  return { lo, hi, at: i >= 0 ? i : Math.floor((lo + hi) / 2), streak: 0, asked: 0, done: null, allRight: false };
 }
 
 export function answerPlacement(p: Placement, right: boolean): Placement {

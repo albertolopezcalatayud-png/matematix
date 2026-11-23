@@ -10,6 +10,7 @@ import { describe } from '@/components/describe';
 import { TopBar } from '@/components/Layout';
 import { ORDER } from '@/data/world';
 import { answerPlacement, startPlacement } from '@/engine/placement';
+import { courseById, courseOfStation } from '@/data/courses';
 
 /** "Find your starting point": a short check with no clock, no marks and no right/wrong shown. It starts in the middle and
  *  jumps up or down (see engine/placement). Rule-based, never a diagnosis; the result is only a suggested station. */
@@ -20,14 +21,15 @@ export default function StartPoint() {
   const set = useApp((s) => s.set);
   const voice = useApp((s) => s.voice);
   const seed = useMemo(() => Date.now() >>> 0, []);
-  const [pl, setPl] = useState(startPlacement);
+  const course = useApp((s) => s.course);
+  const [pl, setPl] = useState(() => startPlacement(courseById(course)?.start));
   const [allRight, setAllRight] = useState(false);
   const current = useMemo(() => ({ id: ORDER[pl.at], item: stationById(ORDER[pl.at])!.make(rng(seed + pl.asked * 7919), false) }), [pl.at, pl.asked, seed]);
   const [value, setValue] = useState<number | null>(null);
   const [typed, setTyped] = useState('');
   const [found, setFound] = useState<string | null>(null);
 
-  const finish = (id: string) => { set({ suggested: id }); setFound(id); };
+  const finish = (id: string) => { set({ suggested: id, last: null, course: course ?? courseOfStation(id).id }); setFound(id); };
   const answer = (v: number) => {
     const next = answerPlacement(pl, isRight(current.item, v));
     if (next.done) { setAllRight(next.allRight); return finish(next.done); }

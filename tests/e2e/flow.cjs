@@ -59,7 +59,7 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     ok(/#\/quien/.test(p.url()), `${code}: then asks who will use it`);
     await p.screenshot({ path: `${SHOTS}/${code}-0-who.png` });
     await p.getByTestId('who-pupil').click(); await p.waitForTimeout(300);
-    ok((await p.getByTestId('start').innerText()).startsWith(words.start), `${code}: home in the chosen language`);
+    ok((await p.getByTestId('course-p1').innerText()).includes({ es: 'Primaria', ca: 'Primària', en: 'Primary' }[code]), `${code}: home asks the school year, in the chosen language`);
     ok(await p.evaluate(() => document.documentElement.lang) === { es: 'es', ca: 'ca-ES-valencia', en: 'en-GB' }[code], `${code}: page language set`);
     await p.screenshot({ path: `${SHOTS}/${code}-1-home.png` });
 

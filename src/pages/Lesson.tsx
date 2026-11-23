@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { STATIONS, isRight, itemKey, stationById } from '@/data/stations';
-import { nextStation } from '@/data/world';
+import { ISLANDS, STATIONS, isRight, itemKey, stationById } from '@/data/stations';
+import { nextStation, stepBackFrom } from '@/data/world';
 import { rng } from '@/engine/rng';
 import { GUIDED, INDEPENDENT, pickItems } from '@/engine/session';
 import type { Item } from '@/engine/types';
@@ -11,6 +11,7 @@ import { speak, stopSpeech } from '@/services/speech';
 import { PlaceOnLine, VisualView } from '@/components/Visuals';
 import { ThreadInput } from '@/components/ThreadInput';
 import { describe } from '@/components/describe';
+import { Mascot } from '@/components/Mascot';
 import { TopBar, RestReminder } from '@/components/Layout';
 
 
@@ -58,7 +59,14 @@ export default function Lesson() {
     setRightFirst(rf);
     if (idx + 1 < items.length) setIdx(idx + 1);
     else {
-      if (!saved.current) { record(station.id, rf, INDEPENDENT); saved.current = true; }
+      if (!saved.current) {
+        record(station.id, rf, INDEPENDENT); saved.current = true;
+        // hard on two different days: next time, first the station it builds on (then back here)
+        const st = useApp.getState();
+        const back = stepBackFrom(st.progress, station.id);
+        if (back) st.set({ suggested: back, last: null, wentBack: station.id, progress: { ...st.progress, [station.id]: { ...st.progress[station.id], hardDays: [] } } });
+        else if (st.wentBack === station.id) st.set({ wentBack: null });
+      }
       setStage('end');
     }
   };
@@ -69,16 +77,16 @@ export default function Lesson() {
   const base = sameIsland[sameIsland.indexOf(station) - 1];
 
   return (
-    <div className="min-h-dvh pb-10">
+    <div className="min-h-dvh pb-10 lesson-bg" data-island={station.island}>
       <TopBar title={m(station.title)} />
       <RestReminder />
       <main className="max-w-xl mx-auto px-4 space-y-4">
         {stage !== 'end' && (
           <div className="flex items-center gap-3 text-sm font-semibold" aria-live="polite">
-            <span className="rounded-full px-3 py-1 bg-[var(--color-accent)] text-[var(--color-bg)]" data-testid="phase">{t(`ph_${phase}`)}</span>
-            <span className="flex gap-1" aria-hidden>
+            <span className="isl-badge" data-testid="phase"><span aria-hidden>{ISLANDS.find((i) => i.id === station.island)?.emoji}</span>{t(`ph_${phase}`)}</span>
+            <span className="step-dots" aria-hidden>
               {(['model', 'guided', 'independent'] as const).map((p, i) => (
-                <span key={p} className={`w-2.5 h-2.5 rounded-full ${i <= ['model', 'guided', 'independent'].indexOf(phase) ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-border)]'}`} />
+                <i key={p} className={i <= ['model', 'guided', 'independent'].indexOf(phase) ? 'on' : ''} />
               ))}
             </span>
             {stage === 'items' && <span className="ml-auto text-[var(--color-muted)]" data-testid="counter">{t('phase_n', { a: idx + 1, b: items.length })}</span>}
@@ -87,7 +95,7 @@ export default function Lesson() {
         )}
 
         {stage === 'model' && (
-          <section className="card space-y-4 pop" key={step}>
+          <section className="card isl-top space-y-4 pop" key={step}>
             <p className="text-sm text-[var(--color-muted)]">{t('step_of', { a: step + 1, b: model.steps.length })}</p>
             {model.steps[step].visual && <VisualView v={model.steps[step].visual!} describe={describe(t, model.steps[step].visual!)} />}
             <p className="text-xl font-semibold" data-testid="model-text">{m(model.steps[step].say)}</p>
@@ -107,10 +115,13 @@ export default function Lesson() {
 
         {stage === 'end' && (
           <section className="card space-y-4 text-center pop" data-testid="end">
-            <p className="text-4xl" aria-hidden>🌟</p>
+            <Mascot mood={rightFirst >= 4 || (testScore ?? 0) >= 4 ? 'cheer' : 'happy'} size={110} className="mx-auto" />
             <h2 className="text-2xl font-extrabold">{t('end_title')}</h2>
             <p data-testid="end-score">{t('end_score', { a: rightFirst, b: INDEPENDENT })}</p>
             {testScore != null ? <p data-testid="test-result">{testScore >= 4 ? t('test_pass') : t('test_fail')}</p> : <p>{statusOf(useApp.getState().progress[station.id]) === 'done' ? t('end_done') : rightFirst >= 4 ? t('end_again_day') : t('end_more')}</p>}
+            {testScore == null && rightFirst === INDEPENDENT && statusOf(useApp.getState().progress[station.id]) !== 'done' && (
+              <button className="btn btn-ghost w-full !border-dashed !border-[var(--color-accent)] text-[var(--color-accent)]" data-testid="end-up" onClick={startTest}>⚡ {t('end_up')}</button>
+            )}
             {rightFirst < 3 && base && (
               <button className="btn btn-ghost w-full" onClick={() => nav(`/estacion/${base.id}`)}>{t('end_base')} · {m(base.title)}</button>
             )}
@@ -172,16 +183,19 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
   const good = state === 'right' ? true : state === 'wrong' || state === 'shown' ? false : null;
 
   return (
-    <section className="card space-y-4 pop" data-testid="exercise" data-kind={item.kind} data-answer={answerOf()}>
+    <section className={`card isl-top space-y-4 pop ${state === 'right' ? 'burst' : ''}`} data-testid="exercise" data-kind={item.kind} data-answer={answerOf()}>
       <div className="flex items-start gap-2">
         <h2 className={`${prompt.length > 70 ? 'text-xl' : 'text-2xl'} font-extrabold flex-1 leading-snug`} data-testid="prompt">{prompt}</h2>
         <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>
       </div>
 
       {(guided || state !== 'ask') && (
-        <p className={`rounded-2xl p-3 text-base ${state === 'ask' ? 'bg-[var(--color-sky-pale)]' : state === 'right' ? 'bg-[var(--color-mint-pale)]' : 'bg-[var(--color-peach-pale)]'}`} data-testid="feedback" aria-live="polite">
+        <div className="flex items-end gap-2">
+        {state !== 'ask' && <Mascot mood={state === 'right' ? 'cheer' : 'think'} size={52} className="shrink-0 kid-only" />}
+        <p className={`flex-1 rounded-2xl p-3 text-base ${state === 'ask' ? 'bg-[var(--color-sky-pale)]' : state === 'right' ? 'bg-[var(--color-mint-pale)]' : 'bg-[var(--color-peach-pale)]'}`} data-testid="feedback" aria-live="polite">
           {state === 'right' ? `${t(okMsg)}${tenStop != null && th && item.kind === 'number' && tenStop !== item.answer && Math.min(th.start, item.answer) < tenStop && tenStop < Math.max(th.start, item.answer) ? ' ' + t('stopped_ten', { t: tenStop }) : ''}` : state === 'wrong' ? `${t('try_again')} ${m(item.hint)}` : state === 'shown' ? `${t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : item.kind === 'place' ? fmtScaled(lang, item.target, item.scale ?? 1, item.frac) : answerOf() })} ${m(item.hint)}` : `💡 ${m(item.hint)}`}
         </p>
+        </div>
       )}
 
       {item.kind !== 'place' && !th && visual && <VisualView v={visual} describe={describe(t, visual)} />}

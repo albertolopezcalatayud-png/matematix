@@ -7,13 +7,15 @@ export interface StationProgress {
   goodDays: string[];
   best: number;
   sessions: number;
+  /** Days with a hard session (2 or fewer right first time): two of them suggest going back a step. */
+  hardDays?: string[];
   /** Passed with "I can already do this": 4 out of 5 with no help. */
   passed?: boolean;
 }
 
 export type Role = 'pupil' | 'teacher' | 'pt' | 'family';
 /** What belongs to each child on a shared device (PT/AL with several pupils). Only an alias and an emoji, never a name. */
-export const PUPIL_KEYS = ['progress', 'seen', 'minutes', 'found', 'reach', 'toured', 'suggested', 'last', 'voice', 'large', 'sound', 'motion', 'help', 'voices'] as const;
+export const PUPIL_KEYS = ['course', 'wentBack', 'progress', 'seen', 'minutes', 'found', 'reach', 'toured', 'suggested', 'last', 'voice', 'large', 'sound', 'motion', 'help', 'voices'] as const;
 type PupilKey = (typeof PUPIL_KEYS)[number];
 export interface Pupil { alias: string; emoji: string; data: Partial<Pick<AppState, PupilKey>> }
 
@@ -26,6 +28,10 @@ interface AppState {
   active: string | null;
   /** 'more': 4 guided exercises before the 5 on your own (instead of 2). */
   help: 'normal' | 'more';
+  /** School year chosen as the starting point (p1…p6, s1…s4); null = not chosen. */
+  course: string | null;
+  /** The station that was hard on two days and sent the pupil back a step (shown once on the home screen). */
+  wentBack: string | null;
   addPupil: (alias: string, emoji: string) => string;
   switchPupil: (id: string | null) => void;
   removePupil: (id: string) => void;
@@ -60,7 +66,7 @@ interface AppState {
   reset: () => void;
 }
 
-const fresh = (): Required<Pupil['data']> => ({ progress: {}, seen: {}, minutes: {}, found: [], reach: 20, toured: false, suggested: null, last: null, voice: true, large: false, sound: true, motion: 'auto', help: 'normal', voices: {} });
+const fresh = (): Required<Pupil['data']> => ({ course: null, wentBack: null, progress: {}, seen: {}, minutes: {}, found: [], reach: 20, toured: false, suggested: null, last: null, voice: true, large: false, sound: true, motion: 'auto', help: 'normal', voices: {} });
 
 export const today = () => new Date().toLocaleDateString('sv-SE');
 const MASTER_RIGHT = 4;
@@ -70,7 +76,7 @@ export const SEEN_MAX = 600;
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
-      lang: null, role: null, pupils: {}, active: null, help: 'normal', voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, voices: {}, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
+      lang: null, course: null, wentBack: null, role: null, pupils: {}, active: null, help: 'normal', voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, voices: {}, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
       addPupil: (alias, emoji) => {
         const id = Math.random().toString(36).slice(2, 8);
@@ -95,14 +101,15 @@ export const useApp = create<AppState>()(
         const cur = s.progress[station] ?? { goodDays: [], best: 0, sessions: 0 };
         const d = today();
         const good = rightFirst >= Math.min(MASTER_RIGHT, total) && !cur.goodDays.includes(d) ? [...cur.goodDays, d] : cur.goodDays;
-        return { last: station, progress: { ...s.progress, [station]: { goodDays: good, best: Math.max(cur.best, rightFirst), sessions: cur.sessions + 1 } } };
+        const hard = rightFirst <= 2 && total >= 5 && !(cur.hardDays ?? []).includes(d) ? [...(cur.hardDays ?? []), d] : cur.hardDays;
+        return { last: station, progress: { ...s.progress, [station]: { ...cur, goodDays: good, best: Math.max(cur.best, rightFirst), sessions: cur.sessions + 1, ...(hard ? { hardDays: hard } : {}) } } };
       }),
       addMinutes: (m) => set((s) => ({ minutes: { ...s.minutes, [today()]: (s.minutes[today()] ?? 0) + m } })),
       markSeen: (station, keys) => set((s) => {
         const fresh = new Set(keys);
         return { seen: { ...s.seen, [station]: [...(s.seen[station] ?? []).filter((k) => !fresh.has(k)), ...keys].slice(-SEEN_MAX) } };
       }),
-      reset: () => set({ suggested: null, last: null, progress: {}, minutes: {}, seen: {}, found: [], reach: 20 }),
+      reset: () => set({ course: null, suggested: null, last: null, progress: {}, minutes: {}, seen: {}, found: [], reach: 20 }),
     }),
     { name: 'matematix', version: 1, merge: (persisted, current) => ({ ...current, ...(persisted as object) }) },
   ),

@@ -78,7 +78,7 @@ button { font: inherit; color: inherit; }
 @keyframes pop { from { transform: scale(.96); opacity: .4; } to { transform: scale(1); opacity: 1; } }
 
 /* ── The living number line ── */
-.world-bg { background: linear-gradient(180deg, #FFF6EA 0%, #FDE9F0 50%, #ECE8FF 100%); }
+.world-bg { background: linear-gradient(180deg, #FFF7E8 0%, #EAF4FF 55%, #ECE8FF 100%); }
 :root[data-theme="dark"] .world-bg { background: linear-gradient(180deg, #232038 0%, #1E1B33 55%, #191A2C 100%); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .world-bg { background: linear-gradient(180deg, #232038 0%, #1E1B33 55%, #191A2C 100%); } }
 .chip { background: color-mix(in srgb, var(--color-card) 80%, transparent); border-radius: 999px; padding: 4px 10px; font-size: .75rem; font-weight: 800; white-space: nowrap; }
@@ -100,3 +100,60 @@ button { font: inherit; color: inherit; }
 .mk-c { background: var(--color-mint); color: var(--color-bg); }
 .mk-d { background: var(--color-peach); color: var(--color-bg); }
 .mk-e { background: #2E6F8B; color: #fff; }
+
+/* ── Islands: each has its own colour (pastel tile + strong colour for text/badges, AA contrast) ── */
+:root { --isl-A: #6A58D6; --isl-A-pale: #EEEBFF; --isl-B: #2A8A6C; --isl-B-pale: #E0F5EC; --isl-C: #2C76B3; --isl-C-pale: #E3EFFB;
+  --isl-D: #B5631C; --isl-D-pale: #FFEFDB; --isl-E: #1B7A7A; --isl-E-pale: #DCF3F2; }
+:root[data-theme="dark"] { --isl-A-pale: #2E2A52; --isl-B-pale: #1E3A31; --isl-C-pale: #1F3042; --isl-D-pale: #3D2E1E; --isl-E-pale: #183635;
+  --isl-A: #B9AEFF; --isl-B: #8FD9C0; --isl-C: #9CCBF2; --isl-D: #F5BE86; --isl-E: #8EDBD8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --isl-A-pale: #2E2A52; --isl-B-pale: #1E3A31; --isl-C-pale: #1F3042; --isl-D-pale: #3D2E1E; --isl-E-pale: #183635;
+  --isl-A: #B9AEFF; --isl-B: #8FD9C0; --isl-C: #9CCBF2; --isl-D: #F5BE86; --isl-E: #8EDBD8; } }
+[data-island="A"] { --isl: var(--isl-A); --isl-pale: var(--isl-A-pale); }
+[data-island="B"] { --isl: var(--isl-B); --isl-pale: var(--isl-B-pale); }
+[data-island="C"] { --isl: var(--isl-C); --isl-pale: var(--isl-C-pale); }
+[data-island="D"] { --isl: var(--isl-D); --isl-pale: var(--isl-D-pale); }
+[data-island="E"] { --isl: var(--isl-E); --isl-pale: var(--isl-E-pale); }
+
+/* Soft decorative shapes behind the home screen (no pink, never behind text that needs contrast) */
+.deco { position: relative; overflow: hidden; isolation: isolate; }
+.deco::before, .deco::after { content: ""; position: absolute; z-index: -1; border-radius: 999px; filter: blur(2px); }
+.deco::before { width: 260px; height: 260px; right: -90px; top: -70px; background: radial-gradient(circle, #FFE7A8 0%, #FFE7A800 70%); }
+.deco::after { width: 300px; height: 300px; left: -120px; bottom: 10%; background: radial-gradient(circle, #CFE6FF 0%, #CFE6FF00 70%); }
+.floaty { position: absolute; z-index: -1; font-weight: 800; color: var(--color-accent); opacity: .09; user-select: none; pointer-events: none; }
+
+.hero-card { border-radius: 28px; padding: 18px; color: #fff; background: linear-gradient(135deg, var(--isl, #5B4BC4) 0%, color-mix(in srgb, var(--isl, #5B4BC4) 70%, #1E1A4A) 100%);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--isl, #5B4BC4) 35%, transparent); }
+:root[data-theme="dark"] .hero-card { color: #1A1C29; }
+.tile { border-radius: 22px; padding: 12px; background: var(--isl-pale, var(--color-card)); border: 2px solid color-mix(in srgb, var(--isl, var(--color-border)) 25%, transparent); }
+.tile-bar { height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--isl, #888) 18%, transparent); overflow: hidden; }
+.tile-bar > i { display: block; height: 100%; border-radius: 99px; background: var(--isl); }
+.isl-badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 4px 12px; font-weight: 800; font-size: .85rem; background: var(--isl-pale); color: var(--isl); }
+.isl-top { border-top: 6px solid var(--isl, var(--color-accent)); }
+
+.bubble { position: relative; background: var(--color-card); border: 2px solid var(--color-border); border-radius: 20px; padding: 10px 14px; font-weight: 600; line-height: 1.35; }
+.bubble::before { content: ""; position: absolute; left: -9px; bottom: 16px; width: 14px; height: 14px; background: inherit; border-left: 2px solid var(--color-border); border-bottom: 2px solid var(--color-border); transform: rotate(45deg); border-radius: 0 0 0 4px; }
+
+.mascot-wing { transform-box: fill-box; transform-origin: center; animation: flutter 1.6s ease-in-out infinite; }
+@keyframes flutter { 0%, 100% { opacity: .75; } 50% { opacity: .45; } }
+.mascot-cheer { animation: hop .6s ease-out 1; }
+@keyframes hop { 0% { transform: translateY(0); } 40% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+.mascot-sparks { animation: twinkle 1s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: .3; } }
+
+.burst { position: relative; }
+.burst::after { content: "✦ ✧ ✦"; position: absolute; right: 12px; top: -6px; color: #FFB547; font-size: 1.1rem; letter-spacing: 4px; animation: rise .9s ease-out forwards; pointer-events: none; }
+@keyframes rise { from { transform: translateY(6px); opacity: 0; } 40% { opacity: 1; } to { transform: translateY(-14px); opacity: 0; } }
+
+.step-dots { display: flex; gap: 4px; }
+.step-dots > i { width: 18px; height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--isl, var(--color-accent)) 20%, transparent); }
+.step-dots > i.on { background: var(--isl, var(--color-accent)); }
+
+/* Older pupils (5.º Primaria to ESO): the same app, less childish. No mascot in lessons, sleeker colours. */
+:root[data-age="teen"] .kid-only { display: none; }
+:root[data-age="teen"] .bubble { border-radius: 16px; }
+:root[data-age="teen"] .hero-card { background: linear-gradient(135deg, #2D2A5E 0%, var(--isl, #5B4BC4) 100%); }
+:root[data-age="teen"] .floaty { opacity: .06; }
+
+/* Lessons take the colour of their island */
+.lesson-bg { background: linear-gradient(180deg, var(--isl-pale) 0, var(--color-bg) 320px); }
+.lesson-bg .btn-primary { background: var(--isl); }

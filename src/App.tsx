@@ -43,14 +43,16 @@ function LessonFresh() { const { id } = useParams(); return <Lesson key={id} />;
 
 /** Applies language, text size, colours and motion to the whole page. */
 function Appearance() {
-  const { lang, large, theme, motion } = useApp();
+  const { lang, large, theme, motion, course } = useApp();
   useEffect(() => {
     const r = document.documentElement;
     r.lang = HTML_LANG[lang ?? 'es'];
     r.dataset.size = large ? 'large' : 'normal';
     if (theme === 'auto') delete r.dataset.theme; else r.dataset.theme = theme;
     r.dataset.motion = motion;
-  }, [lang, large, theme, motion]);
+    // 5.º de Primaria and up: the same app with a less childish look
+    r.dataset.age = course && /^(p5|p6|s\d)$/.test(course) ? 'teen' : 'kid';
+  }, [lang, large, theme, motion, course]);
   return null;
 }
 

@@ -4,6 +4,7 @@ import { useT } from '@/i18n';
 import { statusOf, today, useApp, type StationProgress } from '@/stores/app';
 import { ISLANDS, STATIONS } from '@/data/stations';
 import { TopBar } from '@/components/Layout';
+import { COURSES, courseById } from '@/data/courses';
 import { esc, printPage } from '@/services/print';
 
 const EMOJI = ['🦊', '🐢', '🦉', '🐬', '🦁', '🐝', '🐙', '🦄', '🐸', '🐼', '🚀', '⭐', '🌈', '🍀', '⚽', '🎸'];
@@ -79,6 +80,12 @@ export default function Pupils() {
         <section className="card space-y-1" data-testid="pupil-settings">
           <h2 className="font-extrabold">{t('p_settings', { a: name(s.active) })}</h2>
           <p className="text-sm text-[var(--color-muted)]">{t('p_progress', { d: c.d, g: c.g, m: weekMinutes(s.minutes) })}</p>
+          <label className="flex items-center gap-3 py-2"><span className="flex-1">{t('course_q')}</span>
+            <select className="rounded-2xl border-2 border-[var(--color-border)] bg-[var(--color-card)] px-3 min-h-11" value={s.course ?? ''} data-testid="pupil-course"
+              onChange={(e) => { const c = courseById(e.target.value); s.set(c ? { course: c.id, suggested: c.start, last: null } : { course: null }); }}>
+              <option value="">—</option>
+              {COURSES.map((c) => <option key={c.id} value={c.id}>{t(`course_${c.id}`)}</option>)}
+            </select></label>
           {([['help', s.help === 'more', (v: boolean) => s.set({ help: v ? 'more' : 'normal' })], ['voice', s.voice, (v: boolean) => s.set({ voice: v })], ['sound', s.sound, (v: boolean) => s.set({ sound: v })],
             ['large', s.large, (v: boolean) => s.set({ large: v })], ['motion', s.motion === 'reduce', (v: boolean) => s.set({ motion: v ? 'reduce' : 'auto' })]] as const).map(([k, v, on]) => (
             <label key={k} className="flex items-center gap-3 py-2 cursor-pointer"><span className="flex-1">{t(`p_${k}`)}</span>

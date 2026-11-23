@@ -17,10 +17,17 @@ async function getJson<T>(url: string, empty: T): Promise<T> {
   const cache = 'caches' in window ? await caches.open('mx-audio-index').catch(() => null) : null;
   try {
     const r = await fetch(url, { cache: 'no-cache' });
-    if (r.ok) { void cache?.put(url, r.clone()); return (await r.json()) as T; }
-  } catch { /* offline */ }
-  const kept = await cache?.match(url);
-  return kept ? ((await kept.json()) as T) : empty;
+    if (r.ok && (r.headers.get('content-type') ?? '').includes('json')) {
+      const copy = r.clone();
+      const data = (await r.json()) as T;
+      void cache?.put(url, copy).catch(() => {});
+      return data;
+    }
+  } catch { /* offline, or not there yet */ }
+  try {
+    const kept = await cache?.match(url);
+    return kept ? ((await kept.json()) as T) : empty;
+  } catch { return empty; }
 }
 
 /** A clip: kept on this device after the first time it is heard (the Android app has no service worker). */

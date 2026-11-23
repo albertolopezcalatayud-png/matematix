@@ -50,6 +50,13 @@ export function litOf(progress: Record<string, StationProgress>): [number, numbe
 export const ORDER = ['A1', 'A2', 'B1', 'B3', 'B2', 'A3', 'C1', 'B4', 'B5', 'C2', 'A4', 'C3', 'A5', 'C4', 'A6', 'B6', 'C5', 'D1', 'D2', 'D3', 'D4', 'C6', 'D5', 'E1', 'E2', 'D6', 'E3', 'E4', 'E5', 'E6'];
 
 /** The station the big "Carry on" button opens: the one in progress, else the suggested one, else the first not mastered. */
+/** Hard on two different days: the closest earlier station (at most 3 back) that is not lit yet, or null. */
+export function stepBackFrom(progress: Record<string, StationProgress>, station: string): string | null {
+  if ((progress[station]?.hardDays?.length ?? 0) < 2) return null;
+  const i = ORDER.indexOf(station);
+  return ORDER.slice(Math.max(0, i - 3), i).reverse().find((id) => statusOf(progress[id]) !== 'done') ?? null;
+}
+
 export function nextStation(progress: Record<string, StationProgress>, suggested: string | null, last: string | null): string {
   if (last && statusOf(progress[last]) === 'doing') return last;
   if (suggested && statusOf(progress[suggested]) !== 'done') return suggested;
