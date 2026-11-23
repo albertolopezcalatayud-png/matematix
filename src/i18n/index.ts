@@ -1,4 +1,7 @@
 import { MESSAGES, type MsgKey } from './messages';
+import { ADULT } from './adults';
+
+const ALL: Record<string, readonly string[]> = { ...MESSAGES, ...ADULT };
 import type { Lang, Msg } from '@/engine/types';
 import { useApp } from '@/stores/app';
 
@@ -6,7 +9,7 @@ const IDX: Record<Lang, number> = { es: 0, ca: 1, en: 2 };
 export const HTML_LANG: Record<Lang, string> = { es: 'es', ca: 'ca-ES-valencia', en: 'en-GB' };
 
 export function translate(lang: Lang, key: string, vars?: Record<string, string | number>): string {
-  const row = (MESSAGES as Record<string, readonly string[]>)[key];
+  const row = ALL[key];
   let s = row ? row[IDX[lang]] : key;
   // a value written as "$key" is itself a message (names and objects change with the language);
   // "#0.7" is a decimal number written the way each language writes it (0,7 in castellano and valencià)

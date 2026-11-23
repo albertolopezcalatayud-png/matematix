@@ -6,11 +6,11 @@ export const GUIDED = 2, INDEPENDENT = 5;
 
 /** The 7 exercises of a session. None is the same as another in the session, and none is one the child has already
  *  seen in this station (the fingerprints in `recent`), until every variant has been used. */
-export function pickItems(station: Station, seed: number, recent: Set<string>): { item: Item; guided: boolean }[] {
+export function pickItems(station: Station, seed: number, recent: Set<string>, guidedN = GUIDED): { item: Item; guided: boolean }[] {
   const out: { item: Item; guided: boolean }[] = [];
   const used = new Set<string>();
-  for (let i = 0; i < GUIDED + INDEPENDENT; i++) {
-    const guided = i < GUIDED;
+  for (let i = 0; i < guidedN + INDEPENDENT; i++) {
+    const guided = i < guidedN;
     let best: Item | null = null;
     for (let tryN = 0; tryN < 200; tryN++) {
       const cand = station.make(rng((seed + i * 1013 + tryN * 7907) >>> 0), guided);

@@ -9,7 +9,7 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
   await c.addInitScript(() => { window.__tones = 0; Object.defineProperty(window, 'speechSynthesis', { value: { speak: (u) => setTimeout(() => u.onend && u.onend(), 5), cancel() {}, getVoices: () => [], addEventListener() {} } });
     const AC = window.AudioContext; window.AudioContext = class extends AC { createOscillator() { window.__tones++; return super.createOscillator(); } }; navigator.vibrate = () => { window.__buzz = (window.__buzz || 0) + 1; return true; }; });
   const p = await c.newPage(); p.on('pageerror', (e) => errs.push(e.message));
-  await p.goto(BASE); await p.getByTestId('lang-es').click(); await p.waitForTimeout(200);
+  await p.goto(BASE); await p.getByTestId('lang-es').click(); await p.getByTestId('who-pupil').click(); await p.waitForTimeout(200);
   await p.goto(BASE + '#/mapa'); await p.waitForTimeout(500);
   ok((await p.getByTestId('tour').count()) === 1, 'first visit: guided tour');
   await p.screenshot({ path: `${SHOTS}/w-tour1.png` });

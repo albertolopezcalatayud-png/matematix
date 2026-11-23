@@ -28,7 +28,7 @@ export default function Lesson() {
 
   const model = useMemo(() => station.model(rng(seed)), [station, seed]);
   const markSeen = useApp((s) => s.markSeen);
-  const items = useMemo(() => pickItems(station, seed, new Set(useApp.getState().seen[station.id] ?? [])), [station, seed]);
+  const items = useMemo(() => pickItems(station, seed, new Set(useApp.getState().seen[station.id] ?? []), useApp.getState().help === 'more' ? 4 : GUIDED), [station, seed]);
   useEffect(() => { markSeen(station.id, items.map((x) => itemKey(x.item))); }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [stage, setStage] = useState<'model' | 'items' | 'test' | 'end'>(progress && progress.sessions > 0 ? 'items' : 'model');
@@ -63,7 +63,7 @@ export default function Lesson() {
     }
   };
 
-  const phase = stage === 'model' ? 'model' : stage === 'test' || idx >= GUIDED ? 'independent' : 'guided';
+  const phase = stage === 'model' ? 'model' : stage === 'test' || !items[idx]?.guided ? 'independent' : 'guided';
   const canTest = statusOf(progress) !== 'done' && (stage === 'model' || (stage === 'items' && idx === 0));
   const sameIsland = STATIONS.filter((s) => s.island === station.island);
   const base = sameIsland[sameIsland.indexOf(station) - 1];

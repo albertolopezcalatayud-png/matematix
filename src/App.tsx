@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { HashRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { HTML_LANG, useT } from '@/i18n';
 import { useApp } from '@/stores/app';
@@ -10,7 +10,17 @@ import Lesson from '@/pages/Lesson';
 import StartPoint from '@/pages/StartPoint';
 import Progress from '@/pages/Progress';
 import Settings from '@/pages/Settings';
+import Who from '@/pages/Who';
 import { TopBar } from '@/components/Layout';
+
+// The adults' area is loaded only when an adult opens it (the children's app stays small).
+const Hub = lazy(() => import('@/pages/adults/Hub'));
+const Pupils = lazy(() => import('@/pages/adults/Pupils'));
+const Sheets = lazy(() => import('@/pages/adults/Sheets'));
+const Board = lazy(() => import('@/pages/adults/Board'));
+const Certificate = lazy(() => import('@/pages/adults/Certificate'));
+const Guide = lazy(() => import('@/pages/adults/Guide'));
+const Family = lazy(() => import('@/pages/adults/Family'));
 
 function Privacy() {
   const { t } = useT();
@@ -42,6 +52,7 @@ export default function App() {
   return (
     <HashRouter>
       <Appearance />
+      <Suspense fallback={<p className="p-6 text-center">…</p>}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/idioma" element={<Language />} />
@@ -52,8 +63,17 @@ export default function App() {
         <Route path="/progreso" element={<Progress />} />
         <Route path="/ajustes" element={<Settings />} />
         <Route path="/privacidad" element={<Privacy />} />
+        <Route path="/quien" element={lang ? <Who /> : <Navigate to="/idioma" />} />
+        <Route path="/adultos" element={lang ? <Hub /> : <Navigate to="/idioma" />} />
+        <Route path="/adultos/alumnos" element={lang ? <Pupils /> : <Navigate to="/idioma" />} />
+        <Route path="/adultos/fichas" element={lang ? <Sheets /> : <Navigate to="/idioma" />} />
+        <Route path="/adultos/pizarra" element={lang ? <Board /> : <Navigate to="/idioma" />} />
+        <Route path="/adultos/certificado" element={lang ? <Certificate /> : <Navigate to="/idioma" />} />
+        <Route path="/adultos/guia" element={lang ? <Guide /> : <Navigate to="/idioma" />} />
+        <Route path="/adultos/casa" element={lang ? <Family /> : <Navigate to="/idioma" />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      </Suspense>
     </HashRouter>
   );
 }

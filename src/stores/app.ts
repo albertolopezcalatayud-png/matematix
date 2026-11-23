@@ -11,8 +11,24 @@ export interface StationProgress {
   passed?: boolean;
 }
 
+export type Role = 'pupil' | 'teacher' | 'pt' | 'family';
+/** What belongs to each child on a shared device (PT/AL with several pupils). Only an alias and an emoji, never a name. */
+export const PUPIL_KEYS = ['progress', 'seen', 'minutes', 'found', 'reach', 'toured', 'suggested', 'last', 'voice', 'large', 'sound', 'motion', 'help', 'voices'] as const;
+type PupilKey = (typeof PUPIL_KEYS)[number];
+export interface Pupil { alias: string; emoji: string; data: Partial<Pick<AppState, PupilKey>> }
+
 interface AppState {
   lang: Lang | null;
+  /** Who uses the app on this device. Adults reach their area through a hold-to-open button (no account, no password). */
+  role: Role | null;
+  /** Children on a shared device (PT/AL, aula de apoyo). The active one's data is in the main fields. */
+  pupils: Record<string, Pupil>;
+  active: string | null;
+  /** 'more': 4 guided exercises before the 5 on your own (instead of 2). */
+  help: 'normal' | 'more';
+  addPupil: (alias: string, emoji: string) => string;
+  switchPupil: (id: string | null) => void;
+  removePupil: (id: string) => void;
   voice: boolean;
   large: boolean;
   theme: 'auto' | 'light' | 'dark';
@@ -44,6 +60,8 @@ interface AppState {
   reset: () => void;
 }
 
+const fresh = (): Required<Pupil['data']> => ({ progress: {}, seen: {}, minutes: {}, found: [], reach: 20, toured: false, suggested: null, last: null, voice: true, large: false, sound: true, motion: 'auto', help: 'normal', voices: {} });
+
 export const today = () => new Date().toLocaleDateString('sv-SE');
 const MASTER_RIGHT = 4;
 /** How many past exercises per station are remembered (about 120 sessions). */
@@ -52,8 +70,25 @@ export const SEEN_MAX = 600;
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
-      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, voices: {}, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
+      lang: null, role: null, pupils: {}, active: null, help: 'normal', voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, voices: {}, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
+      addPupil: (alias, emoji) => {
+        const id = Math.random().toString(36).slice(2, 8);
+        set((s) => ({ pupils: { ...s.pupils, [id]: { alias, emoji, data: fresh() } } }));
+        return id;
+      },
+      switchPupil: (id) => set((s) => {
+        const snap = Object.fromEntries(PUPIL_KEYS.map((k) => [k, s[k]])) as Pupil['data'];
+        const pupils = { ...s.pupils };
+        if (s.active && pupils[s.active]) pupils[s.active] = { ...pupils[s.active], data: snap };
+        else pupils['_me'] = { alias: '', emoji: '', data: snap };
+        const next = id ? pupils[id]?.data : pupils['_me']?.data;
+        return { pupils, active: id, ...fresh(), ...(next ?? {}) };
+      }),
+      removePupil: (id) => set((s) => {
+        const pupils = { ...s.pupils }; delete pupils[id];
+        return s.active === id ? { pupils, active: null, ...fresh(), ...(pupils['_me']?.data ?? {}) } : { pupils };
+      }),
       pass: (station) => set((s) => ({ last: station, progress: { ...s.progress, [station]: { ...(s.progress[station] ?? { goodDays: [], best: 0, sessions: 0 }), sessions: (s.progress[station]?.sessions ?? 0) + 1, passed: true } } })),
       find: (v) => set((s) => (s.found.includes(v) ? s : { found: [...s.found, v] })),
       record: (station, rightFirst, total) => set((s) => {

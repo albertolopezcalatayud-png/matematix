@@ -3,6 +3,7 @@ import { STATIONS, isRight } from '../../src/data/stations';
 import { rng } from '../../src/engine/rng';
 import { translate } from '../../src/i18n/index';
 import { MESSAGES } from '../../src/i18n/messages';
+import { ADULT } from '../../src/i18n/adults';
 import type { Item, Msg, Visual } from '../../src/engine/types';
 
 const LANGS = ['es', 'ca', 'en'] as const;
@@ -68,8 +69,10 @@ describe.each(STATIONS.map((s) => [s.id, s] as const))('station %s', (_id, st) =
 });
 
 test('every message has the three languages and the same {placeholders}', () => {
-  for (const [k, row] of Object.entries(MESSAGES)) {
+  for (const [k, row] of Object.entries({ ...MESSAGES, ...ADULT })) {
     expect(row.length, k).toBe(3);
+    expect(MESSAGES, `duplicate key ${k}`).not.toHaveProperty(k in ADULT ? k : '__none__');
+    if (row[0].includes('|')) { expect(row[1].split('|').length, `ca ${k}`).toBe(row[0].split('|').length); expect(row[2].split('|').length, `en ${k}`).toBe(row[0].split('|').length); }
     const ph = (s: string) => [...new Set(s.match(/\{\w+\}/g) ?? [])].sort().join();
     expect(ph(row[1]), `ca ${k}`).toBe(ph(row[0]));
     expect(ph(row[2]), `en ${k}`).toBe(ph(row[0]));

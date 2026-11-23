@@ -1,4 +1,5 @@
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { HoldButton } from '@/components/HoldButton';
 import { useT } from '@/i18n';
 import { useApp } from '@/stores/app';
 import { stationById } from '@/data/stations';
@@ -12,14 +13,20 @@ export default function Home() {
   const last = useApp((s) => s.last);
   const suggested = useApp((s) => s.suggested);
   const progress = useApp((s) => s.progress);
+  const role = useApp((s) => s.role);
+  const active = useApp((s) => s.active);
+  const pupil = useApp((s) => (s.active ? s.pupils[s.active] : undefined));
+  const nav = useNavigate();
   if (!lang) return <Navigate to="/idioma" replace />;
-  const fresh = !last && !suggested;
+  if (!role) return <Navigate to="/quien" replace />;
+  const fresh = !last && !suggested && Object.keys(progress).length === 0;
   const next = stationById(nextStation(progress, suggested, last))!;
   return (
     <main className="min-h-dvh flex flex-col max-w-md mx-auto px-5 py-8 gap-4 world-bg">
       <div className="text-center space-y-2 py-6">
         <img src="./favicon.svg" alt="" className="w-16 h-16 mx-auto" />
         <h1 className="text-4xl font-extrabold">{APP_NAME}</h1>
+        {active && pupil && <p className="chip inline-block !text-base" data-testid="who-now">{pupil.emoji} {pupil.alias}</p>}
         <p className="text-lg">{t('tagline')}</p>
       </div>
       {fresh ? (
@@ -39,6 +46,7 @@ export default function Home() {
         <Link to="/ajustes" className="underline">{t('settings')}</Link>
         <Link to="/privacidad" className="underline">{t('privacy')}</Link>
       </nav>
+      <HoldButton onDone={() => nav('/adultos')} className="btn-ghost !min-h-10 text-sm mx-auto" testId="to-adults">🔑 {t('adults')} · {t('hold_open')}</HoldButton>
     </main>
   );
 }
