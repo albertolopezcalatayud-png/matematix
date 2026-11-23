@@ -26,6 +26,12 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      # Natural-voice audio (branch "audio", made by audio.yml): served at /matematix/audio/
+      - name: Add the natural voices
+        run: |
+          if git fetch --depth 1 origin audio 2>/dev/null; then
+            mkdir -p dist/audio && git archive FETCH_HEAD | tar -x -C dist/audio && echo "audio: $(find dist/audio -type f | wc -l) files, $(du -sh dist/audio | cut -f1)"
+          else echo "no audio branch yet"; fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

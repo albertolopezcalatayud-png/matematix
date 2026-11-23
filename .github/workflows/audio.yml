@@ -1,0 +1,78 @@
+name: Natural voices
+
+# Generates the natural-voice audio (scripts/audio/voices.json: 2 voices per language) of every text listed by
+# scripts/audio/collect.ts and keeps it in the "audio" branch, published at /matematix/audio/.
+# Only missing clips are generated; when time runs out it starts itself again and carries on.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['src/data/**', 'src/i18n/**', 'scripts/audio/**', '.github/workflows/audio.yml']
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: audio
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audio branch
+        run: |
+          if git fetch origin audio:audio 2>/dev/null; then git worktree add audio-out audio
+          else git worktree add --detach audio-out && cd audio-out && git checkout -q --orphan audio && (git rm -rfq . || true); fi
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Tools and voices
+        timeout-minutes: 25
+        run: |
+          npm ci --no-audit --no-fund > /dev/null
+          pip install -q piper-tts onnx onnxruntime lameenc numpy kokoro-onnx
+          mkdir -p /tmp/voices
+          python - <<'PY'
+          import json, os, socket, urllib.request
+          socket.setdefaulttimeout(120)
+          HF = 'https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/'
+          for lang, voices in json.load(open('scripts/audio/voices.json')).items():
+              for v in voices:
+                  if v.get('engine') in ('matxa', 'kokoro'): continue
+                  for ext in ('.onnx', '.onnx.json'):
+                      dst = '/tmp/voices/' + os.path.basename(v['model']) + ext
+                      if not os.path.exists(dst): urllib.request.urlretrieve(HF + v['model'] + ext, dst)
+                  print('voice', v['id'])
+          PY
+          curl -sfL --retry 3 --max-time 900 https://huggingface.co/projecte-aina/matxa-tts-cat-multispeaker/resolve/main/matcha_hifigan_simply.onnx -o /tmp/voices/matxa_hifigan_simply.onnx
+          R=https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0
+          curl -sfL --retry 3 --max-time 900 $R/kokoro-v1.0.onnx -o /tmp/voices/kokoro-v1.0.onnx
+          curl -sfL --retry 3 --max-time 900 $R/voices-v1.0.bin -o /tmp/voices/voices-v1.0.bin
+      - name: Texts
+        run: npx tsx --tsconfig tsconfig.app.json scripts/audio/collect.ts > /tmp/texts.json && python -c "import json;d=json.load(open('/tmp/texts.json'));print({k:len(v) for k,v in d.items()})"
+      - name: Generate
+        env: { MAX_MINUTES: "290" }
+        run: python scripts/audio/generate.py /tmp/texts.json /tmp/voices audio-out
+      - name: Save
+        run: |
+          cd audio-out
+          git config user.name "matematix-bot"; git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          git commit -q -m "Audio: $(git diff --cached --name-only | grep -c '\.mp3$') clips"
+          git push -q origin HEAD:audio
+          echo "changed=1" >> $GITHUB_ENV
+      - name: Publish the web with the new audio
+        if: env.changed == '1'
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: gh workflow run deploy.yml --ref main
+      - name: Carry on if time ran out
+        if: always()
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          if [ -f /tmp/audio-stop ] && grep -q time /tmp/audio-stop; then echo "time ran out: next run"; gh workflow run audio.yml --ref main; fi
