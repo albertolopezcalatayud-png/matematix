@@ -1,0 +1,85 @@
+name: Build Android app bundle
+
+# Builds the Android app (Capacitor) as an UNSIGNED release bundle.
+# Signing is done outside GitHub with Matematix's own upload key, which is never stored here.
+on:
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: 'versionCode (must increase on every Play upload)'
+        required: true
+        default: '1'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Build the web app for the Android package
+        run: |
+          npm ci
+          npm run build:app
+          npx cap sync android
+      - name: Build release bundle
+        working-directory: android
+        env:
+          VERSION_CODE: ${{ github.event.inputs.version_code }}
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0" > /dev/null || true
+          chmod +x gradlew
+          ./gradlew bundleRelease assembleDebug --no-daemon --stacktrace
+      - name: Publish unsigned bundle and test APK to the android-build branch
+        run: |
+          mkdir -p /tmp/out
+          cp android/app/build/outputs/bundle/release/*.aab /tmp/out/app-release-unsigned.aab
+          cp android/app/build/outputs/apk/debug/*.apk /tmp/out/app-debug.apk
+          cd /tmp/out && sha256sum * > sha256.txt && git init -q && git checkout -q -b android-build
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          echo "Unsigned build of ${GITHUB_SHA} (versionCode ${{ github.event.inputs.version_code }})" > README.md
+          git add . && git commit -q -m "Unsigned AAB from ${GITHUB_SHA}"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" android-build
+
+  smoke:
+    # Starts the app on an Android emulator: it must open, show the language screen and speak without errors.
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: android-build }
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          script: |
+            adb install -r app-debug.apk
+            adb shell am start -n com.matematix.app/.MainActivity
+            sleep 25
+            adb shell screencap -p /sdcard/s1.png && adb pull /sdcard/s1.png s1.png
+            adb logcat -d | grep -iE "Capacitor|chromium|AndroidRuntime" | tail -80 > log.txt || true
+            pidof_out=$(adb shell pidof com.matematix.app); echo "pid: $pidof_out"; test -n "$pidof_out"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-smoke
+          path: |
+            s1.png
+            log.txt

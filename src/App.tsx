@@ -12,6 +12,13 @@ import Progress from '@/pages/Progress';
 import Settings from '@/pages/Settings';
 import Who from '@/pages/Who';
 import { TopBar } from '@/components/Layout';
+import { Capacitor } from '@capacitor/core';
+import { App as NativeApp } from '@capacitor/app';
+
+// Android's back button: back through the app's pages, and out of the app from the first one.
+if (Capacitor.isNativePlatform()) {
+  void NativeApp.addListener('backButton', ({ canGoBack }) => { if (canGoBack && location.hash !== '#/' && location.hash !== '') history.back(); else void NativeApp.exitApp(); });
+}
 
 // The adults' area is loaded only when an adult opens it (the children's app stays small).
 const Hub = lazy(() => import('@/pages/adults/Hub'));

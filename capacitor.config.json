@@ -1,0 +1,22 @@
+{
+  "appId": "com.matematix.app",
+  "appName": "Matematix",
+  "webDir": "dist-app",
+  "android": {
+    "backgroundColor": "#FBF8FF",
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false,
+    "minWebViewVersion": 111,
+    "adjustMarginsForEdgeToEdge": "force"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 600,
+      "backgroundColor": "#FBF8FF",
+      "androidScaleType": "CENTER_INSIDE",
+      "showSpinner": false
+    }
+  }
+}

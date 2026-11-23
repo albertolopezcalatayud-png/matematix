@@ -1,6 +1,12 @@
 import type { Lang } from '@/engine/types';
 import { HTML_LANG, speakable } from '@/i18n';
 import { playClip, stopClip } from './clips';
+import { Capacitor } from '@capacitor/core';
+import { TextToSpeech, QueueStrategy } from '@capacitor-community/text-to-speech';
+
+// The Android app's WebView has no Web Speech API: there the device's voice is reached through a plugin.
+const NATIVE = Capacitor.isNativePlatform();
+const TTS_TAG: Record<Lang, string> = { es: 'es-ES', ca: 'ca-ES', en: 'en-GB' };
 
 // The natural voice when there is a clip for the text, otherwise the device's voice. Several parts are read one
 // after another (each part can have its own clip: "Nearly. Look at the hint…" + the hint).
@@ -17,7 +23,16 @@ function pick(lang: Lang): SpeechSynthesisVoice | undefined {
   return undefined;
 }
 
+async function nativeDevice(lang: Lang, text: string): Promise<void> {
+  const limit = Math.max(8000, text.length * 200);
+  await Promise.race([
+    TextToSpeech.speak({ text: speakable(lang, text), lang: TTS_TAG[lang], rate: 0.9, pitch: 1, volume: 1, category: 'playback', queueStrategy: QueueStrategy.Flush }).catch(() => {}),
+    new Promise((r) => setTimeout(r, limit)),
+  ]);
+}
+
 function device(lang: Lang, text: string): Promise<void> {
+  if (NATIVE) return nativeDevice(lang, text);
   return new Promise((resolve) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return resolve();
     const u = new SpeechSynthesisUtterance(speakable(lang, text));
@@ -44,5 +59,6 @@ export async function speak(lang: Lang, text: string | string[]): Promise<void> 
 export function stopSpeech(bump = true) {
   if (bump) run++;
   stopClip();
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+  if (NATIVE) void TextToSpeech.stop().catch(() => {});
+  else if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel();
 }
