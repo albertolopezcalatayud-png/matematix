@@ -87,6 +87,40 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
   await p.screenshot({ path: `${SHOTS}/w-100.png` });
   await p.goto(BASE + '#/progreso'); await p.waitForTimeout(300);
   await p.screenshot({ path: `${SHOTS}/w-progress-lit.png` });
+  // "I can already do this": 5 with no help, one try each; 4 right passes the station
+  await p.goto(BASE + '#/estacion/A4'); await p.waitForTimeout(400);
+  await p.getByTestId('know-it').click(); await p.waitForTimeout(200);
+  ok((await p.getByTestId('test-intro').count()) === 1, '"I can already do this" explains the test');
+  for (let k = 0; k < 5; k++) {
+    const ex = p.getByTestId('exercise'); await ex.waitFor();
+    const kind = await ex.getAttribute('data-kind'), ans = Number(await ex.getAttribute('data-answer'));
+    const right = k !== 2; // one mistake on purpose: 4 out of 5 still passes
+    if (kind === 'choice') { const btns = p.locator('[data-testid=choices] button'); const vals = await btns.evaluateAll((els) => els.map((e) => Number(e.dataset.value))); await btns.nth(vals.indexOf(right ? ans : vals.find((v) => v !== ans))).click(); }
+    else { for (const d of String(right ? ans : ans + 1)) await p.locator('[data-testid=keypad] button', { hasText: new RegExp(`^${d}$`) }).click(); await p.getByTestId('check').click(); }
+    await p.waitForTimeout(100);
+    if (k === 2) ok((await p.getByTestId('feedback').innerText()).includes('La respuesta es'), 'in the test a mistake shows the answer at once (one try)');
+    await p.getByTestId('next').click(); await p.waitForTimeout(100);
+  }
+  ok((await p.getByTestId('test-result').innerText()).startsWith('¡Superada!'), '4 out of 5 passes the station');
+  ok((await p.getByTestId('end-next').count()) === 1, 'after passing, the big button carries on to the next station');
+  await p.screenshot({ path: `${SHOTS}/w-passed.png` });
+  await p.goto(BASE + '#/estaciones'); await p.waitForTimeout(300);
+  ok((await p.getByTestId('station-A4').innerText()).includes('Dominada'), 'the passed station counts as mastered');
+  await p.goto(BASE + '#/estacion/A4'); await p.waitForTimeout(300);
+  ok((await p.getByTestId('know-it').count()) === 0, 'no "I can already do this" on a mastered station');
+  // a strong child: the starting point jumps up and needs few questions
+  await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('matematix')); s.state.suggested = null; s.state.last = null; s.state.progress = {}; localStorage.setItem('matematix', JSON.stringify(s)); });
+  await p.reload(); await p.goto(BASE + '#/punto-de-partida'); await p.waitForTimeout(400);
+  let q = 0;
+  while ((await p.getByTestId('sp-result').count()) === 0 && q < 12) {
+    const ex = p.getByTestId('exercise'); const kind = await ex.getAttribute('data-kind'), ans = Number(await ex.getAttribute('data-answer'));
+    if (kind === 'choice') { const btns = p.locator('[data-testid=choices] button'); const vals = await btns.evaluateAll((els) => els.map((e) => Number(e.dataset.value))); await btns.nth(vals.indexOf(ans)).click(); }
+    else if (kind === 'number') { for (const d of String(ans)) await p.locator('[data-testid=keypad] button', { hasText: new RegExp(`^${d}$`) }).click(); await p.getByTestId('check').click(); }
+    else { const line = p.getByTestId('line-input'); const box = await line.boundingBox(); const min = Number(await line.getAttribute('data-min')), max = Number(await line.getAttribute('data-max')); await p.mouse.click(box.x + ((22 + ((ans - min) / (max - min)) * 316) / 360) * box.width, box.y + box.height * 0.6); await p.getByTestId('check').click(); }
+    await p.waitForTimeout(150); q++;
+  }
+  ok(q <= 8 && (await p.getByTestId('sp-all-right').count()) === 1, `a child who knows everything is placed at the end in ${q} questions and told about "I can already do this"`);
+  await p.screenshot({ path: `${SHOTS}/w-sp-strong.png` });
   const noScroll = await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
   ok(noScroll, 'no sideways scroll');
   ok(errs.length === 0, 'no page errors ' + errs.join(' | '));

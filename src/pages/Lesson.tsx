@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { STATIONS, isRight, itemKey, stationById } from '@/data/stations';
+import { nextStation } from '@/data/world';
 import { rng } from '@/engine/rng';
 import { GUIDED, INDEPENDENT, pickItems } from '@/engine/session';
 import type { Item } from '@/engine/types';
@@ -30,16 +31,28 @@ export default function Lesson() {
   const items = useMemo(() => pickItems(station, seed, new Set(useApp.getState().seen[station.id] ?? [])), [station, seed]);
   useEffect(() => { markSeen(station.id, items.map((x) => itemKey(x.item))); }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [stage, setStage] = useState<'model' | 'items' | 'end'>(progress && progress.sessions > 0 ? 'items' : 'model');
+  const [stage, setStage] = useState<'model' | 'items' | 'test' | 'end'>(progress && progress.sessions > 0 ? 'items' : 'model');
   const [step, setStep] = useState(0);
   const [idx, setIdx] = useState(0);
   const [rightFirst, setRightFirst] = useState(0);
   const saved = useRef(false);
+  const [testScore, setTestScore] = useState<number | null>(null);
+  const pass = useApp((s) => s.pass);
+  const testItems = items.filter((x) => !x.guided);
 
   useEffect(() => () => stopSpeech(), []);
   useEffect(() => { if (stage === 'model' && voice) void speak(lang, m(model.steps[step].say)); }, [stage, step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const restart = () => { saved.current = false; setRun((r) => r + 1); setStage('items'); setIdx(0); setStep(0); setRightFirst(0); };
+  /** "I can already do this": the 5 exercises on your own, one try each, no hints. 4 right passes the station. */
+  const finishTest = (firstTry: boolean) => {
+    const rf = rightFirst + (firstTry ? 1 : 0);
+    setRightFirst(rf);
+    if (idx + 1 < testItems.length) { setIdx(idx + 1); return; }
+    if (rf >= 4) pass(station.id); else record(station.id, rf, INDEPENDENT);
+    saved.current = true; setTestScore(rf); setStage('end');
+  };
+  const startTest = () => { setStage('test'); setIdx(0); setRightFirst(0); };
   const finishItem = (firstTry: boolean) => {
     const rf = rightFirst + (firstTry && !items[idx].guided ? 1 : 0);
     setRightFirst(rf);
@@ -50,7 +63,8 @@ export default function Lesson() {
     }
   };
 
-  const phase = stage === 'model' ? 'model' : idx < GUIDED ? 'guided' : 'independent';
+  const phase = stage === 'model' ? 'model' : stage === 'test' || idx >= GUIDED ? 'independent' : 'guided';
+  const canTest = statusOf(progress) !== 'done' && (stage === 'model' || (stage === 'items' && idx === 0));
   const sameIsland = STATIONS.filter((s) => s.island === station.island);
   const base = sameIsland[sameIsland.indexOf(station) - 1];
 
@@ -68,6 +82,7 @@ export default function Lesson() {
               ))}
             </span>
             {stage === 'items' && <span className="ml-auto text-[var(--color-muted)]" data-testid="counter">{t('phase_n', { a: idx + 1, b: items.length })}</span>}
+            {stage === 'test' && <span className="ml-auto text-[var(--color-muted)]" data-testid="counter">{t('phase_n', { a: idx + 1, b: testItems.length })}</span>}
           </div>
         )}
 
@@ -83,21 +98,37 @@ export default function Lesson() {
           </section>
         )}
 
+        {canTest && (
+          <button className="btn btn-ghost w-full !border-dashed !border-[var(--color-accent)] text-[var(--color-accent)]" onClick={startTest} data-testid="know-it">⚡ {t('know_it')}</button>
+        )}
+        {stage === 'test' && idx === 0 && <p className="rounded-2xl p-3 bg-[var(--color-yellow-pale)]" data-testid="test-intro">{t('test_intro')}</p>}
         {stage === 'items' && <Exercise key={`${seed}-${idx}`} entry={items[idx]} onDone={finishItem} />}
+        {stage === 'test' && <Exercise key={`t${seed}-${idx}`} entry={testItems[idx]} onDone={finishTest} oneTry />}
 
         {stage === 'end' && (
           <section className="card space-y-4 text-center pop" data-testid="end">
             <p className="text-4xl" aria-hidden>🌟</p>
             <h2 className="text-2xl font-extrabold">{t('end_title')}</h2>
             <p data-testid="end-score">{t('end_score', { a: rightFirst, b: INDEPENDENT })}</p>
-            <p>{statusOf(useApp.getState().progress[station.id]) === 'done' ? t('end_done') : rightFirst >= 4 ? t('end_again_day') : t('end_more')}</p>
+            {testScore != null ? <p data-testid="test-result">{testScore >= 4 ? t('test_pass') : t('test_fail')}</p> : <p>{statusOf(useApp.getState().progress[station.id]) === 'done' ? t('end_done') : rightFirst >= 4 ? t('end_again_day') : t('end_more')}</p>}
             {rightFirst < 3 && base && (
               <button className="btn btn-ghost w-full" onClick={() => nav(`/estacion/${base.id}`)}>{t('end_base')} · {m(base.title)}</button>
             )}
-            <div className="grid grid-cols-2 gap-2">
-              <button className="btn btn-ghost" onClick={restart}>{t('again')}</button>
-              <button className="btn btn-primary" onClick={() => nav('/mapa')}>{t('to_map')}</button>
-            </div>
+            {(() => {
+              // mastered: the big button goes on to the next station; otherwise it is "again"
+              const st = useApp.getState();
+              const done = statusOf(st.progress[station.id]) === 'done';
+              const nxt = nextStation(st.progress, st.suggested, st.last);
+              return (<>
+                {done && nxt !== station.id && (
+                  <button className="btn btn-primary w-full !min-h-14 text-lg" data-testid="end-next" onClick={() => nav(`/estacion/${nxt}`)}>{t('carry_on')} ▶ · {m(stationById(nxt)!.title)}</button>
+                )}
+                <div className="grid grid-cols-2 gap-2">
+                  <button className={`btn ${done ? 'btn-ghost' : 'btn-primary'}`} onClick={() => { setTestScore(null); restart(); }}>{t('again')}</button>
+                  <button className="btn btn-ghost" onClick={() => nav('/mapa')}>{t('to_map')}</button>
+                </div>
+              </>);
+            })()}
           </section>
         )}
       </main>
@@ -105,7 +136,7 @@ export default function Lesson() {
   );
 }
 
-function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; onDone: (firstTry: boolean) => void }) {
+function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guided: boolean }; onDone: (firstTry: boolean) => void; oneTry?: boolean }) {
   const { t, m, lang } = useT();
   const voice = useApp((s) => s.voice);
   const { item, guided } = entry;
@@ -132,7 +163,7 @@ function Exercise({ entry, onDone }: { entry: { item: Item; guided: boolean }; o
   const check = (v = current) => {
     if (v == null) return;
     if (isRight(item, v)) { setState('right'); if (voice) void speak(lang, t(okMsg)); }
-    else if (tries === 0) { setTries(1); setState('wrong'); if (voice) void speak(lang, t('try_again') + ' ' + m(item.hint)); }
+    else if (tries === 0 && !oneTry) { setTries(1); setState('wrong'); if (voice) void speak(lang, t('try_again') + ' ' + m(item.hint)); }
     else { setState('shown'); if (voice) void speak(lang, t('answer_was', { n: answerOf() }) + ' ' + m(item.hint)); }
   };
   const locked = state === 'right' || state === 'shown';

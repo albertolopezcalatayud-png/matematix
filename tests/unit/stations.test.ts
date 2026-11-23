@@ -115,3 +115,19 @@ test('a child practising every day does not meet the same exercise again until t
   }
   console.log('FIRST_REPEAT ' + report.join(' '));
 });
+
+import { answerPlacement, startPlacement } from '../../src/engine/placement';
+import { ORDER } from '../../src/data/world';
+test('the starting point lands exactly where a child stops knowing, in few questions', () => {
+  const asked: number[] = [];
+  for (let k = 0; k <= ORDER.length; k++) {
+    // a child who can do the first k stations of the route and none after
+    let p = startPlacement();
+    while (!p.done) p = answerPlacement(p, p.at < k);
+    expect(p.done, `child who knows ${k}`).toBe(ORDER[Math.min(k, ORDER.length - 1)]);
+    expect(p.allRight).toBe(k === ORDER.length);
+    asked.push(p.asked);
+  }
+  console.log('PLACEMENT_QUESTIONS ' + asked.join(','));
+  expect(Math.max(...asked)).toBeLessThanOrEqual(8);
+});

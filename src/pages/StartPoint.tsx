@@ -8,10 +8,11 @@ import { speak } from '@/services/speech';
 import { PlaceOnLine, VisualView } from '@/components/Visuals';
 import { describe } from '@/components/describe';
 import { TopBar } from '@/components/Layout';
+import { ORDER } from '@/data/world';
+import { answerPlacement, startPlacement } from '@/engine/placement';
 
-/** "Find your starting point": a short check with no clock, no marks and no right/wrong shown. Rule-based, never a diagnosis,
- *  and the result is only a suggested station on the map. */
-const PROBE = ['A1', 'A2', 'A4', 'A5', 'B2', 'B3', 'B5', 'B6'];
+/** "Find your starting point": a short check with no clock, no marks and no right/wrong shown. It starts in the middle and
+ *  jumps up or down (see engine/placement). Rule-based, never a diagnosis; the result is only a suggested station. */
 
 export default function StartPoint() {
   const { t, m, lang } = useT();
@@ -19,18 +20,18 @@ export default function StartPoint() {
   const set = useApp((s) => s.set);
   const voice = useApp((s) => s.voice);
   const seed = useMemo(() => Date.now() >>> 0, []);
-  const items = useMemo(() => PROBE.map((id, i) => ({ id, item: stationById(id)!.make(rng(seed + i * 31), false) })), [seed]);
-  const [i, setI] = useState(0);
+  const [pl, setPl] = useState(startPlacement);
+  const [allRight, setAllRight] = useState(false);
+  const current = useMemo(() => ({ id: ORDER[pl.at], item: stationById(ORDER[pl.at])!.make(rng(seed + pl.asked * 7919), false) }), [pl.at, pl.asked, seed]);
   const [value, setValue] = useState<number | null>(null);
   const [typed, setTyped] = useState('');
   const [found, setFound] = useState<string | null>(null);
 
   const finish = (id: string) => { set({ suggested: id }); setFound(id); };
   const answer = (v: number) => {
-    const { id, item } = items[i];
-    if (!isRight(item, v)) return finish(id);
-    if (i + 1 >= items.length) return finish('B6');
-    setI(i + 1); setValue(null); setTyped('');
+    const next = answerPlacement(pl, isRight(current.item, v));
+    if (next.done) { setAllRight(next.allRight); return finish(next.done); }
+    setPl(next); setValue(null); setTyped('');
   };
 
   if (found) {
@@ -41,6 +42,7 @@ export default function StartPoint() {
           <section className="card text-center space-y-4" data-testid="sp-result">
             <p>{t('sp_result')}</p>
             <p className="text-2xl font-extrabold">{m(st.title)}</p>
+            {allRight && <p className="text-sm" data-testid="sp-all-right">{t('sp_all_right')}</p>}
             <button className="btn btn-primary w-full" onClick={() => nav(`/estacion/${found}`)}>{t('sp_go')}</button>
             <button className="btn btn-ghost w-full" onClick={() => nav('/mapa')}>{t('sp_map')}</button>
           </section>
@@ -49,13 +51,13 @@ export default function StartPoint() {
     );
   }
 
-  const { item } = items[i];
+  const { item } = current;
   const prompt = m(item.prompt);
   return (
     <div className="min-h-dvh pb-10"><TopBar title={t('find_start')} back="/" />
       <main className="max-w-xl mx-auto px-4 space-y-4">
         <p className="rounded-2xl p-3 bg-[var(--color-mint-pale)]">{t('sp_intro')}</p>
-        <section className="card space-y-4" key={i} data-testid="exercise" data-kind={item.kind} data-answer={item.kind === 'place' ? item.target : item.answer}>
+        <section className="card space-y-4" key={pl.asked} data-testid="exercise" data-kind={item.kind} data-answer={item.kind === 'place' ? item.target : item.answer}>
           <div className="flex items-start gap-2">
             <h2 className="text-2xl font-extrabold flex-1" data-testid="prompt">{prompt}</h2>
             <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => voice && void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>

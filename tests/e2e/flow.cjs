@@ -65,8 +65,9 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     await p.screenshot({ path: `${SHOTS}/${code}-2-start.png` });
     await answer(p, true); await p.waitForTimeout(200);
     await answer(p, true); await p.waitForTimeout(200);
-    await answer(p, false); await p.waitForTimeout(300);
-    ok(await p.getByTestId('sp-result').count() === 1, `${code}: starting point gives a suggestion after a miss (no marks shown)`);
+    let extra = 0;
+    while ((await p.getByTestId('sp-result').count()) === 0 && extra < 8) { await answer(p, false); await p.waitForTimeout(250); extra++; }
+    ok(await p.getByTestId('sp-result').count() === 1 && extra <= 4, `${code}: the adaptive starting point gives a suggestion (no marks shown, ${2 + extra} questions)`);
     await p.screenshot({ path: `${SHOTS}/${code}-3-result.png` });
     await p.getByRole('button', { name: { es: 'Ver el mapa', ca: 'Veure el mapa', en: 'See the map' }[code] }).click(); await p.waitForTimeout(300);
     ok((await p.getByTestId('world').count()) === 1, `${code}: the map is the number line`);

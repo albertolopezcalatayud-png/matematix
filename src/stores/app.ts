@@ -7,6 +7,8 @@ export interface StationProgress {
   goodDays: string[];
   best: number;
   sessions: number;
+  /** Passed with "I can already do this": 4 out of 5 with no help. */
+  passed?: boolean;
 }
 
 interface AppState {
@@ -25,6 +27,7 @@ interface AppState {
   /** The short first-time tour of the number line has been shown. */
   toured: boolean;
   find: (v: number) => void;
+  pass: (station: string) => void;
   suggested: string | null;
   last: string | null;
   progress: Record<string, StationProgress>;
@@ -49,6 +52,7 @@ export const useApp = create<AppState>()(
     (set) => ({
       lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
+      pass: (station) => set((s) => ({ last: station, progress: { ...s.progress, [station]: { ...(s.progress[station] ?? { goodDays: [], best: 0, sessions: 0 }), sessions: (s.progress[station]?.sessions ?? 0) + 1, passed: true } } })),
       find: (v) => set((s) => (s.found.includes(v) ? s : { found: [...s.found, v] })),
       record: (station, rightFirst, total) => set((s) => {
         const cur = s.progress[station] ?? { goodDays: [], best: 0, sessions: 0 };
@@ -71,5 +75,5 @@ export type Status = 'todo' | 'doing' | 'done';
 /** Mastered = 4 out of 5 right first time on two different days (spaced practice). Never 100 %. */
 export function statusOf(p?: StationProgress): Status {
   if (!p || p.sessions === 0) return 'todo';
-  return p.goodDays.length >= 2 ? 'done' : 'doing';
+  return p.passed || p.goodDays.length >= 2 ? 'done' : 'doing';
 }

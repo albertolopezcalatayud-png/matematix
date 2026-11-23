@@ -30,6 +30,7 @@ export const MESSAGES = {
   sp_intro: ['Sin reloj y sin nota. No es un examen: solo buscamos por dónde empezar.', 'Sense rellotge i sense nota. No és un examen: només busquem per on començar.', "No clock and no mark. It isn't a test: we're just finding where to begin."],
   sp_skip: ['Saltar', 'Saltar', 'Skip'],
   sp_result: ['Te proponemos empezar aquí:', 'Et proposem començar ací:', 'We suggest starting here:'],
+  sp_all_right: ['Lo has acertado todo. Prueba el botón «Ya sé hacer esto» en las estaciones para avanzar más rápido.', 'Ho has encertat tot. Prova el botó «Ja sé fer açò» en les estacions per a avançar més ràpid.', 'You got everything right. Try the “I can already do this” button in the stations to move on faster.'],
   sp_go: ['Ir a esa estación', 'Anar a eixa estació', 'Go to that station'],
   sp_map: ['Ver el mapa', 'Veure el mapa', 'See the map'],
 
@@ -50,6 +51,10 @@ export const MESSAGES = {
   type_answer: ['Escribe la respuesta', 'Escriu la resposta', 'Type the answer'],
   delete: ['Borrar', 'Esborrar', 'Delete'],
   pick_one: ['Elige una respuesta', 'Tria una resposta', 'Choose an answer'],
+  know_it: ['Ya sé hacer esto', 'Ja sé fer açò', 'I can already do this'],
+  test_intro: ['Demuéstralo: 5 ejercicios sin ayudas y un intento cada uno. Si aciertas 4, la estación queda superada.', 'Demostra-ho: 5 exercicis sense ajudes i un intent cada un. Si n’encertes 4, l’estació queda superada.', 'Show it: 5 exercises with no help and one try each. Get 4 right and the station is passed.'],
+  test_pass: ['¡Superada! Su tramo de la recta ya está encendido. Puedes seguir con la siguiente.', 'Superada! El seu tram de la recta ja està encés. Pots continuar amb la següent.', 'Passed! Its stretch of the line is lit up. You can move on to the next one.'],
+  test_fail: ['Casi. Te conviene practicarla un poco: con la práctica guiada irá rápido.', 'Quasi. Et convé practicar-la un poc: amb la pràctica guiada anirà ràpid.', 'Nearly. It is worth practising it a little: with the guided practice it will go quickly.'],
   end_title: ['¡Estación terminada!', 'Estació acabada!', 'Station finished!'],
   end_score: ['Has acertado {a} de {b} a la primera.', 'Has encertat {a} de {b} a la primera.', 'You got {a} out of {b} right first time.'],
   end_done: ['Ya la dominas. Puedes repasarla cuando quieras.', 'Ja la domines. Pots repassar-la quan vulgues.', 'You’ve mastered it. You can practise it again whenever you like.'],
