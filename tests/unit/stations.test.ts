@@ -129,5 +129,5 @@ test('the starting point lands exactly where a child stops knowing, in few quest
     asked.push(p.asked);
   }
   console.log('PLACEMENT_QUESTIONS ' + asked.join(','));
-  expect(Math.max(...asked)).toBeLessThanOrEqual(8);
+  expect(Math.max(...asked)).toBeLessThanOrEqual(10);
 });

@@ -8,14 +8,15 @@ export const HTML_LANG: Record<Lang, string> = { es: 'es', ca: 'ca-ES-valencia',
 export function translate(lang: Lang, key: string, vars?: Record<string, string | number>): string {
   const row = (MESSAGES as Record<string, readonly string[]>)[key];
   let s = row ? row[IDX[lang]] : key;
-  if (vars) for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(String(v));
+  // a value written as "$key" is itself a message (names and objects change with the language)
+  if (vars) for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(typeof v === 'string' && v.startsWith('$') ? translate(lang, v.slice(1)) : String(v));
   return s;
 }
 
 /** Turns symbols into words so the voice reads "8 más 5" and not "8 plus sign 5". */
 export function speakable(lang: Lang, text: string): string {
   const w = { es: ['más', 'menos', 'por', 'es igual a', 'cuánto'], ca: ['més', 'menys', 'per', 'és igual a', 'quant'], en: ['plus', 'minus', 'times', 'equals', 'what'] }[lang];
-  return text.replace(/\+/g, ` ${w[0]} `).replace(/−/g, ` ${w[1]} `).replace(/×/g, ` ${w[2]} `).replace(/=/g, ` ${w[3]} `).replace(/\?/g, ` ${w[4]}`).replace(/\s+/g, ' ').trim();
+  return text.replace(/\+/g, ` ${w[0]} `).replace(/−/g, ` ${w[1]} `).replace(/×/g, ` ${w[2]} `).replace(/=/g, ` ${w[3]} `).replace(/(^|[\s=])\?(?=\s|$)/g, `$1 ${w[4]}`).replace(/\s+/g, ' ').trim();
 }
 
 export function useT() {

@@ -164,7 +164,7 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
     if (v == null) return;
     if (isRight(item, v)) { setState('right'); if (voice) void speak(lang, t(okMsg)); }
     else if (tries === 0 && !oneTry) { setTries(1); setState('wrong'); if (voice) void speak(lang, t('try_again') + ' ' + m(item.hint)); }
-    else { setState('shown'); if (voice) void speak(lang, t('answer_was', { n: answerOf() }) + ' ' + m(item.hint)); }
+    else { setState('shown'); if (voice) void speak(lang, t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : answerOf() }) + ' ' + m(item.hint)); }
   };
   const locked = state === 'right' || state === 'shown';
   const showSupport = guided || state === 'wrong' || state === 'shown';
@@ -174,13 +174,13 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
   return (
     <section className="card space-y-4 pop" data-testid="exercise" data-kind={item.kind} data-answer={answerOf()}>
       <div className="flex items-start gap-2">
-        <h2 className="text-2xl font-extrabold flex-1" data-testid="prompt">{prompt}</h2>
+        <h2 className={`${prompt.length > 70 ? 'text-xl' : 'text-2xl'} font-extrabold flex-1 leading-snug`} data-testid="prompt">{prompt}</h2>
         <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>
       </div>
 
       {(guided || state !== 'ask') && (
         <p className={`rounded-2xl p-3 text-base ${state === 'ask' ? 'bg-[var(--color-sky-pale)]' : state === 'right' ? 'bg-[var(--color-mint-pale)]' : 'bg-[var(--color-peach-pale)]'}`} data-testid="feedback" aria-live="polite">
-          {state === 'right' ? `${t(okMsg)}${tenStop != null && th && item.kind === 'number' && tenStop !== item.answer && Math.min(th.start, item.answer) < tenStop && tenStop < Math.max(th.start, item.answer) ? ' ' + t('stopped_ten', { t: tenStop }) : ''}` : state === 'wrong' ? `${t('try_again')} ${m(item.hint)}` : state === 'shown' ? `${t('answer_was', { n: answerOf() })} ${m(item.hint)}` : `💡 ${m(item.hint)}`}
+          {state === 'right' ? `${t(okMsg)}${tenStop != null && th && item.kind === 'number' && tenStop !== item.answer && Math.min(th.start, item.answer) < tenStop && tenStop < Math.max(th.start, item.answer) ? ' ' + t('stopped_ten', { t: tenStop }) : ''}` : state === 'wrong' ? `${t('try_again')} ${m(item.hint)}` : state === 'shown' ? `${t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : answerOf() })} ${m(item.hint)}` : `💡 ${m(item.hint)}`}
         </p>
       )}
 
@@ -197,12 +197,13 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
       )}
 
       {item.kind === 'choice' && (
-        <div className={`grid gap-2 ${item.options.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`} role="group" aria-label={t('pick_one')} data-testid="choices">
+        <div className={`grid gap-2 ${item.options.length === 2 || item.options.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`} role="group" aria-label={t('pick_one')} data-testid="choices">
           {item.options.map((o) => {
             const chosen = value === o, isAns = o === item.answer;
             const cls = locked && isAns ? 'bg-[var(--color-mint-pale)] border-[var(--color-mint)]' : chosen && state === 'wrong' ? 'bg-[var(--color-peach-pale)] border-[var(--color-peach)]' : chosen ? 'border-[var(--color-accent)]' : '';
+            const lab = item.optionLabels ? m(item.optionLabels[item.options.indexOf(o)] ?? item.optionLabels[o - 1]) : null;
             return (
-              <button key={o} disabled={locked} data-value={o} className={`btn btn-ghost !text-2xl !font-extrabold !min-h-16 ${cls}`} onClick={() => { setValue(o); check(o); }}>{o}</button>
+              <button key={o} disabled={locked} data-value={o} className={`btn btn-ghost ${lab ? '!text-base !font-bold' : '!text-2xl !font-extrabold'} !min-h-16 ${cls}`} onClick={() => { setValue(o); check(o); }}>{lab ?? o}</button>
             );
           })}
         </div>

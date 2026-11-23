@@ -2,7 +2,7 @@ import { STATIONS } from './stations';
 import { statusOf, type StationProgress } from '@/stores/app';
 
 /** Where each station lives on the number line (a number it works with). */
-export const SPOT: Record<string, number> = { A1: 4, A2: 8, A3: 15, A4: 34, A5: 63, A6: 80, B1: 9, B2: 12, B3: 10, B4: 13, B5: 17, B6: 30 };
+export const SPOT: Record<string, number> = { A1: 4, A2: 8, A3: 15, A4: 34, A5: 63, A6: 80, B1: 9, B2: 12, B3: 10, B4: 13, B5: 17, B6: 30, C1: 25, C2: 45, C3: 55, C4: 35, C5: 40, C6: 70 };
 
 /** Real-world numbers to discover on the line. The text is in messages (fd_<id> = name, ff_<id> = fact with {n}). */
 export interface Find { id: string; v: number; unit?: string; options: number[] }
@@ -40,11 +40,12 @@ export function litOf(progress: Record<string, StationProgress>): [number, numbe
   const add = (id: string, a: number, b: number) => { if (statusOf(progress[id]) === 'done') out.push([a, b]); };
   add('A1', 0, 10); add('A2', 0, 10); add('A3', 0, 20); add('A4', 0, 100); add('A5', 0, 100); add('A6', 0, 100);
   add('B1', 0, 20); add('B2', 0, 20); add('B3', 0, 10); add('B4', 0, 20); add('B5', 0, 20); add('B6', 0, 50);
+  add('C1', 0, 50); add('C2', 0, 50); add('C3', 0, 100); add('C4', 0, 100); add('C5', 0, 100); add('C6', 0, 100);
   return out;
 }
 
 /** The suggested learning order across both islands (number sense first, then the facts that build on it). */
-export const ORDER = ['A1', 'A2', 'B1', 'B3', 'B2', 'A3', 'B4', 'B5', 'A4', 'A5', 'A6', 'B6'];
+export const ORDER = ['A1', 'A2', 'B1', 'B3', 'B2', 'A3', 'C1', 'B4', 'B5', 'C2', 'A4', 'C3', 'A5', 'C4', 'A6', 'B6', 'C5', 'C6'];
 
 /** The station the big "Carry on" button opens: the one in progress, else the suggested one, else the first not mastered. */
 export function nextStation(progress: Record<string, StationProgress>, suggested: string | null, last: string | null): string {

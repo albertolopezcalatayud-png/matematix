@@ -1,5 +1,6 @@
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import type { Visual } from '@/engine/types';
+import { useT } from '@/i18n';
 
 const W = 360, PAD = 22;
 const ACC = 'var(--color-accent)', FG = 'var(--color-fg)', MUTED = 'var(--color-muted)', PEACH = 'var(--color-peach)', MINT = 'var(--color-mint)';
@@ -88,8 +89,60 @@ function TenFrame({ n, x, y, cell = 22, empty = true }: { n: number; x: number; 
   return <g>{out}</g>;
 }
 
+type BarsV = Extract<Visual, { type: 'bars' }>;
+const PART_COLOURS = ['var(--color-accent-pale)', 'var(--color-mint-pale)', 'var(--color-yellow-pale)', 'var(--color-sky-pale)'];
+
+/** The bar model: every quantity is a bar whose length is its size; the unknown is a "?" part. Same idea as the number line. */
+function BarsView({ v, describe }: { v: BarsV; describe: string }) {
+  const { m } = useT();
+  const named = v.rows.some((r) => r.name);
+  const L = named ? 74 : 8, R = 340, rowH = 40, gap = 20, top = v.total || v.diff ? 34 : 8;
+  const max = Math.max(...v.rows.map((r) => r.parts.reduce((a, p) => a + p.v, 0)));
+  const sx = (n: number) => (n / max) * (R - L);
+  const h = top + v.rows.length * (rowH + gap) + (v.diff ? 4 : 0);
+  const rowEnd = (i: number) => L + sx(v.rows[i].parts.reduce((a, p) => a + p.v, 0));
+  return (
+    <svg viewBox={`0 0 360 ${h}`} className="w-full max-w-xl mx-auto block" role="img" aria-label={describe} data-testid="bars">
+      {v.total && (() => { const x2 = rowEnd(0); return (
+        <g>
+          <path d={`M ${L} ${top - 6} v -8 H ${x2} v 8`} fill="none" stroke="var(--color-fg)" strokeWidth={2} />
+          <text x={(L + x2) / 2} y={top - 18} textAnchor="middle" fontSize="16" fontWeight={900} fill={v.total === '?' ? 'var(--color-peach)' : 'var(--color-fg)'}>{v.total}</text>
+        </g>); })()}
+      {v.rows.map((row, i) => {
+        let x = L; const y = top + i * (rowH + gap);
+        return (
+          <g key={i}>
+            {row.name && <text x={4} y={y + rowH / 2 + 5} fontSize="13" fontWeight={700} fill="var(--color-fg)">{m(row.name).slice(0, 9)}</text>}
+            {row.parts.map((p, j) => {
+              const w = sx(p.v), unk = p.label === '?';
+              const el = (
+                <g key={j}>
+                  <rect x={x} y={y} width={Math.max(4, w - 2)} height={rowH} rx={8} fill={unk ? 'var(--color-peach-pale)' : PART_COLOURS[(v.groups ? 0 : j) % 4]} stroke={unk ? 'var(--color-peach)' : 'var(--color-accent)'} strokeWidth={2} strokeDasharray={unk ? '5 4' : undefined} />
+                  <text x={x + w / 2} y={y + rowH / 2 + 6} textAnchor="middle" fontSize="16" fontWeight={900} fill={unk ? 'var(--color-peach)' : 'var(--color-fg)'}>{p.label}</text>
+                </g>);
+              x += w; return el;
+            })}
+          </g>
+        );
+      })}
+      {v.diff && v.rows.length === 2 && (() => {
+        // the difference is the extra piece at the end of the LONGER bar
+        const a = rowEnd(0), b = rowEnd(1), longer = a > b ? 0 : 1, y = top + longer * (rowH + gap) + rowH / 2;
+        const x1 = Math.min(a, b), x2 = Math.max(a, b);
+        return (
+          <g>
+            <line x1={x1} y1={top} x2={x1} y2={top + 2 * rowH + gap} stroke="var(--color-muted)" strokeDasharray="3 3" />
+            {x2 - x1 > 4 && <rect x={x1} y={y - rowH / 2} width={x2 - x1 - 2} height={rowH} rx={8} fill="var(--color-peach-pale)" stroke="var(--color-peach)" strokeWidth={2} strokeDasharray="5 4" />}
+            <text x={Math.min(340, (x1 + x2) / 2)} y={x2 - x1 < 34 ? y - rowH / 2 - 5 : y + 6} textAnchor="middle" fontSize="16" fontWeight={900} fill="var(--color-peach)">{v.diff}</text>
+          </g>);
+      })()}
+    </svg>
+  );
+}
+
 export function VisualView({ v, describe }: { v: Visual; describe: string }) {
   if (v.type === 'line') return <NumberLine v={v} describe={describe} />;
+  if (v.type === 'bars') return <BarsView v={v} describe={describe} />;
   if (v.type === 'dots') {
     const cell = 22, gw = cell * 5 + 24;
     const w = v.groups.length * gw;

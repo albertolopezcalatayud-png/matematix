@@ -59,14 +59,14 @@ export default function StartPoint() {
         <p className="rounded-2xl p-3 bg-[var(--color-mint-pale)]">{t('sp_intro')}</p>
         <section className="card space-y-4" key={pl.asked} data-testid="exercise" data-kind={item.kind} data-answer={item.kind === 'place' ? item.target : item.answer}>
           <div className="flex items-start gap-2">
-            <h2 className="text-2xl font-extrabold flex-1" data-testid="prompt">{prompt}</h2>
+            <h2 className={`${prompt.length > 70 ? 'text-xl' : 'text-2xl'} font-extrabold flex-1 leading-snug`} data-testid="prompt">{prompt}</h2>
             <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => voice && void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>
           </div>
           {item.kind !== 'place' && item.visual && <VisualView v={item.visual} describe={describe(t, item.visual)} />}
           {item.kind === 'place' && <PlaceOnLine v={{ type: 'line', min: item.min, max: item.max, marks: item.marks, labels: item.labels }} value={value} onChange={setValue} locked={false} good={null} label={prompt} />}
           {item.kind === 'choice' && (
-            <div className={`grid gap-2 ${item.options.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`} data-testid="choices">
-              {item.options.map((o) => <button key={o} data-value={o} className="btn btn-ghost !text-2xl !font-extrabold !min-h-16" onClick={() => answer(o)}>{o}</button>)}
+            <div className={`grid gap-2 ${item.options.length === 2 || item.options.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`} data-testid="choices">
+              {item.options.map((o, k) => <button key={o} data-value={o} className={`btn btn-ghost ${item.optionLabels ? '!text-base !font-bold' : '!text-2xl !font-extrabold'} !min-h-16`} onClick={() => answer(o)}>{item.optionLabels ? m(item.optionLabels[k]) : o}</button>)}
             </div>
           )}
           {item.kind === 'number' && (

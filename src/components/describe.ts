@@ -4,5 +4,6 @@ export function describe(t: T, v: Visual): string {
   if (v.type === 'line') return t(v.point != null ? 'd_line_point' : 'd_line', { a: v.min, b: v.max });
   if (v.type === 'dots') return t('d_dots', { g: v.groups.join(', ') });
   if (v.type === 'frame') return t('d_frame', { n: v.filled });
+  if (v.type === 'bars') return t('d_bars', { r: v.rows.length });
   return t('d_tens', { t: v.tens, o: v.ones });
 }

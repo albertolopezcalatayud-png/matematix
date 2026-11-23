@@ -119,7 +119,7 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
     else { const line = p.getByTestId('line-input'); const box = await line.boundingBox(); const min = Number(await line.getAttribute('data-min')), max = Number(await line.getAttribute('data-max')); await p.mouse.click(box.x + ((22 + ((ans - min) / (max - min)) * 316) / 360) * box.width, box.y + box.height * 0.6); await p.getByTestId('check').click(); }
     await p.waitForTimeout(150); q++;
   }
-  ok(q <= 8 && (await p.getByTestId('sp-all-right').count()) === 1, `a child who knows everything is placed at the end in ${q} questions and told about "I can already do this"`);
+  ok(q <= 10 && (await p.getByTestId('sp-all-right').count()) === 1, `a child who knows everything is placed at the end in ${q} questions and told about "I can already do this"`);
   await p.screenshot({ path: `${SHOTS}/w-sp-strong.png` });
   const noScroll = await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
   ok(noScroll, 'no sideways scroll');

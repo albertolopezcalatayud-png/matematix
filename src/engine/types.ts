@@ -8,7 +8,9 @@ export type Visual =
   | { type: 'dots'; groups: number[] } // groups of dots in tens frames, e.g. [7] or [6, 7]
   | { type: 'line'; min: number; max: number; marks: number[]; labels: number[]; point?: number; jumps?: [number, number][] }
   | { type: 'tens'; tens: number; ones: number } // tens rods and ones cubes
-  | { type: 'frame'; filled: number }; // a ten frame with some cells filled (friends of 10)
+  | { type: 'frame'; filled: number } // a ten frame with some cells filled (friends of 10)
+  /** The bar model of a word problem: rows of bars split in parts; a part or the total can be "?" */
+  | { type: 'bars'; rows: { parts: { v: number; label: string }[]; name?: Msg }[]; total?: string; diff?: string; groups?: boolean };
 
 export type Item = {
   prompt: Msg;
@@ -20,7 +22,7 @@ export type Item = {
   aid?: Visual;
 } & (
   | { kind: 'place'; min: number; max: number; marks: number[]; labels: number[]; target: number; tol: number; aidMarks?: number[]; aidLabels?: number[] }
-  | { kind: 'choice'; options: number[]; answer: number }
+  | { kind: 'choice'; options: number[]; answer: number; optionLabels?: Msg[] }
   | { kind: 'number'; answer: number; thread?: Thread }
 );
 
@@ -31,7 +33,7 @@ export type Phase = 'model' | 'guided' | 'independent';
 
 export interface Station {
   id: string;
-  island: 'A' | 'B';
+  island: 'A' | 'B' | 'C';
   title: Msg;
   /** A worked example: the steps the narrator explains, each with the same visual growing. */
   model: (rng: () => number) => { steps: { say: Msg; visual?: Visual }[] };
