@@ -163,8 +163,8 @@ function Exercise({ entry, onDone, oneTry = false }: { entry: { item: Item; guid
   const check = (v = current) => {
     if (v == null) return;
     if (isRight(item, v)) { setState('right'); if (voice) void speak(lang, t(okMsg)); }
-    else if (tries === 0 && !oneTry) { setTries(1); setState('wrong'); if (voice) void speak(lang, t('try_again') + ' ' + m(item.hint)); }
-    else { setState('shown'); if (voice) void speak(lang, t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : item.kind === 'place' ? fmtScaled(lang, item.target, item.scale ?? 1, item.frac) : answerOf() }) + ' ' + m(item.hint)); }
+    else if (tries === 0 && !oneTry) { setTries(1); setState('wrong'); if (voice) void speak(lang, [t('try_again'), m(item.hint)]); }
+    else { setState('shown'); if (voice) void speak(lang, [t('answer_was', { n: item.kind === 'choice' && item.optionLabels ? m(item.optionLabels[item.options.indexOf(item.answer)]) : item.kind === 'place' ? fmtScaled(lang, item.target, item.scale ?? 1, item.frac) : answerOf() }), m(item.hint)]); }
   };
   const locked = state === 'right' || state === 'shown';
   const showSupport = guided || state === 'wrong' || state === 'shown';

@@ -4,6 +4,7 @@ import { useT } from '@/i18n';
 import { useApp } from '@/stores/app';
 import { TopBar } from '@/components/Layout';
 import { APP_NAME, APP_VERSION } from '@/config';
+import { VoiceCredits, VoicePicker } from '@/components/VoicePicker';
 
 function Toggle({ label, value, onChange, id }: { label: string; value: boolean; onChange: (v: boolean) => void; id: string }) {
   return (
@@ -28,6 +29,7 @@ export default function Settings() {
             <Link to="/idioma" className="btn btn-ghost !min-h-10">{s.lang === 'ca' ? 'Valencià' : s.lang === 'en' ? 'English (UK)' : 'Castellano'}</Link>
           </div>
           <Toggle id="voice" label={t('set_voice')} value={s.voice} onChange={(v) => s.set({ voice: v })} />
+          {s.voice && <VoicePicker />}
           <Toggle id="size" label={t('set_size')} value={s.large} onChange={(v) => s.set({ large: v })} />
           <Toggle id="motion" label={t('set_motion')} value={s.motion === 'reduce'} onChange={(v) => s.set({ motion: v ? 'reduce' : 'auto' })} />
           <Toggle id="rest" label={t('set_rest')} value={s.rest} onChange={(v) => s.set({ rest: v })} />
@@ -55,6 +57,7 @@ export default function Settings() {
             </div>
           )}
         </section>
+        <VoiceCredits />
         <p className="text-center text-xs text-[var(--color-muted)]">{APP_NAME} {APP_VERSION}</p>
       </main>
     </div>

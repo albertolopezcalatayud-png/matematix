@@ -268,7 +268,7 @@ export default function World() {
                   {f.options.map((o) => (
                     <button key={o} className={`btn btn-ghost !text-lg ${sheet.tried.includes(o) ? '!bg-[var(--color-peach-pale)]' : ''}`} data-value={o} disabled={sheet.tried.includes(o)}
                       onClick={() => {
-                        if (o === f.v) { find(f.v); setSheet({ ...sheet, just: true }); tone(f.v, { chord: true, dur: 0.35, span: view.s }); buzz(30); if (useApp.getState().voice) void speak(lang, t('find_got') + ' ' + fact); }
+                        if (o === f.v) { find(f.v); setSheet({ ...sheet, just: true }); tone(f.v, { chord: true, dur: 0.35, span: view.s }); buzz(30); if (useApp.getState().voice) void speak(lang, [t('find_got'), fact]); }
                         else { setSheet({ ...sheet, tried: [...sheet.tried, o] }); tone(o, { span: view.s }); }
                       }}>{fmt(o)}</button>
                   ))}

@@ -30,7 +30,14 @@ export default defineConfig({
         categories: ['education', 'kids'],
         icons: [{ src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
       },
-      workbox: { globPatterns: ['**/*.{js,css,html,svg,woff2}'] },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+        // Natural-voice clips: fetched the first time they are heard, then kept for offline use.
+        runtimeCaching: [
+          { urlPattern: ({ url }) => url.pathname.includes('/audio/') && url.pathname.endsWith('.json'), handler: 'StaleWhileRevalidate', options: { cacheName: 'mx-audio-index' } },
+          { urlPattern: ({ url }) => url.pathname.includes('/audio/') && url.pathname.endsWith('.mp3'), handler: 'CacheFirst', options: { cacheName: 'mx-audio', expiration: { maxEntries: 4000 }, rangeRequests: true } },
+        ],
+      },
     }),
   ],
   test: { include: ['tests/unit/**/*.test.ts'], testTimeout: 120000 },

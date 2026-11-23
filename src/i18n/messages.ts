@@ -76,6 +76,13 @@ export const MESSAGES = {
   // Settings
   set_lang: ['Idioma', 'Idioma', 'Language'],
   set_voice: ['Leer en voz alta', 'Llegir en veu alta', 'Read aloud'],
+  voice_pick: ['¿Qué voz te gusta más?', 'Quina veu t\'agrada més?', 'Which voice do you like best?'],
+  voice_device: ['La voz del aparato', 'La veu de l\'aparell', 'This device\'s voice'],
+  voice_sample: ['Hola. Así sueno yo.', 'Hola. Així sone jo.', 'Hello. This is how I sound.'],
+  voice_soon: ['Las voces nuevas se están preparando. Mientras, lee la voz del aparato.', 'Les veus noves s\'estan preparant. Mentrestant, llig la veu de l\'aparell.', 'The new voices are being prepared. Meanwhile, this device\'s voice reads.'],
+  credits: ['Créditos y licencias', 'Crèdits i llicències', 'Credits and licences'],
+  credits_font: ['Letra Lexend (Bonnie Shaver-Troup y Thomas Jockin), SIL Open Font License 1.1', 'Lletra Lexend (Bonnie Shaver-Troup i Thomas Jockin), SIL Open Font License 1.1', 'Lexend typeface (Bonnie Shaver-Troup and Thomas Jockin), SIL Open Font License 1.1'],
+  credits_device: ['Cuando no hay voz grabada, lee la voz que trae tu aparato.', 'Quan no hi ha veu gravada, llig la veu que porta el teu aparell.', 'When there is no recorded voice, your device\'s own voice reads.'],
   set_size: ['Letra grande', 'Lletra gran', 'Large text'],
   set_theme: ['Colores', 'Colors', 'Colours'],
   theme_auto: ['Como el aparato', "Com l'aparell", 'Same as device'],

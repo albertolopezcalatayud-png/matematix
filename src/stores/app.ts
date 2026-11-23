@@ -26,6 +26,8 @@ interface AppState {
   reach: number;
   /** The short first-time tour of the number line has been shown. */
   toured: boolean;
+  /** Natural voice chosen per language ('device' = the device's own voice). */
+  voices: Partial<Record<Lang, string>>;
   find: (v: number) => void;
   pass: (station: string) => void;
   suggested: string | null;
@@ -50,7 +52,7 @@ export const SEEN_MAX = 600;
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
-      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
+      lang: null, voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, voices: {}, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
       pass: (station) => set((s) => ({ last: station, progress: { ...s.progress, [station]: { ...(s.progress[station] ?? { goodDays: [], best: 0, sessions: 0 }), sessions: (s.progress[station]?.sessions ?? 0) + 1, passed: true } } })),
       find: (v) => set((s) => (s.found.includes(v) ? s : { found: [...s.found, v] })),

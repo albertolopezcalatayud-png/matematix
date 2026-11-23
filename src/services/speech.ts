@@ -1,7 +1,9 @@
 import type { Lang } from '@/engine/types';
 import { HTML_LANG, speakable } from '@/i18n';
+import { playClip, stopClip } from './clips';
 
-// For 0.1 the device voice. The natural pre-recorded voices (as in Lectorix) come later; the call stays the same.
+// The natural voice when there is a clip for the text, otherwise the device's voice. Several parts are read one
+// after another (each part can have its own clip: "Nearly. Look at the hint…" + the hint).
 let voices: SpeechSynthesisVoice[] = [];
 if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   const load = () => { voices = window.speechSynthesis.getVoices(); };
@@ -15,10 +17,9 @@ function pick(lang: Lang): SpeechSynthesisVoice | undefined {
   return undefined;
 }
 
-export function speak(lang: Lang, text: string): Promise<void> {
+function device(lang: Lang, text: string): Promise<void> {
   return new Promise((resolve) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return resolve();
-    window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(speakable(lang, text));
     const v = pick(lang);
     if (v) u.voice = v;
@@ -29,4 +30,19 @@ export function speak(lang: Lang, text: string): Promise<void> {
     window.speechSynthesis.speak(u);
   });
 }
-export const stopSpeech = () => { if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel(); };
+
+let run = 0;
+export async function speak(lang: Lang, text: string | string[]): Promise<void> {
+  const my = ++run;
+  stopSpeech(false);
+  for (const part of Array.isArray(text) ? text : [text]) {
+    if (my !== run || !part.trim()) continue;
+    const played = await playClip(lang, part);
+    if (!played && my === run) await device(lang, part);
+  }
+}
+export function stopSpeech(bump = true) {
+  if (bump) run++;
+  stopClip();
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+}
