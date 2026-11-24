@@ -15,6 +15,10 @@ TEXTS = json.load(open(texts_file, encoding='utf-8'))
 VOICES = json.load(open(os.path.join(os.path.dirname(__file__), 'voices.json'), encoding='utf-8'))
 DEADLINE = time.time() + float(os.environ.get('MAX_MINUTES', '320')) * 60
 LENGTH_SCALE = 1.08      # a touch slower than the model's default: clearer for children
+# A voice can carry its own "scale" in voices.json. The Valencian (Matxa) voices read about 20 % slower than the
+# Spanish and English ones at the same setting, which sounded slow and robotic: they use 0.83 (≈ 12 characters a second,
+# like the others). They were renamed (mx-mar2, mx-pol2) so phones do not keep the old slow clips in their cache; the
+# old voices stay in the list until the new ones are 97 % done.
 GAP_S = 0.3              # pause between sentences
 PAD_S = 0.12             # a little silence before and after: the first sound is never cut
 
