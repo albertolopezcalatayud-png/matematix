@@ -2,7 +2,7 @@ import { STATIONS } from './stations';
 import { statusOf, type StationProgress } from '@/stores/app';
 
 /** Where each station lives on the number line (a number it works with). */
-export const SPOT: Record<string, number> = { A1: 4, A2: 8, A3: 15, A4: 34, A5: 63, A6: 80, B1: 9, B2: 12, B3: 10, B4: 13, B5: 17, B6: 30, C1: 25, C2: 45, C3: 55, C4: 35, C5: 40, C6: 70, D1: 2, D2: 1, D3: 3, D4: 5, D5: 50, D6: 60, E1: 100, E2: 30, E3: 12, E4: 15, E5: 20, E6: 1000 };
+export const SPOT: Record<string, number> = { A1: 4, A2: 8, A3: 15, A4: 34, A5: 63, A6: 80, B1: 9, B2: 12, B3: 10, B4: 13, B5: 17, B6: 30, C1: 25, C2: 45, C3: 55, C4: 35, C5: 40, C6: 70, D1: 2, D2: 1, D3: 3, D4: 5, D5: 50, D6: 60, E1: 100, E2: 30, E3: 12, E4: 15, E5: 20, E6: 1000, F1: 50, F2: 20, F3: 60, F4: 25, F5: 10, F6: 100 };
 
 /** Real-world numbers to discover on the line. The text is in messages (fd_<id> = name, ff_<id> = fact with {n}). */
 export interface Find { id: string; v: number; unit?: string; options: number[] }
@@ -43,11 +43,16 @@ export function litOf(progress: Record<string, StationProgress>): [number, numbe
   add('C1', 0, 50); add('C2', 0, 50); add('C3', 0, 100); add('C4', 0, 100); add('C5', 0, 100); add('C6', 0, 100);
   add('D1', 0, 1); add('D2', 0, 2); add('D3', 0, 2); add('D4', 0, 2); add('D5', 0, 100); add('D6', 0, 100);
   add('E1', 0, 1000); add('E2', 0, 100); add('E3', 0, 100); add('E4', 0, 100); add('E5', 0, 100); add('E6', 0, 1000);
+  add('F1', 0, 100); add('F2', 0, 50); add('F3', 0, 100); add('F4', 0, 50); add('F5', 0, 20); add('F6', 0, 100);
   return out;
 }
 
 /** The suggested learning order across both islands (number sense first, then the facts that build on it). */
-export const ORDER = ['A1', 'A2', 'B1', 'B3', 'B2', 'A3', 'C1', 'B4', 'B5', 'C2', 'A4', 'C3', 'A5', 'C4', 'A6', 'B6', 'C5', 'D1', 'D2', 'D3', 'D4', 'C6', 'D5', 'E1', 'E2', 'D6', 'E3', 'E4', 'E5', 'E6'];
+export const ORDER = ['A1', 'A2', 'B1', 'B3', 'B2', 'A3', 'C1', 'B4', 'B5', 'C2', 'A4', 'C3', 'A5', 'C4', 'A6', 'B6', 'C5', 'D1', 'D2', 'D3', 'D4', 'C6', 'D5', 'E1', 'E2', 'D6', 'E3', 'E4', 'E5', 'E6', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6'];
+
+/** The short level check only covers the core route (topics A–E): real-life maths (F) builds on all of it and is
+ *  reached by school year or from Topics, so the check stays at about 10 questions. */
+export const PLACEMENT_ROUTE = ORDER.filter((id) => !id.startsWith('F'));
 
 /** The station the big "Carry on" button opens: the one in progress, else the suggested one, else the first not mastered. */
 /** Hard on two different days: the closest earlier station (at most 3 back) that is not lit yet, or null. */

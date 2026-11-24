@@ -16,6 +16,8 @@ export type Visual =
   | { type: 'chart'; kind: 'bar' | 'line'; x: (string | Msg)[]; y: number[]; yMax: number; yStep: number; xTitle?: Msg; yTitle?: Msg; mark?: number; slope?: boolean }
   /** A balance: what is on each pan stays equal */
   | { type: 'balance'; left: string; right: string }
+  /** A table of data (a timetable, a class's marks, a list in order). mark / mark2 = [row, column]; row -1 is the header row */
+  | { type: 'table'; head: (string | Msg)[]; rows: (string | Msg)[][]; mark?: [number, number]; mark2?: [number, number] }
   | { type: 'bars'; rows: { parts: { v: number; label: string; shade?: boolean }[]; name?: Msg }[]; total?: string; diff?: string; groups?: boolean };
 
 export type Item = {
@@ -39,7 +41,7 @@ export type Phase = 'model' | 'guided' | 'independent';
 
 export interface Station {
   id: string;
-  island: 'A' | 'B' | 'C' | 'D' | 'E';
+  island: 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
   title: Msg;
   /** A worked example: the steps the narrator explains, each with the same visual growing. */
   model: (rng: () => number) => { steps: { say: Msg; visual?: Visual }[] };

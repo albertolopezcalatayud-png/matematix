@@ -113,7 +113,7 @@ export default function Home() {
               </Link>
             );
           })}
-          <Link to="/mapa" className="tile flex flex-col justify-center gap-1 !p-3" data-island="A" data-testid="to-world">
+          <Link to="/mapa" className="tile col-span-2 flex flex-col justify-center gap-1 !p-3" data-island="A" data-testid="to-world">
             <span className="flex items-center gap-2"><span className="text-2xl" aria-hidden>📏</span><span className="font-extrabold text-sm leading-tight" style={{ color: 'var(--isl)' }}>{t('my_line')}</span></span>
           </Link>
         </div>

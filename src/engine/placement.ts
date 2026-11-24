@@ -1,4 +1,4 @@
-import { ORDER } from '@/data/world';
+import { PLACEMENT_ROUTE as ORDER } from '@/data/world';
 
 /**
  * Adaptive starting point. It starts in the middle of the route and jumps up or down, like a teacher asking two or

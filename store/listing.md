@@ -12,10 +12,11 @@ Matematix ayuda a aprender matemáticas y ciencias paso a paso. Está pensada pa
 
 CÓMO FUNCIONA
 • Todo gira alrededor de una recta numérica que se va encendiendo a medida que aprendes.
-• 30 estaciones en 5 islas: la recta, los hechos numéricos, problemas con el modelo de barras, fracciones, decimales y porcentajes, y ciencias (unidades, gráficas, ecuaciones, densidad y potencias de 10).
-• Cada estación empieza con un ejemplo resuelto, sigue con ejercicios guiados y termina con ejercicios sin ayuda.
+• 36 lecciones en 6 temas: la recta, sumar, restar y multiplicar, problemas con el modelo de barras, fracciones, decimales y porcentajes, mates para ciencias (unidades, gráficas, ecuaciones, densidad y potencias de 10) y mates para la vida real (porcentajes, dinero, horarios, tablas, media y proporciones).
+• Se elige el curso (de 1.º de Primaria a 4.º de ESO) y desde ahí se sube o se baja según lo que haga falta.
+• Cada lección empieza con un ejemplo resuelto, sigue con ejercicios guiados y termina con ejercicios sin ayuda.
 • Más de un millón de ejercicios distintos: casi nunca se repite uno.
-• Una prueba corta y sin notas propone por dónde empezar. Con «Ya sé hacer esto», quien domina una estación pasa a la siguiente.
+• Una prueba corta y sin notas propone por dónde empezar. Con «Ya sé hacer esto», quien domina una lección pasa a la siguiente.
 
 PARA TODO TIPO DE ALUMNADO
 • Lectura en voz alta con voces naturales en castellano, valenciano e inglés británico.
@@ -25,7 +26,7 @@ PARA TODO TIPO DE ALUMNADO
 
 PARA DOCENTES, PT/AL Y FAMILIAS
 Zona de personas adultas protegida: se abre manteniendo pulsado un botón 3 segundos.
-• Fichas en papel con ejercicios nuevos cada vez, solucionario y un QR que abre la estación.
+• Fichas en papel con ejercicios nuevos cada vez, solucionario y un QR que abre la lección.
 • Modo pizarra para explicar a toda la clase.
 • Varios alumnos en un mismo aparato, con apodo y emoji, y hoja de sesión para el PAP.
 • Certificados, mural de la recta para el aula y una guía breve para docentes.
@@ -46,10 +47,11 @@ Matematix ajuda a aprendre matemàtiques i ciències pas a pas. Està pensada pe
 
 COM FUNCIONA
 • Tot gira al voltant d'una recta numèrica que es va encenent a mesura que aprens.
-• 30 estacions en 5 illes: la recta, els fets numèrics, problemes amb el model de barres, fraccions, decimals i percentatges, i ciències (unitats, gràfiques, equacions, densitat i potències de 10).
-• Cada estació comença amb un exemple resolt, continua amb exercicis guiats i acaba amb exercicis sense ajuda.
+• 36 lliçons en 6 temes: la recta, sumar, restar i multiplicar, problemes amb el model de barres, fraccions, decimals i percentatges, mates per a ciències (unitats, gràfiques, equacions, densitat i potències de 10) i mates per a la vida real (percentatges, diners, horaris, taules, mitjana i proporcions).
+• Es tria el curs (d'1r de Primària a 4t d'ESO) i des d'ací es puja o es baixa segons el que calga.
+• Cada lliçó comença amb un exemple resolt, continua amb exercicis guiats i acaba amb exercicis sense ajuda.
 • Més d'un milió d'exercicis diferents: quasi mai no se'n repetix cap.
-• Una prova curta i sense notes proposa per on començar. Amb «Ja sé fer açò», qui domina una estació passa a la següent.
+• Una prova curta i sense notes proposa per on començar. Amb «Ja sé fer açò», qui domina una lliçó passa a la següent.
 
 PER A TOT TIPUS D'ALUMNAT
 • Lectura en veu alta amb veus naturals en castellà, valencià i anglés britànic.
@@ -59,7 +61,7 @@ PER A TOT TIPUS D'ALUMNAT
 
 PER A DOCENTS, PT/AL I FAMÍLIES
 Zona de persones adultes protegida: s'obri mantenint polsat un botó 3 segons.
-• Fitxes en paper amb exercicis nous cada vegada, solucionari i un QR que obri l'estació.
+• Fitxes en paper amb exercicis nous cada vegada, solucionari i un QR que obri la lliçó.
 • Mode pissarra per a explicar a tota la classe.
 • Diversos alumnes en un mateix aparell, amb sobrenom i emoji, i full de sessió per al PAP.
 • Certificats, mural de la recta per a l'aula i una guia breu per a docents.
@@ -80,10 +82,11 @@ Matematix helps children learn maths and science step by step. It is designed fo
 
 HOW IT WORKS
 • Everything revolves around a number line that lights up as you learn.
-• 30 stations on 5 islands: the number line, number facts, word problems with the bar model, fractions, decimals and percentages, and science (units, graphs, equations, density and powers of 10).
-• Each station starts with a worked example, goes on to guided exercises and ends with exercises on your own.
+• 36 lessons in 6 topics: the number line, adding, subtracting and multiplying, word problems with the bar model, fractions, decimals and percentages, maths for science (units, graphs, equations, density and powers of 10) and maths for real life (percentages, money, timetables, tables, averages and proportion).
+• Pupils pick their school year (Year 2 to Year 11) and move up or down from there as they need.
+• Each lesson starts with a worked example, goes on to guided exercises and ends with exercises on your own.
 • Over a million different exercises: one is almost never repeated.
-• A short check with no marks suggests where to start. With "I can already do this", pupils who know a station move on to the next one.
+• A short check with no marks suggests where to start. With "I can already do this", pupils who know a lesson move on to the next one.
 
 FOR EVERY KIND OF PUPIL
 • Read aloud with natural voices in Spanish, Valencian and British English.
@@ -93,7 +96,7 @@ FOR EVERY KIND OF PUPIL
 
 FOR TEACHERS, SEN STAFF AND FAMILIES
 A protected adults' area: it opens by holding a button for 3 seconds.
-• Paper worksheets with new exercises every time, an answer sheet and a QR code that opens the station.
+• Paper worksheets with new exercises every time, an answer sheet and a QR code that opens the lesson.
 • Whiteboard mode to explain to the whole class.
 • Several pupils on one device, with a nickname and an emoji, and a session record for their support plan.
 • Certificates, a classroom number-line display and a short guide for teachers.

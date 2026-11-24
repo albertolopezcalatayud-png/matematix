@@ -199,7 +199,7 @@ function ChartView({ v, describe }: { v: Extract<Visual, { type: 'chart' }>; des
           <path d={`M ${X(1)} ${Y(v.y[1])} H ${X(2)} V ${Y(v.y[2])}`} strokeDasharray="4 3" />
         </g>
       )}
-      {v.x.map((x, i) => <text key={i} x={X(i)} y={B + 16} textAnchor="middle" fontSize="11" fontWeight={700} fill="var(--color-fg)">{xl(x)}</text>)}
+      {v.x.map((x, i) => { const w = xl(x); return <text key={i} x={X(i)} y={B + 16} textAnchor="middle" fontSize={Math.min(11, ((R - L) / n) / (Math.max(...v.x.map((q) => xl(q).length)) * 0.62))} fontWeight={700} fill="var(--color-fg)">{w}</text>; })}
       {v.xTitle && <text x={R} y={B + 32} textAnchor="end" fontSize="11" fill="var(--color-muted)">{m(v.xTitle)}</text>}
       {v.yTitle && <text x={L - 36} y={12} fontSize="12" fontWeight={700} fill="var(--color-muted)">{m(v.yTitle)}</text>}
     </svg>
@@ -225,7 +225,29 @@ function BalanceView({ v, describe }: { v: Extract<Visual, { type: 'balance' }>;
   );
 }
 
+/** A data table (timetable, class marks, a list put in order). Real table markup so screen readers can move through it. */
+function TableView({ v, describe }: { v: Extract<Visual, { type: 'table' }>; describe: string }) {
+  const { m } = useT();
+  const txt = (x: string | Msg) => (typeof x === 'string' ? x : m(x));
+  const on = (r: number, c: number) => (v.mark && v.mark[0] === r && v.mark[1] === c) || (v.mark2 && v.mark2[0] === r && v.mark2[1] === c);
+  const cell = (r: number, c: number, head: boolean): React.CSSProperties => ({
+    padding: '6px 10px', border: '1.5px solid var(--color-border)', textAlign: c === 0 && v.rows.length ? 'left' : 'center',
+    fontWeight: head || c === 0 ? 800 : 600, fontSize: 17,
+    background: on(r, c) ? 'var(--color-peach-pale)' : head ? 'var(--color-accent-pale)' : 'var(--color-card)',
+    outline: on(r, c) ? '3px solid var(--color-peach)' : undefined, outlineOffset: -3,
+  });
+  return (
+    <div className="overflow-x-auto" data-testid="table">
+      <table aria-label={describe} style={{ borderCollapse: 'collapse', margin: '0 auto', color: 'var(--color-fg)', borderRadius: 12 }}>
+        <thead><tr>{v.head.map((h, c) => <th key={c} scope="col" style={cell(-1, c, true)}>{txt(h)}</th>)}</tr></thead>
+        {v.rows.length > 0 && <tbody>{v.rows.map((row, r) => <tr key={r}>{row.map((x, c) => c === 0 ? <th key={c} scope="row" style={cell(r, c, false)}>{txt(x)}</th> : <td key={c} style={cell(r, c, false)}>{txt(x)}</td>)}</tr>)}</tbody>}
+      </table>
+    </div>
+  );
+}
+
 export function VisualView({ v, describe }: { v: Visual; describe: string }) {
+  if (v.type === 'table') return <TableView v={v} describe={describe} />;
   if (v.type === 'line') return <NumberLine v={v} describe={describe} />;
   if (v.type === 'bars') return <BarsView v={v} describe={describe} />;
   if (v.type === 'ladder') return <LadderView v={v} describe={describe} />;

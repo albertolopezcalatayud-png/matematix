@@ -165,7 +165,7 @@ export default function World() {
     if (!(s.id === next || s.id === suggested || (progress[s.id]?.sessions ?? 0) > 0)) continue;
     const st = statusOf(progress[s.id]);
     markers.push({ key: s.id, x: X(v), side: 'up', label: `${st === 'done' ? '★ ' : ''}${m(s.title)}`,
-      cls: `${s.island === 'A' ? 'mk-a' : s.island === 'B' ? 'mk-b' : s.island === 'C' ? 'mk-c' : s.island === 'D' ? 'mk-d' : 'mk-e'} ${st === 'done' ? 'mk-done' : ''} ${next === s.id ? 'mk-sugg' : ''} ${v > reach ? 'mk-fog' : ''}`,
+      cls: `${s.island === 'A' ? 'mk-a' : s.island === 'B' ? 'mk-b' : s.island === 'C' ? 'mk-c' : s.island === 'D' ? 'mk-d' : s.island === 'E' ? 'mk-e' : 'mk-f'} ${st === 'done' ? 'mk-done' : ''} ${next === s.id ? 'mk-sugg' : ''} ${v > reach ? 'mk-fog' : ''}`,
       onClick: () => { setSheet({ kind: 'station', id: s.id }); tone(v, { chord: true, span: view.s }); } });
   }
   const hiddenNear = FINDS.filter((f) => !found.includes(f.v) && f.v <= reach).sort((p, q) => Math.abs(p.v - SPOT[next]) - Math.abs(q.v - SPOT[next])).slice(0, 2).map((f) => f.id);

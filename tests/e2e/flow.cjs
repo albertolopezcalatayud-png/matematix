@@ -83,11 +83,11 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     await noOverflow(p, `${code} world`);
     await p.screenshot({ path: `${SHOTS}/${code}-4-world.png` });
     await p.goto(BASE + '#/estaciones'); await p.waitForTimeout(300);
-    ok((await p.locator('[data-testid^=topic-]').count()) === 5, `${code}: the old list now opens the 5 topics`);
+    ok((await p.locator('[data-testid^=topic-]').count()) === 6, `${code}: the old list now opens the 6 topics`);
     await p.screenshot({ path: `${SHOTS}/${code}-4-topics.png`, fullPage: true });
     let nLessons = 0;
-    for (const isl of ['A', 'B', 'C', 'D', 'E']) { await p.goto(BASE + '#/tema/' + isl); await p.waitForTimeout(200); nLessons += await p.locator('[data-testid^=station-]').count(); if (isl === 'A') await p.screenshot({ path: `${SHOTS}/${code}-4-topicA.png`, fullPage: true }); }
-    ok(nLessons === 30, `${code}: 30 lessons across the topics`);
+    for (const isl of ['A', 'B', 'C', 'D', 'E', 'F']) { await p.goto(BASE + '#/tema/' + isl); await p.waitForTimeout(200); nLessons += await p.locator('[data-testid^=station-]').count(); if (isl === 'A') await p.screenshot({ path: `${SHOTS}/${code}-4-topicA.png`, fullPage: true }); }
+    ok(nLessons === 36, `${code}: 36 lessons across the topics`);
 
     // A station of each kind: place (A2), tens/number or choice (A4), number with keypad (B5)
     for (const id of code === 'es' ? ['A2', 'A4', 'B5', 'A1', 'A6', 'B3'] : ['A2', 'B5']) {

@@ -120,7 +120,7 @@ test('a child practising every day does not meet the same exercise again until t
 });
 
 import { answerPlacement, startPlacement } from '../../src/engine/placement';
-import { ORDER } from '../../src/data/world';
+import { PLACEMENT_ROUTE as ORDER } from '../../src/data/world';
 test('the starting point lands exactly where a child stops knowing, in few questions', () => {
   const asked: number[] = [];
   for (let k = 0; k <= ORDER.length; k++) {

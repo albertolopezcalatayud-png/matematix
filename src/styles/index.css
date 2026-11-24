@@ -100,19 +100,21 @@ button { font: inherit; color: inherit; }
 .mk-c { background: var(--color-mint); color: var(--color-bg); }
 .mk-d { background: var(--color-peach); color: var(--color-bg); }
 .mk-e { background: #2E6F8B; color: #fff; }
+.mk-f { background: #7A6412; color: #fff; }
 
 /* ── Islands: each has its own colour (pastel tile + strong colour for text/badges, AA contrast) ── */
 :root { --isl-A: #6A58D6; --isl-A-pale: #EEEBFF; --isl-B: #2A8A6C; --isl-B-pale: #E0F5EC; --isl-C: #2C76B3; --isl-C-pale: #E3EFFB;
-  --isl-D: #B5631C; --isl-D-pale: #FFEFDB; --isl-E: #1B7A7A; --isl-E-pale: #DCF3F2; }
-:root[data-theme="dark"] { --isl-A-pale: #2E2A52; --isl-B-pale: #1E3A31; --isl-C-pale: #1F3042; --isl-D-pale: #3D2E1E; --isl-E-pale: #183635;
-  --isl-A: #B9AEFF; --isl-B: #8FD9C0; --isl-C: #9CCBF2; --isl-D: #F5BE86; --isl-E: #8EDBD8; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --isl-A-pale: #2E2A52; --isl-B-pale: #1E3A31; --isl-C-pale: #1F3042; --isl-D-pale: #3D2E1E; --isl-E-pale: #183635;
-  --isl-A: #B9AEFF; --isl-B: #8FD9C0; --isl-C: #9CCBF2; --isl-D: #F5BE86; --isl-E: #8EDBD8; } }
+  --isl-D: #B5631C; --isl-D-pale: #FFEFDB; --isl-E: #1B7A7A; --isl-E-pale: #DCF3F2; --isl-F: #7A6412; --isl-F-pale: #FBF3D2; }
+:root[data-theme="dark"] { --isl-A-pale: #2E2A52; --isl-B-pale: #1E3A31; --isl-C-pale: #1F3042; --isl-D-pale: #3D2E1E; --isl-E-pale: #183635; --isl-F-pale: #39321A;
+  --isl-A: #B9AEFF; --isl-B: #8FD9C0; --isl-C: #9CCBF2; --isl-D: #F5BE86; --isl-E: #8EDBD8; --isl-F: #E9D27C; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --isl-A-pale: #2E2A52; --isl-B-pale: #1E3A31; --isl-C-pale: #1F3042; --isl-D-pale: #3D2E1E; --isl-E-pale: #183635; --isl-F-pale: #39321A;
+  --isl-A: #B9AEFF; --isl-B: #8FD9C0; --isl-C: #9CCBF2; --isl-D: #F5BE86; --isl-E: #8EDBD8; --isl-F: #E9D27C; } }
 [data-island="A"] { --isl: var(--isl-A); --isl-pale: var(--isl-A-pale); }
 [data-island="B"] { --isl: var(--isl-B); --isl-pale: var(--isl-B-pale); }
 [data-island="C"] { --isl: var(--isl-C); --isl-pale: var(--isl-C-pale); }
 [data-island="D"] { --isl: var(--isl-D); --isl-pale: var(--isl-D-pale); }
 [data-island="E"] { --isl: var(--isl-E); --isl-pale: var(--isl-E-pale); }
+[data-island="F"] { --isl: var(--isl-F); --isl-pale: var(--isl-F-pale); }
 
 /* Soft decorative shapes behind the home screen (no pink, never behind text that needs contrast) */
 .deco { position: relative; overflow: hidden; isolation: isolate; }

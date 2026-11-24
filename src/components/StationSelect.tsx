@@ -1,7 +1,7 @@
 import { useT } from '@/i18n';
 import { ISLANDS, STATIONS } from '@/data/stations';
 
-/** All 30 stations grouped by island. */
+/** All the lessons grouped by topic. */
 export function StationSelect({ value, onChange, label, testId }: { value: string; onChange: (id: string) => void; label: string; testId?: string }) {
   const { t, m } = useT();
   return (

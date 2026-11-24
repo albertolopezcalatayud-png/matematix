@@ -3,6 +3,7 @@ import { int, optionsAround, shuffle } from '@/engine/rng';
 import { PROBLEM_STATIONS } from './problems';
 import { FRACTION_STATIONS } from './fractions';
 import { SCIENCE_STATIONS } from './science';
+import { LIFE_STATIONS } from './life';
 
 const range = (a: number, b: number, step = 1) => { const out: number[] = []; for (let v = a; v <= b; v += step) out.push(v); return out; };
 type LineV = Extract<Visual, { type: 'line' }>;
@@ -294,13 +295,14 @@ const B6: Station = {
   },
 };
 
-export const STATIONS: Station[] = [A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, ...PROBLEM_STATIONS, ...FRACTION_STATIONS, ...SCIENCE_STATIONS];
+export const STATIONS: Station[] = [A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, ...PROBLEM_STATIONS, ...FRACTION_STATIONS, ...SCIENCE_STATIONS, ...LIFE_STATIONS];
 export const ISLANDS = [
   { id: 'A' as const, title: 'isl_A', emoji: '📏' },
   { id: 'B' as const, title: 'isl_B', emoji: '🧩' },
   { id: 'C' as const, title: 'isl_C', emoji: '🧠' },
   { id: 'D' as const, title: 'isl_D', emoji: '🍕' },
   { id: 'E' as const, title: 'isl_E', emoji: '🔬' },
+  { id: 'F' as const, title: 'isl_F', emoji: '🛒' },
 ];
 export const stationById = (id: string) => STATIONS.find((s) => s.id === id);
 
@@ -317,7 +319,11 @@ export function itemKey(item: Item): string {
   // labelled options (fractions, decimals, problem types) and the hint's numbers also tell exercises apart
   const labels = item.kind === 'choice' && item.optionLabels ? item.optionLabels.map((l) => `${l.key}${l.vars ? Object.values(l.vars).join(',') : ''}`).join('|') : '';
   const h = item.hint.vars ? Object.values(item.hint.vars).join(',') : '';
-  return `${item.prompt.key}:${v}:${extra}:${labels}:${h}`;
+  // the data in a table or chart also make an exercise different (same question, different class results)
+  const cell = (x: string | Msg) => (typeof x === 'string' ? x : `${x.key}${x.vars ? Object.values(x.vars).join(',') : ''}`);
+  const d = item.visual?.type === 'table' ? item.visual.rows.map((r) => r.map(cell).join(',')).join(';') + item.visual.head.map(cell).join(',')
+    : item.visual?.type === 'chart' ? item.visual.y.join(',') : '';
+  return `${item.prompt.key}:${v}:${extra}:${labels}:${h}${d ? `:${d}` : ''}`;
 }
 
 export { optionsAround };
