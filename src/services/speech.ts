@@ -23,10 +23,13 @@ function pick(lang: Lang): SpeechSynthesisVoice | undefined {
   return undefined;
 }
 
+/** Device voices: a little slower for clarity, except Valencian, whose device voices already sound slow. */
+const RATE: Record<Lang, number> = { es: 0.9, ca: 1, en: 0.9 };
+
 async function nativeDevice(lang: Lang, text: string): Promise<void> {
   const limit = Math.max(8000, text.length * 200);
   await Promise.race([
-    TextToSpeech.speak({ text: speakable(lang, text), lang: TTS_TAG[lang], rate: 0.9, pitch: 1, volume: 1, category: 'playback', queueStrategy: QueueStrategy.Flush }).catch(() => {}),
+    TextToSpeech.speak({ text: speakable(lang, text), lang: TTS_TAG[lang], rate: RATE[lang], pitch: 1, volume: 1, category: 'playback', queueStrategy: QueueStrategy.Flush }).catch(() => {}),
     new Promise((r) => setTimeout(r, limit)),
   ]);
 }
@@ -39,7 +42,7 @@ function device(lang: Lang, text: string): Promise<void> {
     const v = pick(lang);
     if (v) u.voice = v;
     u.lang = v?.lang ?? HTML_LANG[lang];
-    u.rate = 0.9;
+    u.rate = RATE[lang];
     u.onend = () => resolve();
     u.onerror = () => resolve();
     window.speechSynthesis.speak(u);
