@@ -210,7 +210,7 @@ export default function World() {
         <Link to="/" className="font-extrabold text-lg flex-1">{APP_NAME}</Link>
         <Link to="/progreso" className="ib" aria-label={t('lit_title')} data-testid="to-progress">✦</Link>
         <button className="ib" aria-label={sound ? t('w_sound_on') : t('w_sound_off')} aria-pressed={sound} onClick={() => set({ sound: !sound })}>{sound ? '🔊' : '🔈'}</button>
-        <Link to="/estaciones" className="ib" aria-label={t('w_list')}>☰</Link>
+        <Link to="/temas" className="ib" aria-label={t('w_list')}>☰</Link>
       </header>
       <RestReminder />
       <div className="relative flex-1 min-h-0">

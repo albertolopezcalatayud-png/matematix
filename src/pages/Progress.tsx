@@ -4,6 +4,7 @@ import { FINDS, litOf, reachOf } from '@/data/world';
 import { HTML_LANG, useT } from '@/i18n';
 import { statusOf, useApp } from '@/stores/app';
 import { TopBar } from '@/components/Layout';
+import { BottomNav } from '@/components/BottomNav';
 import { APP_NAME } from '@/config';
 
 const LOCALE = { es: 'es-ES', ca: 'ca-ES', en: 'en-GB' } as const;
@@ -46,8 +47,8 @@ export default function Progress() {
   };
 
   return (
-    <div className="min-h-dvh pb-10">
-      <TopBar title={t('lit_title')} back="/mapa" />
+    <div className="min-h-dvh has-nav">
+      <TopBar title={t('lit_title')} back="/" gear={false} />
       <main className="max-w-xl mx-auto px-4 space-y-4">
         <p className="rounded-2xl p-3 bg-[var(--color-mint-pale)]">🔒 {t('pr_intro')}</p>
 
@@ -98,6 +99,7 @@ export default function Progress() {
           </section>
         ))}
       </main>
+      <BottomNav />
     </div>
   );
 }

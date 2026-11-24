@@ -53,10 +53,9 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
   for (const [loc, code, words] of [['es-ES', 'es', { start: 'Empezar', map: 'Tu ruta', end: 'Estación terminada' }], ['ca-ES', 'ca', { start: 'Començar', map: 'La teua ruta', end: 'Estació acabada' }], ['en-GB', 'en', { start: 'Start', map: 'Your route', end: 'Station finished' }]]) {
     const p = await page(loc);
     await p.goto(BASE); await p.waitForTimeout(600);
-    ok(/#\/idioma/.test(p.url()), `${code}: first visit asks for the language`);
-    await p.screenshot({ path: `${SHOTS}/${code}-0-lang.png` });
-    await p.getByTestId(`lang-${code}`).click(); await p.waitForTimeout(300);
-    ok(/#\/quien/.test(p.url()), `${code}: then asks who will use it`);
+    ok(/#\/quien/.test(p.url()) && (await p.getByTestId('change-lang').innerText()).includes('Castellano'), `${code}: first visit opens in castellano, no language screen`);
+    if (code !== 'es') { await p.getByTestId('change-lang').click(); await p.getByTestId(`lang-${code}`).click(); } await p.waitForTimeout(300);
+    ok(/#\/quien/.test(p.url()), `${code}: after changing the language it goes back to who will use it`);
     await p.screenshot({ path: `${SHOTS}/${code}-0-who.png` });
     await p.getByTestId('who-pupil').click(); await p.waitForTimeout(300);
     ok((await p.getByTestId('course-p1').innerText()).includes({ es: 'Primaria', ca: 'Primària', en: 'Primary' }[code]), `${code}: home asks the school year, in the chosen language`);
@@ -84,8 +83,11 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     await noOverflow(p, `${code} world`);
     await p.screenshot({ path: `${SHOTS}/${code}-4-world.png` });
     await p.goto(BASE + '#/estaciones'); await p.waitForTimeout(300);
-    ok((await p.locator('[data-testid^=station-]').count()) === 30, `${code}: list with 30 stations`);
-    await p.screenshot({ path: `${SHOTS}/${code}-4-list.png`, fullPage: true });
+    ok((await p.locator('[data-testid^=topic-]').count()) === 5, `${code}: the old list now opens the 5 topics`);
+    await p.screenshot({ path: `${SHOTS}/${code}-4-topics.png`, fullPage: true });
+    let nLessons = 0;
+    for (const isl of ['A', 'B', 'C', 'D', 'E']) { await p.goto(BASE + '#/tema/' + isl); await p.waitForTimeout(200); nLessons += await p.locator('[data-testid^=station-]').count(); if (isl === 'A') await p.screenshot({ path: `${SHOTS}/${code}-4-topicA.png`, fullPage: true }); }
+    ok(nLessons === 30, `${code}: 30 lessons across the topics`);
 
     // A station of each kind: place (A2), tens/number or choice (A4), number with keypad (B5)
     for (const id of code === 'es' ? ['A2', 'A4', 'B5', 'A1', 'A6', 'B3'] : ['A2', 'B5']) {
@@ -119,7 +121,7 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
     ok((await p.evaluate(() => window.__said || [])).some((s) => /\d/.test(s)), `${code}: the voice read the exercises`);
     // progress
     await p.goto(BASE + '#/progreso'); await p.waitForTimeout(300);
-    ok((await p.getByText({ es: 'En camino', ca: 'En camí', en: 'On the way' }[code]).count()) >= 2, `${code}: progress shows the stations practised`);
+    ok((await p.getByText({ es: 'Empezada', ca: 'Començada', en: 'Started' }[code]).count()) >= 2, `${code}: progress shows the stations practised`);
     ok((await p.getByTestId('lit-strip').count()) === 1, `${code}: the lit-up strip is there`);
     await p.goto(BASE); await p.waitForTimeout(300);
     ok((await p.getByTestId('carry-on').count()) === 1, `${code}: home has one big "carry on" button`);
@@ -134,7 +136,7 @@ require('fs').mkdirSync(SHOTS, { recursive: true });
   const p = await page('es-ES');
   const requests = [];
   p.on('request', (r) => { if (!r.url().startsWith('http://localhost')) requests.push(r.url()); });
-  await p.goto(BASE); await p.getByTestId('lang-es').click(); await p.getByTestId('who-pupil').click();
+  await p.goto(BASE); await p.getByTestId('who-pupil').click();
   await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('matematix')); s.state.progress = { A2: { goodDays: ['2026-11-01'], best: 5, sessions: 1 } }; localStorage.setItem('matematix', JSON.stringify(s)); });
   await p.reload(); await p.waitForTimeout(300);
   await p.goto(BASE + '#/estacion/A2'); await p.waitForTimeout(400);

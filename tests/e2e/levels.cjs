@@ -8,7 +8,7 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
   for (const code of ['es', 'ca', 'en']) {
     const c = await b.newContext({ viewport: { width: 390, height: 844 } });
     const p = await c.newPage(); p.on('pageerror', (e) => errs.push(`${code}: ${e.message}`));
-    await p.goto(BASE); await p.getByTestId(`lang-${code}`).click(); await p.getByTestId('who-pupil').click(); await p.waitForTimeout(300);
+    await p.goto(BASE); if (code !== 'es') { await p.getByTestId('change-lang').click(); await p.getByTestId(`lang-${code}`).click(); } await p.getByTestId('who-pupil').click(); await p.waitForTimeout(300);
     await p.screenshot({ path: `${SHOTS}/${code}-L1-course.png`, fullPage: true });
     await p.getByTestId('course-p3').click(); await p.waitForTimeout(400);
     ok(/estacion\/A5/.test(p.url()), `${code}: 3.º de Primaria starts at its first station (A5)`);

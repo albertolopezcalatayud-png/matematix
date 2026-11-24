@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useT } from '@/i18n';
 import { useApp } from '@/stores/app';
 import { TopBar } from '@/components/Layout';
+import { BottomNav } from '@/components/BottomNav';
+import { HoldButton } from '@/components/HoldButton';
 import { APP_NAME, APP_VERSION } from '@/config';
 import { VoiceCredits, VoicePicker } from '@/components/VoicePicker';
 
@@ -16,17 +18,18 @@ function Toggle({ label, value, onChange, id }: { label: string; value: boolean;
 }
 
 export default function Settings() {
+  const nav = useNavigate();
   const { t } = useT();
   const s = useApp();
   const [confirm, setConfirm] = useState(false);
   return (
-    <div className="min-h-dvh pb-10">
-      <TopBar title={t('settings')} back="/" />
+    <div className="min-h-dvh has-nav">
+      <TopBar title={t('settings')} back="/" gear={false} />
       <main className="max-w-xl mx-auto px-4 space-y-4">
         <section className="card">
           <div className="flex items-center gap-3 py-2">
             <span className="flex-1">{t('set_lang')}</span>
-            <Link to="/idioma" className="btn btn-ghost !min-h-10">{s.lang === 'ca' ? 'Valencià' : s.lang === 'en' ? 'English (UK)' : 'Castellano'}</Link>
+            <Link to="/idioma" className="btn btn-ghost !min-h-10">🌐 {s.lang === 'ca' ? 'Valencià' : s.lang === 'en' ? 'English (UK)' : 'Castellano'} ›</Link>
           </div>
           <Toggle id="voice" label={t('set_voice')} value={s.voice} onChange={(v) => s.set({ voice: v })} />
           {s.voice && <VoicePicker />}
@@ -58,8 +61,14 @@ export default function Settings() {
           )}
         </section>
         <VoiceCredits />
-        <p className="text-center text-xs text-[var(--color-muted)]">{APP_NAME} {APP_VERSION}</p>
+        <section className="card space-y-2">
+          <h2 className="font-extrabold">🔑 {t('adults')}</h2>
+          <p className="text-sm">{t('hold_why')}</p>
+          <HoldButton onDone={() => nav('/adultos')} className="btn-ghost w-full" testId="to-adults">{t('hold_open')}</HoldButton>
+        </section>
+        <p className="text-center text-xs text-[var(--color-muted)]">{APP_NAME} {APP_VERSION} · <a href="./privacidad.html" className="underline">{t('privacy')}</a></p>
       </main>
+      <BottomNav />
     </div>
   );
 }

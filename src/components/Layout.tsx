@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useT } from '@/i18n';
 import { today, useApp } from '@/stores/app';
 
-export function TopBar({ title, back = '/mapa' }: { title: string; back?: string }) {
+export function TopBar({ title, back = '/mapa', gear = true }: { title: string; back?: string; gear?: boolean }) {
   const { t } = useT();
   const nav = useNavigate();
   return (
@@ -11,7 +11,7 @@ export function TopBar({ title, back = '/mapa' }: { title: string; back?: string
       <div className="max-w-xl mx-auto px-4 h-14 flex items-center gap-2">
         <button className="btn btn-ghost !min-h-10 !px-3" onClick={() => nav(back)} aria-label={t('back')}>←</button>
         <h1 className="flex-1 text-lg font-extrabold truncate">{title}</h1>
-        <Link to="/ajustes" className="btn btn-ghost !min-h-10 !px-3" aria-label={t('settings')}>⚙️</Link>
+        {gear && <Link to="/ajustes" className="btn btn-ghost !min-h-10 !px-3" aria-label={t('settings')}>⚙️</Link>}
       </div>
     </header>
   );

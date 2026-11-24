@@ -13,7 +13,7 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
     await c.addInitScript(() => { window.print = () => {}; Object.defineProperty(window, 'speechSynthesis', { value: { speak: (u) => setTimeout(() => u.onend && u.onend(), 5), cancel() {}, getVoices: () => [], addEventListener() {} } }); });
     const p = await c.newPage(); p.on('pageerror', (e) => errs.push(`${code}: ${e.message}`));
     p.on('frameattached', (f) => f.page().evaluate(() => { const fr = document.getElementById('print-frame'); if (fr && fr.contentWindow) fr.contentWindow.print = () => {}; }).catch(() => {}));
-    await p.goto(BASE); await p.getByTestId(`lang-${code}`).click(); await p.waitForTimeout(300);
+    await p.goto(BASE); if (code !== 'es') { await p.getByTestId('change-lang').click(); await p.getByTestId(`lang-${code}`).click(); } await p.waitForTimeout(300);
     // a short press does nothing
     await hold(p, 'who-pt', 800);
     ok(/#\/quien/.test(p.url()), `${code}: a short press does not open the adults' area`);
@@ -44,6 +44,7 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
     await p.goto(BASE); await p.waitForTimeout(300);
     ok((await p.getByTestId('who-now').innerText()).includes('Lince'), `${code}: the child's home shows who is using it`);
     ok((await p.getByTestId('carry-on').count()) === 1, `${code}: and their own "carry on"`);
+    await p.getByTestId('nav-settings').click(); await p.waitForTimeout(200);
     await hold(p, 'to-adults');
     ok(/#\/adultos$/.test(p.url()), `${code}: adults get back in from the home screen by holding`);
 

@@ -27,7 +27,7 @@ export const ADULT = {
   sec_guide: ['Guía breve para docentes', 'Guia breu per a docents', 'Short guide for teachers'],
   sec_home: ['En casa', 'A casa', 'At home'],
   sec_mural: ['Mural de la recta para el aula', 'Mural de la recta per a l\'aula', 'Classroom number-line display'],
-  sec_explain: ['Cómo se explica cada estación', 'Com s\'explica cada estació', 'How each station is taught'],
+  sec_explain: ['Cómo se explica cada lección', 'Com s\'explica cada lliçó', 'How each lesson is taught'],
   sec_hands: ['Ideas con material manipulativo', 'Idees amb material manipulatiu', 'Hands-on ideas'],
 
   // Pupils (PT/AL)
@@ -46,7 +46,7 @@ export const ADULT = {
   p_voice: ['Leer en voz alta', 'Llegir en veu alta', 'Read aloud'],
   p_large: ['Letra más grande', 'Lletra més gran', 'Larger text'],
   p_motion: ['Menos movimiento', 'Menys moviment', 'Less motion'],
-  p_progress: ['Estaciones: {d} dominadas · {g} en marcha · {m} min esta semana', 'Estacions: {d} dominades · {g} en marxa · {m} min aquesta setmana', 'Stations: {d} mastered · {g} under way · {m} min this week'],
+  p_progress: ['Lecciones: {d} completadas · {g} en marcha · {m} min esta semana', 'Lliçons: {d} completades · {g} en marxa · {m} min aquesta setmana', 'Lessons: {d} complete · {g} under way · {m} min this week'],
   p_sheet: ['Hoja de sesión (PAP)', 'Full de sessió (PAP)', 'Session sheet (support plan)'],
   p_back_child: ['Dar el aparato a {a}', 'Donar l\'aparell a {a}', 'Hand the device to {a}'],
 
@@ -55,7 +55,7 @@ export const ADULT = {
   ss_note: ['Registro de trabajo para el plan de actuación personalizado (PAP). No es una evaluación ni un diagnóstico.', 'Registre de treball per al pla d\'actuació personalitzat (PAP). No és una avaluació ni un diagnòstic.', 'A record of work for the pupil\'s support plan. It is not an assessment or a diagnosis.'],
   ss_pupil: ['Alumno/a (apodo)', 'Alumne/a (sobrenom)', 'Pupil (nickname)'],
   ss_date: ['Fecha', 'Data', 'Date'],
-  ss_station: ['Estación', 'Estació', 'Station'],
+  ss_station: ['Lección', 'Lliçó', 'Lesson'],
   ss_state: ['Estado', 'Estat', 'Status'],
   ss_days: ['Días con 4 de 5', 'Dies amb 4 de 5', 'Days with 4 out of 5'],
   ss_minutes: ['Minutos de práctica (últimos 7 días): {m}', 'Minuts de pràctica (últims 7 dies): {m}', 'Minutes of practice (last 7 days): {m}'],
@@ -68,8 +68,8 @@ export const ADULT = {
   st_done: ['Dominada', 'Dominada', 'Mastered'],
 
   // Worksheets
-  f_intro: ['Ejercicios nuevos cada vez, con solucionario aparte. El QR abre la misma estación en la app: solo abre, no envía nada.', 'Exercicis nous cada vegada, amb solucionari a banda. El QR obri la mateixa estació en l\'app: només obri, no envia res.', 'New exercises every time, with a separate answer sheet. The QR code opens the same station in the app: it only opens it, it sends nothing.'],
-  f_station: ['Estación', 'Estació', 'Station'],
+  f_intro: ['Ejercicios nuevos cada vez, con solucionario aparte. El QR abre la misma lección en la app: solo abre, no envía nada.', 'Exercicis nous cada vegada, amb solucionari a banda. El QR obri la mateixa lliçó en l\'app: només obri, no envia res.', 'New exercises every time, with a separate answer sheet. The QR code opens the same lesson in the app: it only opens it, it sends nothing.'],
+  f_station: ['Lección', 'Lliçó', 'Lesson'],
   f_guided: ['Con pistas (ayudas en los primeros)', 'Amb pistes (ajudes en els primers)', 'With hints (help on the first ones)'],
   f_count: ['Ejercicios', 'Exercicis', 'Exercises'],
   f_print: ['Imprimir ficha y solucionario', 'Imprimir fitxa i solucionari', 'Print worksheet and answers'],
@@ -80,7 +80,7 @@ export const ADULT = {
   f_circle: ['Rodea la respuesta.', 'Encercla la resposta.', 'Circle the answer.'],
   f_write: ['Escribe la respuesta en la caja.', 'Escriu la resposta en la caixa.', 'Write the answer in the box.'],
   f_hint: ['Pista', 'Pista', 'Hint'],
-  f_island: ['Isla', 'Illa', 'Island'],
+  f_island: ['Tema', 'Tema', 'Topic'],
   f_paper_first: ['Primero en papel. La app es un apoyo, nunca el material principal.', 'Primer en paper. L\'app és un suport, mai el material principal.', 'Paper first. The app supports the lesson; it is never the main material.'],
 
   // Mural
@@ -93,8 +93,8 @@ export const ADULT = {
   c_name: ['Nombre en el certificado', 'Nom en el certificat', 'Name on the certificate'],
   c_print: ['Imprimir certificado', 'Imprimir certificat', 'Print certificate'],
   c_title: ['Certificado de la recta', 'Certificat de la recta', 'Number-line certificate'],
-  c_text: ['ha encendido estas estaciones con esfuerzo y paciencia:', 'ha encés aquestes estacions amb esforç i paciència:', 'has lit up these stations with effort and patience:'],
-  c_none: ['Todavía no hay estaciones dominadas en este aparato.', 'Encara no hi ha estacions dominades en aquest aparell.', 'No stations mastered on this device yet.'],
+  c_text: ['ha completado estas lecciones con esfuerzo y paciencia:', 'ha completat aquestes lliçons amb esforç i paciència:', 'has completed these lessons with effort and patience:'],
+  c_none: ['Todavía no hay lecciones completadas en este aparato.', 'Encara no hi ha lliçons completades en aquest aparell.', 'No lessons complete on this device yet.'],
   c_sign: ['Firma', 'Signatura', 'Signed'],
 
   // Whiteboard
@@ -102,7 +102,7 @@ export const ADULT = {
   b_from: ['Desde', 'Des de', 'From'],
   b_to: ['Hasta', 'Fins a', 'To'],
   b_clear: ['Borrar', 'Esborrar', 'Clear'],
-  b_example: ['Explicación de una estación', 'Explicació d\'una estació', 'A station\'s explanation'],
+  b_example: ['Explicación de una lección', 'Explicació d\'una lliçó', 'A lesson\'s explanation'],
   b_full: ['Pantalla completa', 'Pantalla completa', 'Full screen'],
 
   // Guide
@@ -151,11 +151,11 @@ export const ADULT = {
   h_ten_rules: ['Recortad las cartas y ponedlas boca abajo. Por turnos, levantad dos: si suman 10, os las quedáis. Usad el marco de 10 de cada carta para comprobarlo.', 'Retalleu les cartes i poseu-les cap per avall. Per torns, alceu-ne dues: si sumen 10, us les quedeu. Useu el marc de 10 de cada carta per a comprovar-ho.', 'Cut out the cards and lay them face down. Take turns to turn over two: if they make 10, keep them. Use the ten frame on each card to check.'],
   h_print: ['Imprimir', 'Imprimir', 'Print'],
   h_week: ['Tarjeta semanal «Lo que ya sé»', 'Targeta setmanal «El que ja sé»', 'Weekly card: "What I can do"'],
-  h_week_d: ['Sin notas: solo lo que ha encendido esta semana, para pegar en la nevera.', 'Sense notes: només el que ha encés aquesta setmana, per a enganxar a la nevera.', 'No marks: only what they lit up this week, for the fridge.'],
+  h_week_d: ['Sin notas: solo lo que ha completado esta semana, para pegar en la nevera.', 'Sense notes: només el que ha completat aquesta setmana, per a enganxar a la nevera.', 'No marks: only what they completed this week, for the fridge.'],
   h_week_title: ['Lo que ya sé', 'El que ja sé', 'What I can do'],
   h_week_none: ['Esta semana hemos empezado. ¡Lo importante es seguir!', 'Aquesta setmana hem començat. L\'important és continuar!', 'This week we made a start. Keeping going is what matters!'],
   h_week_wish: ['Lo que me gustaría aprender:', 'El que m\'agradaria aprendre:', 'What I would like to learn:'],
   h_week_min: ['Minutos de práctica esta semana: {m}', 'Minuts de pràctica aquesta setmana: {m}', 'Minutes of practice this week: {m}'],
   h_explain_d: ['Los pasos que ve en la app, para explicarlo igual en casa.', 'Els passos que veu en l\'app, per a explicar-ho igual a casa.', 'The steps your child sees in the app, so you can explain it the same way at home.'],
-  h_fridge: ['La recta de la nevera está en «Lo que he encendido».', 'La recta de la nevera està en «El que he encés».', 'The fridge number line is in "What I have lit up".'],
+  h_fridge: ['La recta de la nevera está en «Mi progreso».', 'La recta de la nevera està en «El meu progrés».', 'The fridge number line is in "My progress".'],
 } as const satisfies Record<string, readonly [string, string, string]>;

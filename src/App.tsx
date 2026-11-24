@@ -4,7 +4,7 @@ import { HTML_LANG, useT } from '@/i18n';
 import { useApp } from '@/stores/app';
 import Home from '@/pages/Home';
 import Language from '@/pages/Language';
-import MapPage from '@/pages/MapPage';
+import { TopicList, TopicPage } from '@/pages/Topics';
 import World from '@/pages/World';
 import Lesson from '@/pages/Lesson';
 import StartPoint from '@/pages/StartPoint';
@@ -43,7 +43,9 @@ function LessonFresh() { const { id } = useParams(); return <Lesson key={id} />;
 
 /** Applies language, text size, colours and motion to the whole page. */
 function Appearance() {
-  const { lang, large, theme, motion, course } = useApp();
+  const { lang, large, theme, motion, course, set } = useApp();
+  // castellano unless someone changes it in Settings (older installs may still have no language stored)
+  useEffect(() => { if (!lang) set({ lang: 'es' }); }, [lang, set]);
   useEffect(() => {
     const r = document.documentElement;
     r.lang = HTML_LANG[lang ?? 'es'];
@@ -57,7 +59,6 @@ function Appearance() {
 }
 
 export default function App() {
-  const lang = useApp((s) => s.lang);
   return (
     <HashRouter>
       <Appearance />
@@ -65,21 +66,23 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/idioma" element={<Language />} />
-        <Route path="/mapa" element={lang ? <World /> : <Navigate to="/idioma" />} />
-        <Route path="/estaciones" element={lang ? <MapPage /> : <Navigate to="/idioma" />} />
-        <Route path="/estacion/:id" element={lang ? <LessonFresh /> : <Navigate to="/idioma" />} />
-        <Route path="/punto-de-partida" element={lang ? <StartPoint /> : <Navigate to="/idioma" />} />
+        <Route path="/mapa" element={<World />} />
+        <Route path="/estaciones" element={<Navigate to="/temas" replace />} />
+        <Route path="/temas" element={<TopicList />} />
+        <Route path="/tema/:id" element={<TopicPage />} />
+        <Route path="/estacion/:id" element={<LessonFresh />} />
+        <Route path="/punto-de-partida" element={<StartPoint />} />
         <Route path="/progreso" element={<Progress />} />
         <Route path="/ajustes" element={<Settings />} />
         <Route path="/privacidad" element={<Privacy />} />
-        <Route path="/quien" element={lang ? <Who /> : <Navigate to="/idioma" />} />
-        <Route path="/adultos" element={lang ? <Hub /> : <Navigate to="/idioma" />} />
-        <Route path="/adultos/alumnos" element={lang ? <Pupils /> : <Navigate to="/idioma" />} />
-        <Route path="/adultos/fichas" element={lang ? <Sheets /> : <Navigate to="/idioma" />} />
-        <Route path="/adultos/pizarra" element={lang ? <Board /> : <Navigate to="/idioma" />} />
-        <Route path="/adultos/certificado" element={lang ? <Certificate /> : <Navigate to="/idioma" />} />
-        <Route path="/adultos/guia" element={lang ? <Guide /> : <Navigate to="/idioma" />} />
-        <Route path="/adultos/casa" element={lang ? <Family /> : <Navigate to="/idioma" />} />
+        <Route path="/quien" element={<Who />} />
+        <Route path="/adultos" element={<Hub />} />
+        <Route path="/adultos/alumnos" element={<Pupils />} />
+        <Route path="/adultos/fichas" element={<Sheets />} />
+        <Route path="/adultos/pizarra" element={<Board />} />
+        <Route path="/adultos/certificado" element={<Certificate />} />
+        <Route path="/adultos/guia" element={<Guide />} />
+        <Route path="/adultos/casa" element={<Family />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       </Suspense>
