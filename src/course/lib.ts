@@ -42,10 +42,12 @@ export function near(r: R, a: number, { spread = 3, min = 0, max = Infinity, ste
 const keyOf = (v: Ans) => (Array.isArray(v) ? v[0] : String(v));
 /** Removes wrong answers equal to the right one, and repeated wrong answers. */
 const clean = <V extends Ans>(a: V, wrong: V[]): V[] => wrong.filter((w, i) => keyOf(w) !== keyOf(a) && wrong.findIndex((x) => keyOf(x) === keyOf(w)) === i);
-export const q = (qq: T3, a: Ans, wrong: Ans[], hint: T3, extra: Partial<Q> = {}): Q => fixMinus({ q: qq, a, wrong: clean(a, wrong), hint, ...extra });
+/** Proper minus signs, then no wrong answer equal to the right one or repeated. */
+const tidy = (o: Q): Q => { const f = fixMinus(o); return { ...f, wrong: clean(f.a, f.wrong) }; };
+export const q = (qq: T3, a: Ans, wrong: Ans[], hint: T3, extra: Partial<Q> = {}): Q => tidy({ q: qq, a, wrong, hint, ...extra });
 
 /** A written multiple-choice exercise: question, right answer, wrong answers, hint (all in three languages). */
-export const mc = (qq: T3, a: T3, wrong: T3[], hint: T3, extra: Partial<Q> = {}): Q => fixMinus({ q: qq, a, wrong: clean(a, wrong), hint, ...extra });
+export const mc = (qq: T3, a: T3, wrong: T3[], hint: T3, extra: Partial<Q> = {}): Q => tidy({ q: qq, a, wrong, hint, ...extra });
 
 /** Yes/no-style answers used in many lessons. */
 export const YES = T('Sí', 'Sí', 'Yes'), NO = T('No', 'No', 'No');
@@ -122,9 +124,9 @@ import type { Visual } from '@/engine/types';
 /** One text in three languages written as "es|ca|en". */
 export const L = (s: string): T3 => { const p = s.split('|').map((x) => x.trim()); if (p.length !== 3) throw new Error(`L(): needs 3 parts: ${s}`); return [p[0], p[1], p[2]]; };
 /** A multiple-choice exercise from "es|ca|en" strings: question, right answer, wrong answers, hint. */
-export const M = (qq: string, a: string, w: string[], h: string, extra: Partial<Q> = {}): Q => ({ q: L(qq), a: L(a), wrong: w.map(L), hint: L(h), ...extra });
+export const M = (qq: string, a: string, w: string[], h: string, extra: Partial<Q> = {}): Q => tidy({ q: L(qq), a: L(a), wrong: w.map(L), hint: L(h), ...extra });
 /** A number exercise from "es|ca|en" strings. */
-export const Nq = (qq: string, a: number, w: number[], h: string, extra: Partial<Q> = {}): Q => ({ q: L(qq), a, wrong: w, hint: L(h), ...extra });
+export const Nq = (qq: string, a: number, w: number[], h: string, extra: Partial<Q> = {}): Q => tidy({ q: L(qq), a, wrong: w, hint: L(h), ...extra });
 /** True or false from "es|ca|en" strings. */
 export const TF = (statement: string, isTrue: boolean, h: string): Q => tf(L(statement), isTrue, L(h));
 /** A whole written lesson. */
