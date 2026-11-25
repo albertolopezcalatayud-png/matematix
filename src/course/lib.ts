@@ -137,7 +137,7 @@ export const glesson = (explain: string[], exQ: string, steps: string[], make: (
 
 /** Writes hyphen-minus before digits as a true minus sign (−) in every text of a question. */
 export const fixMinus = (qq: Q): Q => {
-  const g = (x: string) => x.replace(/(^|[(\s,=])-(\d)/g, '$1−$2'); const f = (t: T3): T3 => [g(t[0]), g(t[1]), g(t[2])];
+  const g = (x: string) => x.replace(/(^|[([\s,=])-(\d)/g, '$1−$2'); const f = (t: T3): T3 => [g(t[0]), g(t[1]), g(t[2])];
   const fa = (a: Ans): Ans => (Array.isArray(a) ? f(a as T3) : a);
   return { ...qq, q: f(qq.q), a: fa(qq.a), wrong: qq.wrong.map(fa), hint: f(qq.hint) };
 };

@@ -321,8 +321,8 @@ export const chance = (kinds: ('likely' | 'laplace' | 'space')[]): Gen => (r) =>
 
 /* ───────────── Logic ───────────── */
 /** Take-away game: leave the other player a multiple of (m + 1). */
-export const nim = (maxN: number): Gen => (r) => {
-  const m = pick(r, [2, 3]); let n = int(r, m + 2, maxN); if (n % (m + 1) === 0) n += 1; const a = n % (m + 1);
+export const nim = (maxN: number, takes = [2, 3]): Gen => (r) => {
+  const m = pick(r, takes); let n = int(r, m + 2, maxN); if (n % (m + 1) === 0) n += 1; const a = n % (m + 1);
   return q(X((l) => [`Hay ${n} fichas. Por turnos, cada jugador quita de 1 a ${m}. Gana quien quita la última. Te toca: ¿cuántas quitas?`, `Hi ha ${n} fitxes. Per torns, cada jugador en lleva d’1 a ${m}. Guanya qui lleva l’última. Et toca: quantes en lleves?`, `There are ${n} counters. Taking turns, each player removes 1 to ${m}. Whoever takes the last one wins. Your turn: how many do you take?`][l]), a,
     Array.from({ length: m }, (_, i) => i + 1).filter((x) => x !== a), X((l) => [`Intenta dejarle al otro ${m + 1}, ${2 * (m + 1)} o ${3 * (m + 1)} fichas: así ganas siempre.`, `Intenta deixar-li a l’altre ${m + 1}, ${2 * (m + 1)} o ${3 * (m + 1)} fitxes: així guanyes sempre.`, `Try to leave the other player ${m + 1}, ${2 * (m + 1)} or ${3 * (m + 1)} counters: then you always win.`][l]), { mc: true, visual: { type: 'emoji', rows: rowsOf('🟣', n, 10) } });
 };

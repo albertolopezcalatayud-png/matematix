@@ -15,7 +15,7 @@ const sgn = (v: number) => (v < 0 ? `(−${Math.abs(v)})` : String(v));
 const sup = (e: number) => String(e).split('').map((c) => (c === '-' ? '⁻' : '⁰¹²³⁴⁵⁶⁷⁸⁹'[Number(c)])).join('');
 const frac = (n: number, d: number) => { if (d < 0) { n = -n; d = -d; } const g = gcd(Math.abs(n), d) || 1; n /= g; d /= g; return d === 1 ? String(n) : `${n}/${d}`; };
 /** Builds a linear expression like "3x − 5" (a coefficient 1 written as x). */
-export const lin = (a: number, b: number, v = 'x') => `${a === 1 ? '' : a === -1 ? '−' : String(a).replace('-', '−')}${v}${b === 0 ? '' : b > 0 ? ` + ${b}` : ` − ${-b}`}`.replace(/^−?0x/, '');
+export const lin = (a: number, b: number, v = 'x'): string => a === 0 ? String(b).replace('-', '−') : `${a === 1 ? '' : a === -1 ? '−' : String(a).replace('-', '−')}${v}${b === 0 ? '' : b > 0 ? ` + ${b}` : ` − ${-b}`}`.replace(/^−?0x/, '');
 
 /* ───── Numbers ───── */
 export const integerOps = (max = 12): Gen => (r) => {
@@ -56,7 +56,7 @@ export const decToFrac = (recurring: boolean): Gen => (r) => {
     return q(X((l) => [`Escribe ${N(l, v)} como fracción irreducible.`, `Escriu ${N(l, v)} com a fracció irreductible.`, `Write ${N(l, v)} as a fraction in its simplest form.`][l]), `${n}/${d}`, [frac(Math.round(v * 100), 100) === `${n}/${d}` ? `${Math.round(v * 100)}/100` : frac(Math.round(v * 100), 100), `${n + 1}/${d}`, `${d}/${n}`].filter((w) => w !== `${n}/${d}`), T('Pon el número sin coma sobre 10, 100 o 1 000 y simplifica.', 'Posa el nombre sense coma sobre 10, 100 o 1 000 i simplifica.', 'Put the number without the point over 10, 100 or 1,000 and simplify.')); }
   const k = int(r, 1, 8); const pure = r() < 0.6;
   if (pure) return q(X((l) => [`Escribe 0,${k}${k}${k}… (periodo ${k}) como fracción irreducible.`, `Escriu 0,${k}${k}${k}… (període ${k}) com a fracció irreductible.`, `Write 0.${k}${k}${k}… (${k} recurring) as a fraction in its simplest form.`][l]), frac(k, 9), [`${k}/10`, `${k}/99`, `1/${k}`].filter((w) => w !== frac(k, 9)), T('Periódico puro de una cifra: el periodo partido por 9.', 'Periòdic pur d’una xifra: el període dividit per 9.', 'One recurring digit: the digit over 9.'));
-  const a = int(r, 1, 8); const n = a * 9 + k - a, ansf = frac(10 * a + k - a, 90); void n;
+  let a = int(r, 1, 8); if (a === k) a = k === 8 ? 1 : k + 1; const n = a * 9 + k - a, ansf = frac(10 * a + k - a, 90); void n;
   return q(X((l) => [`Escribe 0,${a}${k}${k}${k}… (periodo ${k}) como fracción irreducible.`, `Escriu 0,${a}${k}${k}${k}… (període ${k}) com a fracció irreductible.`, `Write 0.${a}${k}${k}${k}… (${k} recurring) as a fraction in its simplest form.`][l]), ansf, [frac(10 * a + k, 90), frac(10 * a + k, 99), `${a}${k}/100`].filter((w) => w !== ansf), T('Periódico mixto: (número sin coma − parte no periódica) / (tantos 9 como cifras del periodo y tantos 0 como del anteperiodo).', 'Periòdic mixt: (nombre sense coma − part no periòdica) / (tants 9 com xifres del període i tants 0 com de l’anteperíode).', 'Mixed recurring: (number without the point − non-recurring part) / (one 9 per recurring digit and one 0 per non-recurring digit).'));
 };
 /** Powers with integer exponents and their rules. */
@@ -81,7 +81,7 @@ export const roots = (kinds: ('sqrt' | 'cbrt' | 'between' | 'simplify' | 'ops')[
   if (k === 'between') { const n = int(r, 3, 150); const s = Math.floor(Math.sqrt(n)); if (s * s === n) return roots(['sqrt'])(r);
     return q(X((l) => [`√${N(l, n)} está entre dos números enteros seguidos. ¿Cuál es el menor?`, `√${N(l, n)} està entre dos nombres enters seguits. Quin és el menor?`, `√${N(l, n)} lies between two consecutive whole numbers. Which is the smaller?`][l]), s, near(r, s, { min: 1, also: [s + 1, Math.round(n / 2)] }), X((l) => [`${s}² = ${s * s} y ${s + 1}² = ${(s + 1) * (s + 1)}.`, `${s}² = ${s * s} i ${s + 1}² = ${(s + 1) * (s + 1)}.`, `${s}² = ${s * s} and ${s + 1}² = ${(s + 1) * (s + 1)}.`][l])); }
   if (k === 'simplify') { const a = pick(r, [2, 3, 4, 5]), b = pick(r, [2, 3, 5, 6, 7]); const n = a * a * b; return mc(S(`√${n} = ?`), S(`${a}√${b}`), [S(`${b}√${a}`), S(`${a * a}√${b}`), S(`√${a + b}`)], T('Busca un cuadrado perfecto dentro y sácalo de la raíz.', 'Busca un quadrat perfecte dins i trau-lo de l’arrel.', 'Find a perfect square factor and take it outside the root.')); }
-  const a = int(r, 1, 6), b = int(r, 1, 6), n = pick(r, [2, 3, 5]); return mc(S(`${a}√${n} + ${b}√${n} = ?`), S(`${a + b}√${n}`), [S(`${a + b}√${2 * n}`), S(`${a * b}√${n}`), S(`√${(a + b) * n}`)], T('Radicales iguales se suman como términos semejantes: suma los coeficientes.', 'Radicals iguals se sumen com a termes semblants: suma els coeficients.', 'Like surds add like like terms: add the coefficients.'));
+  const a = int(r, 2, 7), b = int(r, 2, 6), n = pick(r, [2, 3, 5]); return mc(S(`${a}√${n} + ${b}√${n} = ?`), S(`${a + b}√${n}`), [S(`${a + b}√${2 * n}`), S(`${a * b}√${n}`), S(`√${(a + b) * n}`)], T('Radicales iguales se suman como términos semejantes: suma los coeficientes.', 'Radicals iguals se sumen com a termes semblants: suma els coeficients.', 'Like surds add like like terms: add the coefficients.'));
 };
 /** Proportion: direct or inverse, percentages chain. */
 export const proportionEso = (inverse: boolean): Gen => (r) => {
@@ -337,4 +337,22 @@ export const rationalLine = (): Gen => (r) => {
     return mc(X((l) => [`¿Qué número es ${big ? 'mayor' : 'menor'}: ${a.s} o ${b.s}?`, `Quin nombre és ${big ? 'major' : 'menor'}: ${a.s} o ${b.s}?`, `Which number is ${big ? 'greater' : 'smaller'}: ${a.s} or ${b.s}?`][l]), S(ans.s), [S(oth.s)], T('Pásalos a decimal (divide numerador entre denominador) y compara. En los negativos, el más alejado del 0 es el menor.', 'Passa’ls a decimal (dividix numerador entre denominador) i compara. En els negatius, el més allunyat del 0 és el menor.', 'Turn them into decimals (divide top by bottom) and compare. With negatives, the one further from 0 is smaller.')); }
   const lo = Math.floor(a.v); const ok = Number.isInteger(a.v) ? a.v - 1 : lo;
   return q(X((l) => [`${a.s} está entre dos enteros seguidos. ¿Cuál es el menor de los dos?`, `${a.s} està entre dos enters seguits. Quin és el menor dels dos?`, `${a.s} lies between two consecutive integers. Which is the smaller?`][l]), ok, near(r, ok, { min: -30, also: [ok + 1, -ok - 1] }), T('Haz la división. Si es negativo, el entero menor está más a la izquierda (−1,5 está entre −2 y −1).', 'Fes la divisió. Si és negatiu, l’enter menor està més a l’esquerra (−1,5 està entre −2 i −1).', 'Do the division. If it is negative, the smaller integer is further left (−1.5 is between −2 and −1).'));
+};
+/** Powers with fractional exponents: a^(1/n) is the n-th root. */
+export const fracExponent = (): Gen => (r) => {
+  const k = int(r, 0, 2);
+  if (k === 0) { const b = int(r, 2, 12); return q(S(`${b * b}^(1/2) = ?`), b, near(r, b, { min: 1, also: [(b * b) / 2] }), T('Exponente 1/2 es la raíz cuadrada.', 'Exponent 1/2 és l’arrel quadrada.', 'An exponent of 1/2 is the square root.')); }
+  if (k === 1) { const b = int(r, 2, 5); return q(S(`${b ** 3}^(1/3) = ?`), b, near(r, b, { min: 1, also: [b * b, b * 3] }), T('Exponente 1/3 es la raíz cúbica.', 'Exponent 1/3 és l’arrel cúbica.', 'An exponent of 1/3 is the cube root.')); }
+  const b = pick(r, [2, 3]), m = pick(r, [2, 3]), base = b ** 3; return q(S(`${base}^(${m}/3) = ?`), b ** m, near(r, b ** m, { min: 1, also: [base * m / 3, b * m].filter(Number.isInteger) }), X((l) => [`Primero la raíz cúbica (${b}) y después eleva a ${m}.`, `Primer l’arrel cúbica (${b}) i després eleva a ${m}.`, `First the cube root (${b}), then raise to the power ${m}.`][l]));
+};
+/** Moving a point: translation, reflection in an axis, rotation of 180° about the origin. */
+export const transform = (): Gen => (r) => {
+  const x = int(r, -6, 6) || 2, y = int(r, -6, 6) || -3; const k = int(r, 0, 3); const P = (a: number, b: number) => `(${mn(a)}, ${mn(b)})`;
+  let ans: [number, number]; let qq: T3; let hint: T3;
+  if (k === 0) { const dx = int(r, -5, 5) || 3, dy = int(r, -5, 5) || 1; ans = [x + dx, y + dy]; qq = X((l) => [`Traslado el punto ${P(x, y)} con el vector ${P(dx, dy)}. ¿Dónde queda?`, `Trasllade el punt ${P(x, y)} amb el vector ${P(dx, dy)}. On queda?`, `I translate the point ${P(x, y)} by the vector ${P(dx, dy)}. Where does it end up?`][l]); hint = T('Suma el vector: (x + a, y + b).', 'Suma el vector: (x + a, y + b).', 'Add the vector: (x + a, y + b).'); }
+  else if (k === 1) { ans = [x, -y]; qq = X((l) => [`Simetría del punto ${P(x, y)} respecto al eje X. ¿Dónde queda?`, `Simetria del punt ${P(x, y)} respecte a l’eix X. On queda?`, `Reflect the point ${P(x, y)} in the x-axis. Where does it end up?`][l]); hint = T('Respecto al eje X, cambia el signo de la y.', 'Respecte a l’eix X, canvia el signe de la y.', 'In the x-axis, the y changes sign.'); }
+  else if (k === 2) { ans = [-x, y]; qq = X((l) => [`Simetría del punto ${P(x, y)} respecto al eje Y. ¿Dónde queda?`, `Simetria del punt ${P(x, y)} respecte a l’eix Y. On queda?`, `Reflect the point ${P(x, y)} in the y-axis. Where does it end up?`][l]); hint = T('Respecto al eje Y, cambia el signo de la x.', 'Respecte a l’eix Y, canvia el signe de la x.', 'In the y-axis, the x changes sign.'); }
+  else { ans = [-x, -y]; qq = X((l) => [`Giro de 180° del punto ${P(x, y)} con centro en el origen. ¿Dónde queda?`, `Gir de 180° del punt ${P(x, y)} amb centre en l’origen. On queda?`, `Rotate the point ${P(x, y)} by 180° about the origin. Where does it end up?`][l]); hint = T('Un giro de 180° cambia el signo de las dos coordenadas.', 'Un gir de 180° canvia el signe de les dues coordenades.', 'A 180° rotation changes the sign of both coordinates.'); }
+  const right = P(ans[0], ans[1]); const cands = [P(-ans[0], ans[1]), P(ans[0], -ans[1]), P(ans[1], ans[0]), P(-ans[0], -ans[1]), P(x, y)];
+  return mc(qq, S(right), cands.filter((c) => c !== right).slice(0, 3).map(S), hint);
 };
