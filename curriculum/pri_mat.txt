@@ -1,0 +1,70 @@
+# Matemáticas Primaria, Decreto 106/2022 (ciclos 1=1.º-2.º, 2=3.º-4.º, 3=5.º-6.º). Alineación comprobada con el PDF.
+N Naturales | 1 | Recuento y cardinalidad
+N Naturales | 1 | La decena
+N Naturales | 1 | Descomposición; pares e impares
+N Naturales | 1 2 | Valor posicional: unidades, decenas, centenas
+N Naturales | 2 3 | Números de más de mil: leer, escribir, representar
+N Naturales | 1 2 | Recta numérica; comparar y ordenar
+N Naturales | 2 3 | Múltiplos, divisores, primos y compuestos; criterios de divisibilidad
+N Naturales | 3 | Números negativos: comparar y ordenar
+N Operaciones | 1 2 | Suma y resta: significados y estrategias
+N Operaciones | 1 | Dobles y mitades; iniciación a multiplicar y dividir
+N Operaciones | 2 3 | Multiplicación y división: significados y estrategias
+N Operaciones | 1 2 3 | Igualdad y desigualdad en expresiones
+N Operaciones | 3 | Potencias: cuadrados, cubos, potencias de 10
+N Operaciones | 2 3 | Propiedades: conmutativa, asociativa, distributiva
+N Operaciones | 1 2 3 | Cálculo mental, estimación y aproximación
+N Fracciones y decimales | 2 3 | La fracción como medida y parte-todo
+N Fracciones y decimales | 2 3 | Fracción decimal; décimas, centésimas, milésimas; operaciones
+N Fracciones y decimales | 3 | Aproximación y redondeo de decimales
+N Fracciones y decimales | 2 3 | Multiplicar y dividir decimales por 10, 100, 1000
+N Fracciones y decimales | 2 3 | Comparar y ordenar naturales y fracciones
+N Fracciones y decimales | 3 | Fracciones decimales y porcentajes
+N Fracciones y decimales | 3 | Fracciones equivalentes
+N Fracciones y decimales | 3 | Proporcionalidad directa
+N Fracciones y decimales | 3 | Suma y resta de dos fracciones
+N Fracciones y decimales | 1 2 3 | Situaciones donde sirven fracciones y decimales
+M Medida | 1 | Unidades no convencionales (palmos, pasos)
+M Medida | 1 2 | Medir y estimar tiempo, longitud, capacidad, masa de forma informal
+M Medida | 2 3 | Instrumentos de medida adecuados
+M Medida | 1 2 3 | Magnitudes: tiempo, longitud, ángulos, masa, superficie, capacidad, temperatura, dinero
+M Medida | 1 2 3 | Unidades convencionales: comparar, ordenar, convertir
+G Geometría | 1 | Orientación y localización: dentro, fuera, derecha, izquierda…
+G Geometría | 2 3 | Puntos en ejes y plano cartesiano; mapas y puntos cardinales
+G Geometría | 1 2 3 | Vértices, lados; polígonos regulares
+G Geometría | 2 3 | Poliedros regulares: caras, aristas, vértices
+G Geometría | 1 2 | Líneas rectas y curvas
+G Geometría | 2 3 | Rectas secantes, paralelas, perpendiculares
+G Geometría | 1 2 3 | Componer y descomponer polígonos
+G Geometría | 2 3 | Perímetros y áreas de polígonos
+G Geometría | 1 2 3 | Circunferencia y círculo: elementos
+G Geometría | 3 | Longitud de la circunferencia, área del círculo, número π
+G Geometría | 2 3 | Ángulos: medir y clasificar; clasificar triángulos
+G Geometría | 2 3 | Giros, traslaciones y simetrías
+G Geometría | 3 | Semejanza
+G Geometría | 2 3 | Figuras cóncavas y convexas
+G Geometría | 3 | Desarrollos de prismas y pirámides
+G Geometría | 1 2 3 | Geometría dinámica
+P Probabilidad | 1 2 3 | Azar frente a determinista
+P Probabilidad | 1 2 | Probabilidad intuitiva: siempre, a menudo, a veces, nunca
+P Probabilidad | 2 3 | Suceso y suceso elemental
+P Probabilidad | 2 3 | Espacio muestral
+P Probabilidad | 3 | Tablas de contingencia y diagramas de árbol
+P Probabilidad | 3 | Probabilidad como medida
+P Probabilidad | 2 3 | Estimar probabilidades experimentando
+P Probabilidad | 3 | Regla de Laplace; relación con la experimentación
+E Estadística | 1 2 3 | Preguntas y encuestas para recoger datos
+E Estadística | 1 2 3 | Variables cualitativas y cuantitativas discretas; recuento y tablas de frecuencias
+E Estadística | 1 2 | Diagramas de barras
+E Estadística | 1 2 3 | Pictogramas, sectores, polígonos de frecuencias; herramientas digitales
+E Estadística | 1 2 3 | Interpretar tablas y gráficos
+E Estadística | 2 3 | Moda, mediana y media
+E Estadística | 2 3 | Dispersión y rango
+E Estadística | 3 | Población y muestra
+E Estadística | 3 | Variables continuas e histogramas
+C Computacional | 1 2 | Regularidades; instrucciones paso a paso; predecir términos
+C Computacional | 2 3 | Sucesiones numéricas y patrones
+C Computacional | 2 3 | Interpretar, modificar y crear algoritmos
+C Computacional | 3 | Algoritmos en hoja de cálculo y programación por bloques
+C Computacional | 1 2 3 | Juegos de estrategia sin azar
+C Computacional | 1 2 3 | Valores desconocidos en igualdades

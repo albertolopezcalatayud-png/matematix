@@ -15,12 +15,23 @@ export interface StationProgress {
 
 export type Role = 'pupil' | 'teacher' | 'pt' | 'family';
 /** What belongs to each child on a shared device (PT/AL with several pupils). Only an alias and an emoji, never a name. */
-export const PUPIL_KEYS = ['course', 'wentBack', 'progress', 'seen', 'minutes', 'found', 'reach', 'toured', 'suggested', 'last', 'voice', 'large', 'sound', 'motion', 'help', 'voices'] as const;
+export const PUPIL_KEYS = ['course', 'lessons', 'qseen', 'lastLesson', 'wentBack', 'progress', 'seen', 'minutes', 'found', 'reach', 'toured', 'suggested', 'last', 'voice', 'large', 'sound', 'motion', 'help', 'voices'] as const;
 type PupilKey = (typeof PUPIL_KEYS)[number];
 export interface Pupil { alias: string; emoji: string; data: Partial<Pick<AppState, PupilKey>> }
 
+/** A lesson: the highest level passed (0 none, 3 = complete) and the best first-time score in each level. */
+export interface LessonProgress { lv: number; best: [number, number, number]; runs: number }
+
 interface AppState {
   lang: Lang | null;
+  /** New structure (course → subject → block → lesson). */
+  lessons: Record<string, LessonProgress>;
+  /** Fingerprints of the exercises already shown in each lesson. */
+  qseen: Record<string, string[]>;
+  lastLesson: string | null;
+  /** One level of a lesson finished: rightFirst out of total. Passing needs 4. */
+  finishLevel: (lesson: string, level: 1 | 2 | 3, rightFirst: number) => void;
+  markQSeen: (lesson: string, keys: string[]) => void;
   /** Who uses the app on this device. Adults reach their area through a hold-to-open button (no account, no password). */
   role: Role | null;
   /** Children on a shared device (PT/AL, aula de apoyo). The active one's data is in the main fields. */
@@ -66,7 +77,9 @@ interface AppState {
   reset: () => void;
 }
 
-const fresh = (): Required<Pupil['data']> => ({ course: null, wentBack: null, progress: {}, seen: {}, minutes: {}, found: [], reach: 20, toured: false, suggested: null, last: null, voice: true, large: false, sound: true, motion: 'auto', help: 'normal', voices: {} });
+const fresh = (): Required<Pupil['data']> => ({ lessons: {}, qseen: {}, lastLesson: null, course: null, wentBack: null, progress: {}, seen: {}, minutes: {}, found: [], reach: 20, toured: false, suggested: null, last: null, voice: true, large: false, sound: true, motion: 'auto', help: 'normal', voices: {} });
+
+const OLD_COURSE: Record<string, string> = { p1: '1P', p2: '2P', p3: '3P', p4: '4P', p5: '5P', p6: '6P', s1: '1E', s2: '2E', s3: '3E', s4: '4E' };
 
 export const today = () => new Date().toLocaleDateString('sv-SE');
 const MASTER_RIGHT = 4;
@@ -76,8 +89,20 @@ export const SEEN_MAX = 600;
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
+      lessons: {}, qseen: {}, lastLesson: null,
       lang: 'es', course: null, wentBack: null, role: null, pupils: {}, active: null, help: 'normal', voice: true, large: false, theme: 'auto', motion: 'auto', rest: true, sound: true, found: [], reach: 20, toured: false, voices: {}, suggested: null, last: null, progress: {}, minutes: {}, seen: {},
       set: (p) => set(p),
+      finishLevel: (lesson, level, rightFirst) => set((s) => {
+        const cur = s.lessons[lesson] ?? { lv: 0, best: [0, 0, 0] as [number, number, number], runs: 0 };
+        const best = [...cur.best] as [number, number, number];
+        best[level - 1] = Math.max(best[level - 1], rightFirst);
+        const lv = rightFirst >= MASTER_RIGHT ? Math.max(cur.lv, level) : cur.lv;
+        return { lastLesson: lesson, lessons: { ...s.lessons, [lesson]: { lv, best, runs: cur.runs + 1 } } };
+      }),
+      markQSeen: (lesson, keys) => set((s) => {
+        const fresh = new Set(keys);
+        return { qseen: { ...s.qseen, [lesson]: [...(s.qseen[lesson] ?? []).filter((k) => !fresh.has(k)), ...keys].slice(-120) } };
+      }),
       addPupil: (alias, emoji) => {
         const id = Math.random().toString(36).slice(2, 8);
         set((s) => ({ pupils: { ...s.pupils, [id]: { alias, emoji, data: fresh() } } }));
@@ -109,9 +134,12 @@ export const useApp = create<AppState>()(
         const fresh = new Set(keys);
         return { seen: { ...s.seen, [station]: [...(s.seen[station] ?? []).filter((k) => !fresh.has(k)), ...keys].slice(-SEEN_MAX) } };
       }),
-      reset: () => set({ course: null, suggested: null, last: null, progress: {}, minutes: {}, seen: {}, found: [], reach: 20 }),
+      reset: () => set({ lessons: {}, qseen: {}, lastLesson: null, course: null, suggested: null, last: null, progress: {}, minutes: {}, seen: {}, found: [], reach: 20 }),
     }),
-    { name: 'matematix', version: 1, merge: (persisted, current) => ({ ...current, ...(persisted as object) }) },
+    { name: 'matematix', version: 2,
+      // version 2: school years are named 1P…6P and 1E…4E (they were p1…p6 and s1…s4)
+      migrate: (old, v) => { const o = (old ?? {}) as Record<string, unknown>; if (v < 2 && typeof o.course === 'string') o.course = OLD_COURSE[o.course] ?? null; return o as unknown as AppState; },
+      merge: (persisted, current) => ({ ...current, ...(persisted as object) }) },
   ),
 );
 
@@ -121,3 +149,6 @@ export function statusOf(p?: StationProgress): Status {
   if (!p || p.sessions === 0) return 'todo';
   return p.passed || p.goodDays.length >= 2 ? 'done' : 'doing';
 }
+
+export type LessonStatus = 'todo' | 'doing' | 'done';
+export const lessonStatus = (p?: LessonProgress): LessonStatus => (!p || p.runs === 0 ? 'todo' : p.lv >= 3 ? 'done' : 'doing');

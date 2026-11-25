@@ -1,0 +1,36 @@
+# Tecnología y Digitalización: 1.º y 3.º ESO (Decreto 107/2022; programaciones 2024-25 lo confirman). 1=1.º 3=3.º
+B1 Resolución de problemas | 1 3 | Buscar y filtrar información
+B1 Resolución de problemas | 3 | Introducción a la inteligencia artificial
+B1 Resolución de problemas | 1 | Proceso de resolución de problemas y sus fases
+B1 Resolución de problemas | 1 3 | Diseño, planificación, construcción y evaluación de prototipos
+B1 Resolución de problemas | 3 | Fabricación digital
+B2 Digitalización | 1 | Arquitectura del ordenador: microprocesador, memoria, periféricos
+B2 Digitalización | 3 | Sistemas operativos; redes cableadas e inalámbricas; resolver problemas
+B2 Digitalización | 1 | Plataformas de aprendizaje
+B2 Digitalización | 1 3 | Protección de dispositivos y datos; copias de seguridad; antivirus
+B2 Digitalización | 1 | Identidad y bienestar digital
+B2 Digitalización | 1 3 | Prácticas seguras y ciberconvivencia
+B2 Digitalización | 3 | Software libre y propietario
+B3 Programación y robótica | 1 3 | Modelar problemas
+B3 Programación y robótica | 3 | Algoritmos: lenguaje natural y diagramas de flujo
+B3 Programación y robótica | 1 | Programación por bloques; programas sencillos
+B3 Programación y robótica | 1 3 | Bucles; variables, constantes, condiciones y operadores
+B3 Programación y robótica | 3 | Apps para móviles; sistemas automáticos; robots; tarjetas controladoras
+B3 Programación y robótica | 1 3 | Robótica, IA e internet de las cosas en la sociedad
+B4 Taller | 1 3 | Herramientas y máquinas; seguridad e higiene; riesgos; primeros auxilios
+B5 Materiales y soluciones | 1 | Materiales: obtención, clasificación, propiedades; residuos
+B5 Materiales y soluciones | 3 | Plásticos: obtención, propiedades, mecanizado
+B5 Materiales y soluciones | 1 | Estructuras: tipos, elementos, triangulación, esfuerzos
+B5 Materiales y soluciones | 3 | Apoyos y cálculo de esfuerzos
+B5 Materiales y soluciones | 1 | Palancas; mecanismos; transmisión y transformación del movimiento
+B5 Materiales y soluciones | 1 3 | Relación de transmisión
+B5 Materiales y soluciones | 3 | Magnitudes eléctricas; ley de Ohm; asociación de generadores y receptores
+B5 Materiales y soluciones | 1 3 | Circuitos eléctricos: simbología y diseño
+B5 Materiales y soluciones | 3 | Electrónica analógica: componentes y circuitos
+B6 Expresión y comunicación | 1 3 | Documentación técnica; presentaciones; propiedad intelectual
+B6 Expresión y comunicación | 1 | Textos, hojas de cálculo (datos, celdas), diapositivas
+B6 Expresión y comunicación | 1 3 | Hoja de cálculo: fórmulas, funciones y gráficos
+B6 Expresión y comunicación | 1 | Dibujo: diédrico y perspectiva; croquis y bocetos
+B6 Expresión y comunicación | 3 | Escalas y acotación; dibujo 2D y 3D por ordenador; audio y vídeo
+B7 Tecnología sostenible | 1 3 | Historia del desarrollo tecnológico; impacto ambiental; reciclaje; ahorro energético; energías alternativas
+B7 Tecnología sostenible | 3 | Producción, transporte e impacto de la energía; ODS

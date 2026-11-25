@@ -7,14 +7,14 @@ export function BottomNav() {
   const { pathname } = useLocation();
   const items = [
     { to: '/', icon: '🏠', label: t('nav_home'), id: 'home' },
-    { to: '/temas', icon: '📚', label: t('nav_topics'), id: 'topics' },
+    { to: '/materias', icon: '📚', label: t('nav_subjects'), id: 'topics' },
     { to: '/progreso', icon: '⭐', label: t('lit_title'), id: 'progress' },
     { to: '/ajustes', icon: '⚙️', label: t('settings'), id: 'settings' },
   ];
   return (
     <nav className="bottom-nav" aria-label="Matematix">
       {items.map((x) => (
-        <NavLink key={x.to} to={x.to} end={x.to === '/'} data-testid={`nav-${x.id}`} className={({ isActive }) => (isActive || (x.id === 'topics' && pathname.startsWith('/tema')) ? 'on' : '')}>
+        <NavLink key={x.to} to={x.to} end={x.to === '/'} data-testid={`nav-${x.id}`} className={({ isActive }) => (isActive || (x.id === 'topics' && (pathname.startsWith('/materia') || pathname.startsWith('/leccion') || pathname === '/curso')) ? 'on' : '')}>
           <span aria-hidden className="text-xl leading-none">{x.icon}</span>
           <span>{x.label}</span>
         </NavLink>

@@ -1,0 +1,102 @@
+# ESO Matemáticas, Decreto 66/2024 (DOGV 9878), columns: S=1.º-2.º (centro reparte 1.º y 2.º), T=3.º, A=4.ºA, B=4.ºB
+B1 Números | S | Lectura, escritura, representación, orden y comparación de naturales y enteros
+B1 Números | S T | Racionales: leer, escribir, representar, ordenar, comparar
+B1 Números | S | Justificación de criterios de divisibilidad
+B1 Números | T A | Irracionales más comunes: leer, aproximar, ordenar, comparar
+B1 Números | S T | Valor absoluto
+B1 Números | S T | Fracciones y decimales exactos y periódicos; fracción irreducible
+B1 Números | T A B | Número irracional; aproximación y error
+B1 Números | S T A B | Notación científica
+B1 Números | S | Potencias de exponente entero y radicales sencillos
+B1 Números | T A B | Potencias de exponente fraccionario
+B1 Números | S | Racionales en la recta
+B1 Números | T A B | Reales en la recta; intervalos
+B1 Operaciones | S T | Operaciones con naturales, enteros y racionales
+B1 Operaciones | T A B | Operaciones con irracionales
+B1 Operaciones | S | Factores, múltiplos, divisores; factorización; divisibilidad
+B1 Operaciones | S T A B | Prioridad de operaciones y propiedades
+B1 Operaciones | S T A B | Decimales a fracción
+B1 Operaciones | S T A B | Estimación, cálculo, simplificación de expresiones numéricas; operaciones inversas
+B1 Operaciones | S T | Potencias de naturales, enteros, racionales
+B1 Operaciones | T A B | Potencias de irracionales
+B1 Operaciones | S T A B | Proporcionalidad; proporciones y porcentajes
+B1 Operaciones | T A B | Reducción a la unidad; aumentos y disminuciones
+B1 Operaciones | T A | Interés simple
+B1 Operaciones | B | Interés compuesto
+B1 Operaciones | S T A B | Cálculo mental
+B1 Operaciones | B | Logaritmo
+B2 Álgebra | S T A B | Lenguaje ordinario y algebraico; patrones y generalización
+B2 Álgebra | S | Monomios y binomios: operaciones
+B2 Álgebra | T A B | Monomios, binomios e identidades notables
+B2 Álgebra | T A B | Polinomios: suma, resta y producto
+B2 Álgebra | A B | Valor numérico y raíces de un polinomio
+B2 Álgebra | S T | Ecuaciones de primer y segundo grado
+B2 Álgebra | S T A B | Equivalencia entre expresiones algebraicas
+B2 Álgebra | A B | Inecuaciones de primer grado; sistemas de inecuaciones lineales
+B2 Álgebra | S | Sistemas de ecuaciones lineales con dos incógnitas
+B2 Álgebra | T A B | Sistemas lineales: interpretación geométrica
+B2 Álgebra | A B | Factorización de polinomios y raíces
+B2 Álgebra | B | Fracciones algebraicas
+B3 Medida | S T | Estimación y análisis de medidas con unidades convencionales
+B3 Medida | S | Determinar medidas eligiendo estrategias e instrumentos
+B3 Medida | T A B | Precisión y error aproximado en la medida
+B3 Medida | S T A | Elección de unidad y escala; conversión de unidades
+B3 Medida | S T A B | Cambio de herramientas y métodos de medida y estimación
+B4 Geometría | S T | Figuras planas; elementos del plano; longitudes y áreas
+B4 Geometría | S | Clasificación de figuras planas por sus propiedades
+B4 Geometría | S T | Proporcionalidad, semejanza, escalas
+B4 Geometría | T | Teorema de Tales
+B4 Geometría | S | Ángulos en sistema sexagesimal
+B4 Geometría | T A B | Ángulos sexagesimal y radianes
+B4 Geometría | T A B | Traslaciones, giros y simetrías
+B4 Geometría | S T A B | Teorema de Pitágoras y aplicaciones
+B4 Geometría | T A B | Elementos notables del triángulo
+B4 Geometría | S T | Circunferencia, círculo, arcos y sectores
+B4 Geometría | S | Sólidos: prismas rectos, pirámides, cilindros, conos
+B4 Geometría | T A | Superficies y volúmenes de prismas, pirámides, cilindros, conos
+B4 Geometría | A B | Esfera; coordenadas geográficas, husos horarios; superficie y volumen
+B4 Geometría | A B | Geometría analítica: coordenadas y vectores
+B4 Geometría | A B | Ecuaciones de la recta; paralelismo, perpendicularidad, posiciones
+B4 Geometría | S T A B | Geometría dinámica
+B4 Geometría | A B | Relaciones métricas en triángulos y razones trigonométricas
+B4 Geometría | S T A B | Geometría en contexto real
+B5 Funciones | S T A | Variable; variación y relación entre variables
+B5 Funciones | S T A B | Funciones lineales: expresión, tabla y gráfica
+B5 Funciones | T A B | Funciones no lineales: expresión, tabla y gráfica
+B5 Funciones | T | Ecuación de la recta; pendiente y cortes con los ejes
+B5 Funciones | T A B | Propiedades de una función; funciones no lineales desde la gráfica
+B5 Funciones | S T A B | Geometría dinámica y calculadoras gráficas
+B5 Funciones | A B | Resolución de problemas y modelización con funciones
+B6 Probabilidad | S T A | Espacio muestral en experimentos simples
+B6 Probabilidad | T A B | Tablas de contingencia y diagramas de árbol en experimentos compuestos
+B6 Probabilidad | S | Regla de Laplace en experimentos simples
+B6 Probabilidad | T A B | Regla de Laplace en experimentos compuestos
+B6 Probabilidad | T A B | Estimación por experimentación; ley de los grandes números
+B6 Probabilidad | S | Asignación de probabilidad por experimentación
+B6 Probabilidad | S | Suceso contrario, seguro e imposible
+B6 Probabilidad | T A B | Sucesos compatibles e incompatibles
+B6 Probabilidad | A B | Unión e intersección de sucesos
+B6 Probabilidad | A B | Propiedades de la probabilidad
+B6 Probabilidad | A B | Probabilidad condicionada; sucesos dependientes e independientes
+B6 Probabilidad | S | Introducción a las técnicas de recuento
+B6 Probabilidad | T A B | Regla de la suma y del producto
+B6 Probabilidad | B | Combinatoria: variaciones, permutaciones, combinaciones
+B6 Probabilidad | T B | Probabilidad en contextos no lúdicos: riesgos y decisiones
+B7 Estadística | S T A B | Variable estadística cualitativa, discreta, continua
+B7 Estadística | S T A B | Diseño de un estudio; población, muestra, muestras representativas
+B7 Estadística | S | Tablas de frecuencias y gráficos, con TIC y sin ellas
+B7 Estadística | T A B | Tablas de frecuencias, de contingencia y gráficos con hoja de cálculo
+B7 Estadística | S T | Moda, mediana y media
+B7 Estadística | T A B | Rango, desviación media, desviación típica, varianza
+B7 Estadística | S T | Variabilidad de las muestras de una población
+B7 Estadística | B | Comparar muestras; coeficiente de variación
+B7 Estadística | B | Diagramas de dispersión; correlación
+B7 Estadística | B | Regresión con herramientas tecnológicas
+B7 Estadística | B | Comparar distribuciones con centralización y dispersión
+B7 Estadística | A B | Interpretar estudios estadísticos; analizar y aceptar el error
+B8 Computacional | T A B | Regularidades y predicción de términos en sucesiones y series
+B8 Computacional | S T A B | Procesos matemáticos como secuencias de instrucciones
+B8 Computacional | S T A B | Reconocer patrones para generalizar y automatizar
+B8 Computacional | T A B | Diseñar y programar algoritmos
+B8 Computacional | S T A B | Estrategias en juegos de lógica sin azar
+# (actitudinales y de contribución histórica: en todos los cursos; se trabajan en las explicaciones, no como lección propia)

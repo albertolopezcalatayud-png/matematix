@@ -1,0 +1,11 @@
+# Tecnología 4.º ESO
+B1 | Gestión de proyectos; ciclo de vida de productos; materiales; CAD 3D; fabricación manual y digital; difusión
+B2 | Electrónica analógica; electrónica digital (Boole, puertas lógicas); neumática e hidráulica
+B3 | Sistemas de control (sensores, actuadores, controladores); IoT; IA; robótica y microcontroladoras
+B4 | Instalaciones de la vivienda (electricidad, agua, saneamiento, calefacción, gas, climatización, domótica); ahorro
+B5 | Sostenibilidad; obsolescencia; arquitectura bioclimática; transporte eficiente; vehículos eléctricos
+# Digitalización 4.º ESO
+B1 | Representación digital de la información y unidades; componentes del ordenador; sistemas operativos; redes; IoT; problemas técnicos
+B2 | Buscar y contrastar información; propiedad intelectual y licencias; organizar archivos; crear contenidos; programar apps; IA; colaborar en red
+B3 | Seguridad de dispositivos y datos; identidad y huella digital; privacidad; bienestar digital y ergonomía
+B4 | Ciberconvivencia; bulos y noticias falsas; administración electrónica y firma digital; contraseñas; comercio electrónico y fraudes; ética de datos e IA; activismo digital
