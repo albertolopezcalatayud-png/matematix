@@ -148,3 +148,14 @@ export const motionGraph = (): Gen => (r) => {
   const vis = { type: 'chart' as const, kind: 'line' as const, x: xs, y: ys, yMax: Math.ceil(Math.max(...ys) / 5) * 5, yStep: 5, xTitle: { key: 'tt_seconds' }, yTitle: { key: 'tt_metres' } };
   return { ...P(X((l) => [`La gráfica posición-tiempo es una recta. ¿Cuál es la velocidad (m/s)?`, `La gràfica posició-temps és una recta. Quina és la velocitat (m/s)?`, `The position–time graph is a straight line. What is the velocity (m/s)?`][l]), v, [ys[5], v * 5, v + 1], T('Pendiente = Δx / Δt: cuántos metros avanza cada segundo.', 'Pendent = Δx / Δt: quants metres avança cada segon.', 'Gradient = Δx ÷ Δt: metres travelled each second.'), 0), visual: vis };
 };
+/** Monohybrid crosses (complete dominance): genotype and phenotype ratios. */
+export const mendel = (): Gen => (r) => {
+  const traits: [T3, T3, string][] = [[T('semilla amarilla', 'llavor groga', 'yellow seed'), T('semilla verde', 'llavor verda', 'green seed'), 'A'], [T('flor morada', 'flor morada', 'purple flower'), T('flor blanca', 'flor blanca', 'white flower'), 'B'], [T('ojos marrones', 'ulls marrons', 'brown eyes'), T('ojos azules', 'ulls blaus', 'blue eyes'), 'M']];
+  const [dom, rec, L] = pick(r, traits); const l = L.toLowerCase();
+  const crosses: [string, string][] = [[L + l, L + l], [L + l, l + l], [L + L, l + l], [L + L, L + l]];
+  const [p1, p2] = pick(r, crosses); const kids = [p1[0] + p2[0], p1[0] + p2[1], p1[1] + p2[0], p1[1] + p2[1]];
+  const recN = kids.filter((k) => k === l + l).length; const k = int(r, 0, 1);
+  if (k === 0) return q(X((lg) => [`${L} = ${dom[0]} (dominante), ${l} = ${rec[0]}. Cruce ${p1} × ${p2}: de cada 4 descendientes, ¿cuántos tendrán ${rec[0]}?`, `${L} = ${dom[1]} (dominant), ${l} = ${rec[1]}. Encreuament ${p1} × ${p2}: de cada 4 descendents, quants tindran ${rec[1]}?`, `${L} = ${dom[2]} (dominant), ${l} = ${rec[2]}. Cross ${p1} × ${p2}: out of every 4 offspring, how many will have ${rec[2]}?`][lg]), recN, [0, 1, 2, 3, 4].filter((x) => x !== recN).slice(0, 3), X((lg) => [`Haz el cuadro de Punnett: solo los ${l}${l} muestran el carácter recesivo.`, `Fes el quadre de Punnett: només els ${l}${l} mostren el caràcter recessiu.`, `Draw a Punnett square: only ${l}${l} shows the recessive trait.`][lg]));
+  const het = kids.filter((x) => x[0] !== x[1]).length;
+  return q(X((lg) => [`Cruce ${p1} × ${p2}: de cada 4 descendientes, ¿cuántos serán heterocigotos (${L}${l})?`, `Encreuament ${p1} × ${p2}: de cada 4 descendents, quants seran heterozigots (${L}${l})?`, `Cross ${p1} × ${p2}: out of every 4 offspring, how many will be heterozygous (${L}${l})?`][lg]), het, [0, 1, 2, 3, 4].filter((x) => x !== het).slice(0, 3), T('Combina cada alelo de un progenitor con cada alelo del otro.', 'Combina cada al·lel d’un progenitor amb cada al·lel de l’altre.', 'Pair each allele from one parent with each from the other.'));
+};
