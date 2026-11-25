@@ -84,17 +84,61 @@ function unitWords(lang: Lang, text: string): string {
   return text;
 }
 
+/** Numbers before a noun said as a person would: «un metro», «una hora», «veintiún metros», «mil milímetros»
+ *  (not «uno metro» or «uno cero cero cero»); and a unit after 1 in the singular («1 m» → «un metro»). */
+const PLURAL_ONE: Record<'es' | 'ca' | 'en', Record<string, string>> = {
+  es: { horas: 'hora', toneladas: 'tonelada', kilómetros: 'kilómetro', metros: 'metro', decímetros: 'decímetro', centímetros: 'centímetro', milímetros: 'milímetro', hectómetros: 'hectómetro', decámetros: 'decámetro', kilos: 'kilo', gramos: 'gramo', miligramos: 'miligramo', litros: 'litro', mililitros: 'mililitro', centilitros: 'centilitro', decilitros: 'decilitro', segundos: 'segundo', minutos: 'minuto', grados: 'grado', euros: 'euro', céntimos: 'céntimo', días: 'día', semanas: 'semana', meses: 'mes', años: 'año', vatios: 'vatio', voltios: 'voltio', amperios: 'amperio', julios: 'julio', ohmios: 'ohmio', moles: 'mol', newtons: 'newton', cuadrados: 'cuadrado', cúbicos: 'cúbico', unidades: 'unidad', decenas: 'decena', centenas: 'centena' },
+  ca: { hores: 'hora', tones: 'tona', quilòmetres: 'quilòmetre', metres: 'metre', decímetres: 'decímetre', centímetres: 'centímetre', 'mil·límetres': 'mil·límetre', quilos: 'quilo', grams: 'gram', 'mil·ligrams': 'mil·ligram', litres: 'litre', 'mil·lilitres': 'mil·lilitre', centilitres: 'centilitre', segons: 'segon', minuts: 'minut', graus: 'grau', euros: 'euro', cèntims: 'cèntim', dies: 'dia', setmanes: 'setmana', mesos: 'mes', anys: 'any', watts: 'watt', volts: 'volt', ampers: 'amper', joules: 'joule', ohms: 'ohm', mols: 'mol', newtons: 'newton', quadrats: 'quadrat', cúbics: 'cúbic', unitats: 'unitat', desenes: 'desena', centenes: 'centena' },
+  en: { hours: 'hour', tonnes: 'tonne', kilometres: 'kilometre', metres: 'metre', decimetres: 'decimetre', centimetres: 'centimetre', millimetres: 'millimetre', kilograms: 'kilogram', grams: 'gram', milligrams: 'milligram', litres: 'litre', millilitres: 'millilitre', centilitres: 'centilitre', seconds: 'second', minutes: 'minute', degrees: 'degree', euros: 'euro', days: 'day', weeks: 'week', months: 'month', years: 'year', watts: 'watt', volts: 'volt', amps: 'amp', joules: 'joule', ohms: 'ohm', moles: 'mole', newtons: 'newton', units: 'unit', tens: 'ten', hundreds: 'hundred' },
+};
+const MASC_A = /^(día|dia|mapa|problema|tema|sistema|planeta|idioma|clima|programa|diagrama|esquema|kilogramo|telegrama|pijama|sofá|sofà)$/i;
+function feminine(lang: 'es' | 'ca', word: string): boolean {
+  const w = word.toLowerCase();
+  if (MASC_A.test(w)) return false;
+  if (lang === 'es') return /(a|as|ción|sión|dad|tad|tud|umbre|ciones|siones|dades)$/.test(w);
+  if (/(txes|xes|sses|jes|ges|ços)$/.test(w)) return false;
+  return /(a|es|ció|sió|tat|tats|cions)$/.test(w) && !/^(metres|centímetres|decímetres|quilòmetres|mil·límetres|litres|mil·lilitres|centilitres|joules|euros|quilos)$/.test(w);
+}
+const NOT_NOUN = /^(es|y|o|u|e|ni|más|menos|por|entre|de|del|a|al|en|con|sin|son|que|se|no|lo|la|el|los|las|le|les|és|i|més|menys|per|amb|sense|són|o|un|una|veces|vegades|cop|cops|pas|paso|pasos|passos)$/i;
+const TENS_ES = ['', '', 'veinti', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+const TENS_CA = ['', '', 'vint', 'trenta', 'quaranta', 'cinquanta', 'seixanta', 'setanta', 'vuitanta', 'noranta'];
+function numberAgreement(lang: Lang, text: string): string {
+  // thousands written with a space: «1 000» → «1000», so it is said «mil»
+  text = text.replace(/(?<![\d.,])(\d{1,3})(?:[\u00A0\u202F ](\d{3}))+(?![\d])/g, (m) => m.replace(/[\u00A0\u202F ]/g, ''));
+  // «= ? cm» → «cuántos centímetros», not «cuánto centímetros»
+  if (lang === 'es') text = text.replace(/\bcuánto ([\p{L}]+s)\b/gu, (_m, w: string) => `${feminine('es', w) ? 'cuántas' : 'cuántos'} ${w}`);
+  if (lang === 'ca') text = text.replace(/\bquant ([\p{L}·]+s)\b/gu, (_m, w: string) => `${feminine('ca', w) ? 'quantes' : 'quants'} ${w}`);
+  if (lang === 'en') text = text.replace(/\bwhat ([\p{L}]+s)\b/gu, (_m, w: string) => `how many ${w}`);
+  if (lang === 'en') return text.replace(/(?<![\d.,])1 ([\p{L}]+)/gu, (_m, w: string) => `1 ${PLURAL_ONE.en[w] ?? w}`);
+  const L = lang;
+  const sing = PLURAL_ONE[L];
+  return text.replace(/(?<![\d.,−-])(\d{1,2}) ([\p{L}·]+)((?: (?:cuadrados|cúbicos|quadrats|cúbics))?)/gu, (m, n: string, w: string, rest: string) => {
+    const v = Number(n);
+    if (v % 10 !== 1 || v === 11 || NOT_NOUN.test(w)) return m;
+    const word = v === 1 ? sing[w] ?? w : w;
+    const adj = v === 1 ? rest.replace(/ (\S+)$/, (_x, a: string) => ` ${sing[a] ?? a}`) : rest;
+    const fem = feminine(L, word);
+    const one = L === 'es' ? (fem ? 'una' : 'un') : (fem ? 'una' : 'un');
+    let said: string;
+    if (v === 1) said = one;
+    else if (L === 'es') said = v === 21 ? (fem ? 'veintiuna' : 'veintiún') : `${TENS_ES[Math.floor(v / 10)]} y ${one}`;
+    else said = v === 21 ? `vint-i-${one}` : `${TENS_CA[Math.floor(v / 10)]}-${one}`;
+    return `${said} ${word}${adj}`;
+  });
+}
+
 export function speakable(lang: Lang, text: string): string {
   // A symbol in brackets after its name is not read: «1 metro (m)» is said «1 metro», not «1 metro metros».
   text = text.replace(/\s*\((?:[^()\s\d]{1,5}|°C|[a-zA-Z]{1,3}[²³])\)/gu, '');
   const w = { es: ['más', 'menos', 'por', 'es igual a', 'cuánto'], ca: ['més', 'menys', 'per', 'és igual a', 'quant'], en: ['plus', 'minus', 'times', 'equals', 'what'] }[lang];
   const sup = (x: string) => x.split('').map((c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).join('');
   const pw = { es: ['elevado a', 'por', 'entre'], ca: ['elevat a', 'per', 'entre'], en: ['to the power of', 'times', 'divided by'] }[lang];
-  text = text.replace(/10([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g, (_, e) => `10 ${pw[0]} ${sup(e)}`).replace(/10ⁿ/g, `10 ${pw[0]} n`).replace(/·/g, ` ${pw[1]} `).replace(/÷/g, ` ${pw[2]} `);
+  text = text.replace(/10([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g, (_, e) => `10 ${pw[0]} ${sup(e)}`).replace(/10ⁿ/g, `10 ${pw[0]} n`).replace(/(?<=[\d\s)])·(?=[\s\d(])/g, ` ${pw[1]} `).replace(/÷/g, ` ${pw[2]} `);
   const U: Record<string, [string, string, string]> = { 'km/h': ['kilómetros por hora', 'quilòmetres per hora', 'kilometres per hour'], 'g/cm³': ['gramos por centímetro cúbico', 'grams per centímetre cúbic', 'grams per cubic centimetre'], 'g/L': ['gramos por litro', 'grams per litre', 'grams per litre'], 'cm³': ['centímetros cúbicos', 'centímetres cúbics', 'cubic centimetres'], '°C': ['grados', 'graus', 'degrees'] };
   for (const [u, w3] of Object.entries(U)) text = text.split(u).join(w3[lang === 'es' ? 0 : lang === 'ca' ? 1 : 2]);
   text = unitWords(lang, text);
-  return text.replace(/(\d+)\/(\d+)/g, (_, a, b) => fractionWords(lang, Number(a), Number(b))).replace(/\+/g, ` ${w[0]} `).replace(/−/g, ` ${w[1]} `).replace(/×/g, ` ${w[2]} `).replace(/=/g, ` ${w[3]} `).replace(/(^|[\s=])\?(?=\s|$)/g, `$1 ${w[4]}`).replace(/\s+/g, ' ').trim();
+  text = text.replace(/(\d+)\/(\d+)/g, (_, a, b) => fractionWords(lang, Number(a), Number(b))).replace(/\+/g, ` ${w[0]} `).replace(/−/g, ` ${w[1]} `).replace(/×/g, ` ${w[2]} `).replace(/=/g, ` ${w[3]} `).replace(/(^|[\s=])\?(?=\s|$)/g, `$1 ${w[4]}`);
+  return numberAgreement(lang, text).replace(/\s+/g, ' ').trim();
 }
 
 export function useT() {
