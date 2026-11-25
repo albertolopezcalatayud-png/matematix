@@ -39,10 +39,13 @@ export function near(r: R, a: number, { spread = 3, min = 0, max = Infinity, ste
 }
 
 /** Build an exercise. */
-export const q = (qq: T3, a: Ans, wrong: Ans[], hint: T3, extra: Partial<Q> = {}): Q => ({ q: qq, a, wrong, hint, ...extra });
+const keyOf = (v: Ans) => (Array.isArray(v) ? v[0] : String(v));
+/** Removes wrong answers equal to the right one, and repeated wrong answers. */
+const clean = <V extends Ans>(a: V, wrong: V[]): V[] => wrong.filter((w, i) => keyOf(w) !== keyOf(a) && wrong.findIndex((x) => keyOf(x) === keyOf(w)) === i);
+export const q = (qq: T3, a: Ans, wrong: Ans[], hint: T3, extra: Partial<Q> = {}): Q => fixMinus({ q: qq, a, wrong: clean(a, wrong), hint, ...extra });
 
 /** A written multiple-choice exercise: question, right answer, wrong answers, hint (all in three languages). */
-export const mc = (qq: T3, a: T3, wrong: T3[], hint: T3, extra: Partial<Q> = {}): Q => ({ q: qq, a, wrong, hint, ...extra });
+export const mc = (qq: T3, a: T3, wrong: T3[], hint: T3, extra: Partial<Q> = {}): Q => fixMinus({ q: qq, a, wrong: clean(a, wrong), hint, ...extra });
 
 /** Yes/no-style answers used in many lessons. */
 export const YES = T('Sí', 'Sí', 'Yes'), NO = T('No', 'No', 'No');
