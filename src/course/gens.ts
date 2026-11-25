@@ -564,7 +564,7 @@ export const similar = (): Gen => (r) => {
 export const probScale = (): Gen => (r) => {
   const n = int(r, 4, 10), f = int(r, 0, n); const g = gcd(f, n);
   const ans = f === 0 ? '0' : f === n ? '1' : `${f / g}/${n / g}`;
-  return q(X((l) => [`En una bolsa hay ${n} bolas y ${f} son rojas. ¿Cuál es la probabilidad de sacar roja? (0, 1 o una fracción simplificada)`, `En una bossa hi ha ${n} boles i ${f} són roges. Quina és la probabilitat de traure roja? (0, 1 o una fracció simplificada)`, `A bag holds ${n} balls and ${f} are red. What is the probability of red? (0, 1 or a fraction in its simplest form)`][l]), ans,
+  return q(X((l) => [`En una bolsa hay ${n} bolas y ${f === 0 ? 'ninguna es roja' : f === 1 ? '1 es roja' : `${f} son rojas`}. ¿Cuál es la probabilidad de sacar roja? (0, 1 o una fracción simplificada)`, `En una bossa hi ha ${n} boles i ${f === 0 ? 'cap és roja' : f === 1 ? '1 és roja' : `${f} són roges`}. Quina és la probabilitat de traure roja? (0, 1 o una fracció simplificada)`, `A bag holds ${n} balls and ${f === 0 ? 'none are' : f === 1 ? '1 is' : `${f} are`} red. What is the probability of red? (0, 1 or a fraction in its simplest form)`][l]), ans,
     [`${n - f}/${n}`, `${f}/${n - f || 1}`, f === 0 ? '1' : '0', `1/${n}`].filter((x) => x !== ans && x !== `${f}/${n}`), T('Probabilidad = casos favorables ÷ casos posibles. Imposible = 0; seguro = 1.', 'Probabilitat = casos favorables ÷ casos possibles. Impossible = 0; segur = 1.', 'Probability = favourable outcomes ÷ possible outcomes. Impossible = 0; certain = 1.'), { visual: { type: 'emoji', rows: ['🔴'.repeat(f) + '⚪'.repeat(n - f)] } });
 };
 /** Relative frequency from an experiment. */
@@ -587,4 +587,32 @@ export const spreadsheet = (): Gen => (r) => {
   const [f, ans] = F[k];
   return q(X((l) => [`En la hoja de cálculo, ¿qué número aparece en la celda con la fórmula ${l === 2 ? f.replace('SUMA', 'SUM') : l === 1 ? f : f}?`, `En el full de càlcul, quin nombre apareix en la cel·la amb la fórmula ${f}?`, `In the spreadsheet, what number appears in a cell with the formula ${f.replace('SUMA', 'SUM')}?`][l]), ans,
     near(r, ans, { also: [a + b + c, a * b, a + c].filter((x) => x !== ans), min: -20 }), T('Cada celda se nombra por su columna (letra) y su fila (número). Sustituye y calcula. * es multiplicar.', 'Cada cel·la es nomena per la columna (lletra) i la fila (nombre). Substituïx i calcula. * és multiplicar.', 'Each cell is named by its column (letter) and row (number). Substitute and calculate. * means multiply.'), { visual: v });
+};
+/** Fraction × whole number and fraction × fraction. */
+export const fracMul = (): Gen => (r) => {
+  if (r() < 0.5) { const d = int(r, 2, 9), n = int(r, 1, d - 1), w = int(r, 2, 9); const N2 = n * w, g = gcd(N2, d); const ans = d / g === 1 ? String(N2 / g) : `${N2 / g}/${d / g}`;
+    return q(X(() => `${n}/${d} × ${w} = ?`), ans, [`${n * w}/${d * w}`, `${n}/${d * w}`, `${n + w}/${d}`].filter((x) => x !== ans && x !== `${N2}/${d}`), T('Multiplica el numerador por el número entero y deja el denominador. Simplifica si puedes.', 'Multiplica el numerador pel nombre enter i deixa el denominador. Simplifica si pots.', 'Multiply the numerator by the whole number and keep the denominator. Simplify if you can.')); }
+  const b = int(r, 2, 6), a = int(r, 1, b - 1), d = int(r, 2, 6), c = int(r, 1, d - 1); const nn = a * c, dd = b * d, g = gcd(nn, dd); const ans = `${nn / g}/${dd / g}`;
+  return q(X(() => `${a}/${b} × ${c}/${d} = ?`), ans, [`${a + c}/${b + d}`, `${a * d}/${b * c}`, `${nn}/${b + d}`].filter((x) => x !== ans && x !== `${nn}/${dd}`), T('Numerador por numerador y denominador por denominador. Después simplifica.', 'Numerador per numerador i denominador per denominador. Després simplifica.', 'Numerator times numerator, denominator times denominator. Then simplify.'));
+};
+/** Simple equations: ax + b = c, x/a = b, a(x + b) = c. */
+export const simpleEq = (hard = false): Gen => (r) => {
+  const x = int(r, hard ? -9 : 1, 12) || 3, a = int(r, 2, 9), b = int(r, 1, 20), k = int(r, 0, hard ? 2 : 1);
+  if (k === 0) return q(X(() => `${a}x + ${b} = ${a * x + b}`), x, near(r, x, { also: [(a * x + b) / a, a * x, x + b].filter((v) => Number.isInteger(v) && v !== x), min: hard ? -30 : 0 }), X((l) => [`Quita ${b} a los dos lados: ${a}x = ${a * x}. Después divide entre ${a}.`, `Lleva ${b} als dos costats: ${a}x = ${a * x}. Després dividix entre ${a}.`, `Take ${b} from both sides: ${a}x = ${a * x}. Then divide by ${a}.`][l]), { aid: { type: 'balance', left: `${a}x + ${b}`, right: String(a * x + b) } });
+  if (k === 1) return q(X(() => `${a}x − ${b} = ${a * x - b}`), x, near(r, x, { also: [(a * x - b) / a, x - b].filter((v) => Number.isInteger(v) && v !== x), min: hard ? -30 : 0 }), X((l) => [`Suma ${b} a los dos lados: ${a}x = ${a * x}. Después divide entre ${a}.`, `Suma ${b} als dos costats: ${a}x = ${a * x}. Després dividix entre ${a}.`, `Add ${b} to both sides: ${a}x = ${a * x}. Then divide by ${a}.`][l]), { aid: { type: 'balance', left: `${a}x − ${b}`, right: String(a * x - b) } });
+  return q(X(() => `${a}(x + ${b}) = ${a * (x + b)}`), x, near(r, x, { also: [x + b, a * x + b, (a * (x + b) - b) / a].filter((v) => Number.isInteger(v) && v !== x), min: -30 }), X((l) => [`Divide los dos lados entre ${a}: x + ${b} = ${x + b}. Después resta ${b}.`, `Dividix els dos costats entre ${a}: x + ${b} = ${x + b}. Després resta ${b}.`, `Divide both sides by ${a}: x + ${b} = ${x + b}. Then subtract ${b}.`][l]));
+};
+/** Area of an L-shaped (composite) figure. */
+export const compositeArea = (): Gen => (r) => {
+  const W = int(r, 5, 10), H = int(r, 5, 10), w = int(r, 2, W - 2), h = int(r, 2, H - 2); const A = W * H - (W - w) * (H - h);
+  return q(X((l) => [`Calcula el área de la figura (en cm²). Mide ${W} cm de ancho y ${H} cm de alto; le falta un rectángulo de ${W - w} × ${H - h} cm en una esquina.`, `Calcula l’àrea de la figura (en cm²). Mesura ${W} cm d’ample i ${H} cm d’alt; li falta un rectangle de ${W - w} × ${H - h} cm en un cantó.`, `Find the area of the shape (in cm²). It is ${W} cm wide and ${H} cm tall, with a ${W - w} × ${H - h} cm rectangle missing from one corner.`][l]), A,
+    near(r, A, { also: [W * H, (W - w) * (H - h), 2 * (W + H)] }), T('Calcula el rectángulo grande y réstale el trozo que falta (o divide la figura en dos rectángulos).', 'Calcula el rectangle gran i resta-li el tros que falta (o dividix la figura en dos rectangles).', 'Work out the big rectangle and subtract the missing piece (or split the shape into two rectangles).'),
+    { visual: { type: 'shape', pts: [[0, 0], [W, 0], [W, h], [w, h], [w, H], [0, H]], labels: [String(W), String(h), '', '', '', String(H)] } });
+};
+/** Histograms: read a class interval or count. */
+export const histogram = (): Gen => (r) => {
+  const bins = ['130–135', '135–140', '140–145', '145–150', '150–155']; const ys = bins.map(() => int(r, 1, 9)); const i = int(r, 0, 4);
+  const v: Visual = { type: 'chart', kind: 'bar', x: bins, y: ys, yMax: 10, yStep: 2, xTitle: { key: 'tt_height' } };
+  if (r() < 0.5) return q(X((l) => [`El histograma muestra las alturas (cm) de una clase. ¿Cuántos alumnos miden entre ${bins[i].replace('–', ' y ')} cm?`, `L’histograma mostra les altures (cm) d’una classe. Quants alumnes mesuren entre ${bins[i].replace('–', ' i ')} cm?`, `The histogram shows the heights (cm) of a class. How many pupils are between ${bins[i].replace('–', ' and ')} cm?`][l]), ys[i], near(r, ys[i], { min: 0, also: ys.filter((y) => y !== ys[i]) }), T('Busca la barra de ese intervalo y lee su altura.', 'Busca la barra d’eixe interval i llig la seua altura.', 'Find the bar for that interval and read its height.'), { visual: v });
+  const tot = ys.reduce((a, b) => a + b, 0); return q(T('¿Cuántos alumnos hay en total?', 'Quants alumnes hi ha en total?', 'How many pupils are there altogether?'), tot, near(r, tot, { also: [tot - ys[0], Math.max(...ys)] }), T('Suma las alturas de todas las barras.', 'Suma les altures de totes les barres.', 'Add up the heights of all the bars.'), { visual: v });
 };

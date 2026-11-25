@@ -754,6 +754,7 @@ export const MESSAGES = {
   d_frac: ['{n} partes coloreadas de {d}', '{n} parts acolorides de {d}', '{n} parts shaded out of {d}'],
   d_grid: ['Cuadrícula con los puntos {p}', 'Quadrícula amb els punts {p}', 'Grid with the points {p}'],
   tt_temp: ['Temperatura (°C)', 'Temperatura (°C)', 'Temperature (°C)'],
+  tt_height: ['Altura (cm)', 'Altura (cm)', 'Height (cm)'],
   progress_subject: ['{s}: {d} de {n}', '{s}: {d} de {n}', '{s}: {d} of {n}'],
 } as const satisfies Record<string, readonly [string, string, string]>;
 

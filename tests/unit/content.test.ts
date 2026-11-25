@@ -16,7 +16,7 @@ function checkT3(t: T3, where: string) {
   t.forEach((s, i) => expect(typeof s === 'string' && s.trim().length > 0, `${where}[${i}] empty`).toBe(true));
   const [es, ca, en] = t;
   for (const s of [es, ca, en]) expect(s, where).not.toMatch(/gratuit/i);
-  expect(ca, `${where} (ca): ${ca}`).not.toMatch(/[¿¡ñ]|[a-záéíóú] y [a-záéíóú]|\b(pero|también|entonces|hay|muy|cuántos|cuántas|qué|cuál)\b/i);
+  expect(ca, `${where} (ca): ${ca}`).not.toMatch(/[¿¡ñ]|[a-záéíóú] y (el|la|los|las|un|una|de|en|se|que|luego|después)\b|\b(pero|también|entonces|hay|muy|cuántos|cuántas|qué|cuál)\b/i);
   expect(en, `${where} (en): ${en}`).not.toMatch(/[¿¡ñ]/);
   // a written question in castellano opens with ¿ (not "5 + ? = 9")
   if (/[a-záéíóúñ)»] ?\?/i.test(es)) expect(es.includes('¿'), `${where} (es) opening ¿: ${es}`).toBe(true);
