@@ -77,7 +77,7 @@ export function optionsFor(qq: Q, level: Level, r: () => number): Ans[] {
   // numbers in order (easier to read); texts mixed
   return out.every((x) => typeof x === 'number') ? (out as number[]).sort((a, b) => a - b) : shuffle(r, out);
 }
-export const qKey = (qq: Q) => `${qq.q[0]}|${keyOf(qq.a)}`;
+export const qKey = (qq: Q) => `${qq.q[0]}|${keyOf(qq.a)}|${qq.visual ? JSON.stringify(qq.visual).slice(0, 120) : ''}`;
 /** The 5 exercises of a session: no repeats inside it, and preferably none seen recently. */
 export function pickQs(content: LessonContent, seed: number, recent: Set<string>, n = PER_LEVEL): Q[] {
   const r = rng(seed);
