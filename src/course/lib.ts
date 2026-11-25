@@ -49,7 +49,7 @@ export const YES = T('Sí', 'Sí', 'Yes'), NO = T('No', 'No', 'No');
 export const TRUE = T('Verdadero', 'Vertader', 'True'), FALSE = T('Falso', 'Fals', 'False');
 /** True or false: the statement and whether it is true. The third option makes level 2 a little harder. */
 export const tf = (statement: T3, isTrue: boolean, hint: T3): Q =>
-  ({ q: X((l) => [`¿Verdadero o falso? ${statement[0]}`, `Vertader o fals? ${statement[1]}`, `True or false? ${statement[2]}`][l]), a: isTrue ? TRUE : FALSE, wrong: [isTrue ? FALSE : TRUE, T('No se puede saber', 'No es pot saber', "You can't tell"), T('Depende del día', 'Depén del dia', 'It depends on the day')], hint });
+  ({ q: X((l) => [`¿Verdadero o falso? ${statement[0]}`, `Vertader o fals? ${statement[1]}`, `True or false? ${statement[2]}`][l]), a: isTrue ? TRUE : FALSE, wrong: [isTrue ? FALSE : TRUE], hint, mc: true });
 
 /* ───── Names and objects for word problems (short, everyday, mixed genders) ───── */
 export const NAMES = ['Ana', 'Pau', 'Lucía', 'Marc', 'Sara', 'Hugo', 'Aina', 'Leo', 'Nora', 'Iker', 'Vera', 'Joel', 'Carla', 'Àlex', 'Emma', 'Ian'];
@@ -112,3 +112,17 @@ export function compareQ(_r: R, nums: number[], bigger: boolean, hint: T3, extra
   return q(X((l) => [bigger ? '¿Cuál es el número mayor?' : '¿Cuál es el número menor?', bigger ? 'Quin és el nombre major?' : 'Quin és el nombre menor?', bigger ? 'Which number is the biggest?' : 'Which number is the smallest?'][l]),
     a, nums.filter((x) => x !== a), hint, { mc: true, visual: { type: 'emoji', rows: [nums.map((x) => String(x)).join('   ')] }, ...extra });
 }
+
+/* ───── Compact authoring for written lessons: "castellano|valencià|English" ───── */
+import type { LessonContent } from './types';
+import type { Visual } from '@/engine/types';
+/** One text in three languages written as "es|ca|en". */
+export const L = (s: string): T3 => { const p = s.split('|').map((x) => x.trim()); if (p.length !== 3) throw new Error(`L(): needs 3 parts: ${s}`); return [p[0], p[1], p[2]]; };
+/** A multiple-choice exercise from "es|ca|en" strings: question, right answer, wrong answers, hint. */
+export const M = (qq: string, a: string, w: string[], h: string, extra: Partial<Q> = {}): Q => ({ q: L(qq), a: L(a), wrong: w.map(L), hint: L(h), ...extra });
+/** A number exercise from "es|ca|en" strings. */
+export const Nq = (qq: string, a: number, w: number[], h: string, extra: Partial<Q> = {}): Q => ({ q: L(qq), a, wrong: w, hint: L(h), ...extra });
+/** True or false from "es|ca|en" strings. */
+export const TF = (statement: string, isTrue: boolean, h: string): Q => tf(L(statement), isTrue, L(h));
+/** A whole written lesson. */
+export const lesson = (explain: string[], exQ: string, steps: string[], bank: Q[], visual?: Visual): LessonContent => ({ explain: explain.map(L), example: { q: L(exQ), steps: steps.map(L), ...(visual ? { visual } : {}) }, bank });
