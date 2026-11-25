@@ -53,15 +53,15 @@ export const tf = (statement: T3, isTrue: boolean, hint: T3): Q =>
 
 /* ───── Names and objects for word problems (short, everyday, mixed genders) ───── */
 export const NAMES = ['Ana', 'Pau', 'Lucía', 'Marc', 'Sara', 'Hugo', 'Aina', 'Leo', 'Nora', 'Iker', 'Vera', 'Joel', 'Carla', 'Àlex', 'Emma', 'Ian'];
-/** Countable objects: singular and plural in each language, and an emoji. */
+/** Countable objects (all feminine in castellano and valencià, so «¿cuántas?» / «quantes?» always agree): singular and plural in each language, and an emoji. */
 export const THINGS: { w: [string, string, string, string, string, string]; e: string }[] = [
   { w: ['manzana', 'manzanas', 'poma', 'pomes', 'apple', 'apples'], e: '🍎' },
   { w: ['canica', 'canicas', 'bala', 'bales', 'marble', 'marbles'], e: '🔵' },
-  { w: ['cromo', 'cromos', 'cromo', 'cromos', 'sticker', 'stickers'], e: '🃏' },
-  { w: ['lápiz', 'lápices', 'llapis', 'llapis', 'pencil', 'pencils'], e: '✏️' },
+  { w: ['pegatina', 'pegatinas', 'enganxina', 'enganxines', 'sticker', 'stickers'], e: '⭐' },
+  { w: ['cera', 'ceras', 'cera', 'ceres', 'crayon', 'crayons'], e: '🖍️' },
   { w: ['galleta', 'galletas', 'galeta', 'galetes', 'biscuit', 'biscuits'], e: '🍪' },
-  { w: ['globo', 'globos', 'globus', 'globus', 'balloon', 'balloons'], e: '🎈' },
-  { w: ['libro', 'libros', 'llibre', 'llibres', 'book', 'books'], e: '📚' },
+  { w: ['fresa', 'fresas', 'maduixa', 'maduixes', 'strawberry', 'strawberries'], e: '🍓' },
+  { w: ['castaña', 'castañas', 'castanya', 'castanyes', 'chestnut', 'chestnuts'], e: '🌰' },
   { w: ['pelota', 'pelotas', 'pilota', 'pilotes', 'ball', 'balls'], e: '⚽' },
   { w: ['flor', 'flores', 'flor', 'flors', 'flower', 'flowers'], e: '🌼' },
   { w: ['concha', 'conchas', 'petxina', 'petxines', 'shell', 'shells'], e: '🐚' },

@@ -1,6 +1,6 @@
 import type { ContentPack } from '../types';
 import { int, mc, near, pick, pickN, q, S, T, X } from '../lib';
-import { barChart, chance, clockRead, compareOrder, doublesHalves, equalGroups, gapEquation, mentalPowers, money, nim, placeValue, polygons, robot, sequence, share, tally, twoStep } from '../gens';
+import { barChart, chance, gridPoints, clockRead, compareOrder, doublesHalves, equalGroups, gapEquation, mentalPowers, money, nim, placeValue, polygons, robot, sequence, share, tally, twoStep } from '../gens';
 import { addQ, subQ } from '../lib';
 
 const P: ContentPack = {
@@ -150,7 +150,7 @@ const P: ContentPack = {
       T('Cada flecha es un paso de una casilla. Sigue las flechas en orden.', 'Cada fletxa és un pas d’una casella. Seguix les fletxes en ordre.', 'Each arrow is a one-square step. Follow the arrows in order.')],
     example: { q: T('El robot está en (1, 1) y sigue ➡️ ➡️ ⬆️. ¿Dónde acaba?', 'El robot està en (1, 1) i seguix ➡️ ➡️ ⬆️. On acaba?', 'The robot is at (1, 1) and follows ➡️ ➡️ ⬆️. Where does it end?'), visual: { type: 'grid', w: 4, h: 4, pts: [{ x: 1, y: 1, label: '🤖' }], axes: true },
       steps: [T('Dos a la derecha: de 1 a 3.', 'Dos a la dreta: d’1 a 3.', 'Two to the right: from 1 to 3.'), T('Uno arriba: de 1 a 2. Acaba en (3, 2).', 'Un amunt: d’1 a 2. Acaba en (3, 2).', 'One up: from 1 to 2. It ends at (3, 2).')] },
-    make: robot(5),
+    make: gridPoints(5, true),
   },
   '2P-M-18': {
     explain: [T('Las figuras se pueden juntar para formar otras más grandes o partir en otras más pequeñas.', 'Les figures es poden ajuntar per a formar-ne altres de més grans o partir en altres de més xicotetes.', 'Shapes can be put together to make bigger shapes or split into smaller ones.'),
