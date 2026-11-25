@@ -36,8 +36,8 @@ export default function Progress() {
         <p className="rounded-2xl p-3 bg-[var(--color-mint-pale)]">🔒 {t('pr_intro')}</p>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="card text-center"><p className="text-3xl font-extrabold">{minutes[days[0]] ?? 0}</p><p className="text-sm">{t('pr_today', { m: minutes[days[0]] ?? 0 })}</p></div>
-          <div className="card text-center"><p className="text-3xl font-extrabold">{week}</p><p className="text-sm">{t('pr_week', { m: week })}</p></div>
+          <div className="card text-center"><p className="text-3xl font-extrabold">{minutes[days[0]] ?? 0}</p><p className="text-sm">{t('pr_today')}</p></div>
+          <div className="card text-center"><p className="text-3xl font-extrabold">{week}</p><p className="text-sm">{t('pr_week')}</p></div>
         </div>
 
         {!course ? (

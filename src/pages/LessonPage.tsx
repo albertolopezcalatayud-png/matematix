@@ -225,7 +225,7 @@ function QExercise({ qq, level, seed, onDone, keys }: { qq: Q; level: Level; see
       {visual && <VisualView v={visual} describe={describe(t, visual)} />}
 
       {!typed && (
-        <div className={`grid gap-2 ${long ? 'grid-cols-1' : options.length === 4 ? 'grid-cols-2' : 'grid-cols-3'}`} role="group" aria-label={t('pick_one')} data-testid="choices">
+        <div className={`grid gap-2 ${long ? 'grid-cols-1' : options.length === 4 || options.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`} role="group" aria-label={t('pick_one')} data-testid="choices">
           {options.map((o) => {
             const k = ansKey(o); const chosen = value != null && ansKey(value) === k; const isAns = k === ansKey(qq.a);
             const cls = locked && isAns ? 'bg-[var(--color-mint-pale)] border-[var(--color-mint)]' : chosen && state !== 'ask' && !isAns ? 'bg-[var(--color-peach-pale)] border-[var(--color-peach)]' : chosen ? 'border-[var(--color-accent)]' : '';

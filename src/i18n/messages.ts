@@ -105,8 +105,8 @@ export const MESSAGES = {
 
   // Progress
   pr_intro: ['Solo tú ves esto. Se guarda en este aparato y no sale de aquí.', 'Només tu veus açò. Es guarda en este aparell i no ix d’ací.', 'Only you can see this. It stays on this device and never leaves it.'],
-  pr_today: ['Hoy: {m} min de práctica', 'Hui: {m} min de pràctica', 'Today: {m} min of practice'],
-  pr_week: ['Esta semana: {m} min', 'Esta setmana: {m} min', 'This week: {m} min'],
+  pr_today: ['minutos hoy', 'minuts hui', 'minutes today'],
+  pr_week: ['minutos esta semana', 'minuts esta setmana', 'minutes this week'],
   pr_best: ['Mejor resultado: {a} de {b}', 'Millor resultat: {a} de {b}', 'Best result: {a} out of {b}'],
 
   // Settings
