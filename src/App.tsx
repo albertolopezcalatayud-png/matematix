@@ -1,13 +1,11 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { HashRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { HTML_LANG, useT } from '@/i18n';
 import { useApp } from '@/stores/app';
 import Home from '@/pages/Home';
 import Language from '@/pages/Language';
-import { TopicList, TopicPage } from '@/pages/Topics';
-import World from '@/pages/World';
-import Lesson from '@/pages/Lesson';
-import StartPoint from '@/pages/StartPoint';
+import { CoursePage, SubjectPage, SubjectsPage } from '@/pages/Subjects';
+import LessonPage from '@/pages/LessonPage';
 import Progress from '@/pages/Progress';
 import Settings from '@/pages/Settings';
 import Who from '@/pages/Who';
@@ -38,9 +36,6 @@ function Privacy() {
   );
 }
 
-/** A new station starts from scratch (otherwise going from one station to another kept the old state). */
-function LessonFresh() { const { id } = useParams(); return <Lesson key={id} />; }
-
 /** Applies language, text size, colours and motion to the whole page. */
 function Appearance() {
   const { lang, large, theme, motion, course, set } = useApp();
@@ -53,7 +48,7 @@ function Appearance() {
     if (theme === 'auto') delete r.dataset.theme; else r.dataset.theme = theme;
     r.dataset.motion = motion;
     // 5.º de Primaria and up: the same app with a less childish look
-    r.dataset.age = course && /^(p5|p6|s\d)$/.test(course) ? 'teen' : 'kid';
+    r.dataset.age = course && /^(5P|6P|\dE)$/.test(course) ? 'teen' : 'kid';
   }, [lang, large, theme, motion, course]);
   return null;
 }
@@ -66,12 +61,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/idioma" element={<Language />} />
-        <Route path="/mapa" element={<World />} />
-        <Route path="/estaciones" element={<Navigate to="/temas" replace />} />
-        <Route path="/temas" element={<TopicList />} />
-        <Route path="/tema/:id" element={<TopicPage />} />
-        <Route path="/estacion/:id" element={<LessonFresh />} />
-        <Route path="/punto-de-partida" element={<StartPoint />} />
+        <Route path="/curso" element={<CoursePage />} />
+        <Route path="/materias" element={<SubjectsPage />} />
+        <Route path="/materia/:c/:s" element={<SubjectPage />} />
+        <Route path="/leccion/:id" element={<LessonPage />} />
         <Route path="/progreso" element={<Progress />} />
         <Route path="/ajustes" element={<Settings />} />
         <Route path="/privacidad" element={<Privacy />} />

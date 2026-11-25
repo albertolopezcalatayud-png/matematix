@@ -8,6 +8,11 @@ export function describe(t: T, v: Visual): string {
   if (v.type === 'ladder') return t('d_ladder', { a: v.units[v.from], b: v.units[v.to] });
   if (v.type === 'chart') return t(v.kind === 'bar' ? 'd_chart_bar' : 'd_chart_line', { n: v.x.length });
   if (v.type === 'table') return t('d_table', { r: v.rows.length, c: v.head.length });
+  if (v.type === 'emoji') return v.rows.join(' · ');
+  if (v.type === 'clock') return t('d_clock', { h: v.h, m: String(v.m).padStart(2, '0') });
+  if (v.type === 'shape') return v.sides === 0 || (!v.sides && !v.pts) ? t('d_circle') : t('d_shape', { n: v.pts?.length ?? v.sides ?? 0 });
+  if (v.type === 'frac') return t('d_frac', { n: v.n, d: v.d });
+  if (v.type === 'grid') return t('d_grid', { p: (v.pts ?? []).map((p) => `${p.label} (${p.x}, ${p.y})`).join(', ') });
   if (v.type === 'balance') return t('d_balance', { a: v.left, b: v.right });
   return t('d_tens', { t: v.tens, o: v.ones });
 }

@@ -1,32 +1,55 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useT } from '@/i18n';
-import { statusOf, useApp } from '@/stores/app';
-import { ISLANDS, STATIONS, stationById } from '@/data/stations';
-import { nextStation } from '@/data/world';
-import { courseById, courseOfStation, neighbourCourse } from '@/data/courses';
-import { CoursePicker } from '@/components/CoursePicker';
+import { lessonStatus, useApp } from '@/stores/app';
+import { courseOf, findLesson, lessonsOf, SUBJ_COLOUR, SUBJ_EMOJI, tr } from '@/course';
+import type { Subject } from '@/course/types';
+import { CoursePicker, courseKey } from '@/components/CoursePicker';
 import { MascotSays } from '@/components/Mascot';
 import { APP_NAME } from '@/config';
 import { BottomNav } from '@/components/BottomNav';
 
+/** The lesson to carry on with in a subject: the first one not yet complete. */
+export function nextInSubject(subject: Subject, lessons: Record<string, { lv: number; runs: number } | undefined>) {
+  const all = lessonsOf(subject);
+  return all.find((l) => lessonStatus(lessons[l.id] as never) !== 'done') ?? all[all.length - 1];
+}
+
+/** The subjects of a course as big pastel tiles, each with how much is complete. */
+export function SubjectTiles({ courseId }: { courseId: string }) {
+  const { t, lang } = useT();
+  const lessons = useApp((s) => s.lessons);
+  const course = courseOf(courseId)!;
+  return (
+    <div className="grid grid-cols-1 gap-2">
+      {course.subjects.map((s) => {
+        const all = lessonsOf(s);
+        const done = all.filter((l) => lessonStatus(lessons[l.id]) === 'done').length;
+        return (
+          <Link key={s.code} to={`/materia/${course.id}/${s.code}`} data-island={SUBJ_COLOUR[s.code]} className="tile flex items-center gap-3 !p-4" data-testid={`subject-${s.code}`}>
+            <span className="text-4xl" aria-hidden>{SUBJ_EMOJI[s.code]}</span>
+            <span className="flex-1 space-y-1">
+              <span className="block text-lg font-extrabold leading-tight" style={{ color: 'var(--isl)' }}>{tr(lang, s.title)}</span>
+              <span className="block text-sm">{t('lessons_done', { d: done, n: all.length })}</span>
+              <span className="tile-bar block"><i style={{ width: `${(done / all.length) * 100}%` }} /></span>
+            </span>
+            <span aria-hidden className="text-2xl" style={{ color: 'var(--isl)' }}>›</span>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
 /**
- * Home: one clear thing to do (the big coloured card), the school year you are working at with "easier / harder",
- * and the five islands with how much of each is lit. A first-time pupil chooses their school year (or takes the short
- * check) instead of being dropped into a test.
+ * Home: the school year, one clear thing to do (carry on with the last lesson) and the subjects of that year.
+ * A first-time pupil just chooses the school year.
  */
 export default function Home() {
-  const { t, m } = useT();
+  const { t, lang } = useT();
   const s = useApp();
-  const nav = useNavigate();
   if (!s.role) return <Navigate to="/quien" replace />;
-  const fresh = !s.last && !s.suggested && Object.keys(s.progress).length === 0;
   const pupil = s.active ? s.pupils[s.active] : undefined;
-
-  const goCourse = (id: string) => {
-    const c = courseById(id)!;
-    s.set({ course: id, suggested: c.start, last: null });
-    return c.start;
-  };
+  const course = courseOf(s.course);
 
   const header = (
     <header className="flex items-center gap-3 pt-2">
@@ -39,84 +62,53 @@ export default function Home() {
     </header>
   );
 
-  const deco = (
-    <>
-      {['3', '7', '½', '10', '+', '×', '0,5', '='].map((c, i) => (
-        <span key={i} className="floaty" aria-hidden style={{ left: `${(i * 37) % 90}%`, top: `${8 + ((i * 53) % 80)}%`, fontSize: `${28 + ((i * 11) % 30)}px`, transform: `rotate(${(i % 2 ? -1 : 1) * (8 + i * 3)}deg)` }}>{c}</span>
-      ))}
-    </>
-  );
-
-
-  if (fresh) {
+  if (!course) {
     return (
-      <main className="min-h-dvh max-w-md mx-auto px-5 py-6 flex flex-col gap-4 world-bg deco has-nav">
-        {deco}{header}
+      <main className="min-h-dvh max-w-md mx-auto px-5 py-6 flex flex-col gap-4 world-bg has-nav">
+        {header}
         <MascotSays mood="wave" size={84}><span className="text-lg">{t('mascot_hello')}</span></MascotSays>
         <section className="card space-y-3" data-testid="course-pick">
           <h2 className="text-xl font-extrabold text-center">{t('course_q')}</h2>
-          <CoursePicker value={s.course} onPick={(id) => nav(`/estacion/${goCourse(id)}`)} />
-          <p className="text-sm text-[var(--color-muted)] text-center">{t('course_note')}</p>
-          <Link to="/punto-de-partida" className="btn btn-ghost w-full !border-dashed" data-testid="start">🧭 {t('course_unsure')}</Link>
+          <CoursePicker value={s.course} onPick={(id) => s.set({ course: id })} />
+          <p className="text-sm text-[var(--color-muted)] text-center">{t('course_pick_note')}</p>
         </section>
         <BottomNav />
       </main>
     );
   }
 
-  const nextId = nextStation(s.progress, s.suggested, s.last);
-  const next = stationById(nextId)!;
-  const isl = ISLANDS.find((i) => i.id === next.island)!;
-  const inTopic = STATIONS.filter((x) => x.island === next.island);
-  const level = courseOfStation(nextId);
-  const easier = neighbourCourse(level.id, -1);
-  const harder = neighbourCourse(level.id, 1);
-  const wentBack = !!s.wentBack && s.wentBack !== nextId;
-  const days = Math.min(2, s.progress[nextId]?.goodDays.length ?? 0);
+  // carry on: the last lesson if it belongs to this year and is not complete; otherwise the first subject's next lesson
+  const last = s.lastLesson ? findLesson(s.lastLesson) : undefined;
+  const target = last && last.course.id === course.id
+    ? (lessonStatus(s.lessons[last.lesson.id]) === 'done' ? nextInSubject(last.subject, s.lessons) : last.lesson)
+    : nextInSubject(course.subjects[0], s.lessons);
+  const where = findLesson(target.id)!;
+  const fresh = Object.keys(s.lessons).length === 0;
+  const lp = s.lessons[target.id];
 
   return (
-    <main className="min-h-dvh max-w-md mx-auto px-5 py-6 flex flex-col gap-4 world-bg deco has-nav">
-      {deco}{header}
-      <MascotSays mood={wentBack ? 'think' : 'happy'} size={72}>{wentBack ? t('went_back') : t('mascot_today')}</MascotSays>
+    <main className="min-h-dvh max-w-md mx-auto px-5 py-6 flex flex-col gap-4 world-bg has-nav">
+      {header}
+      <MascotSays mood="happy" size={72}>{t('mascot_today')}</MascotSays>
 
-      <Link to={`/estacion/${next.id}`} className="hero-card block" data-island={next.island} data-testid="carry-on">
-        <p className="text-sm font-semibold opacity-90">{t('lesson_of', { a: inTopic.indexOf(next) + 1, b: inTopic.length, t: t(isl.title) })}</p>
+      <Link to={`/leccion/${target.id}`} className="hero-card block" data-island={SUBJ_COLOUR[where.subject.code]} data-testid="carry-on">
+        <p className="text-sm font-semibold opacity-90">{fresh ? t('first_lesson') : t('carry_on_with')} · {tr(lang, where.subject.title)} · {tr(lang, where.block.title)}</p>
         <div className="flex items-center gap-3 mt-1">
-          <span className="text-4xl" aria-hidden>{isl.emoji}</span>
-          <p className="flex-1 text-2xl font-extrabold leading-tight">{m(next.title)}</p>
+          <span className="text-4xl" aria-hidden>{SUBJ_EMOJI[where.subject.code]}</span>
+          <p className="flex-1 text-2xl font-extrabold leading-tight">{tr(lang, target.title)}</p>
         </div>
         <div className="mt-3 flex items-center justify-between">
-          <span className="text-lg" aria-label={`${days}/2`}>{days >= 1 ? '★' : '☆'}{days >= 2 ? '★' : '☆'}</span>
-          <span className="rounded-full bg-white/90 text-[#262A40] px-5 py-2 text-xl font-extrabold">{days || s.progress[nextId] ? t('carry_on') : t('start')} ▶</span>
+          <span className="text-lg" aria-label={`${lp?.lv ?? 0}/3`}>{[1, 2, 3].map((n) => ((lp?.lv ?? 0) >= n ? '★' : '☆')).join('')}</span>
+          <span className="rounded-full bg-white/90 text-[#262A40] px-5 py-2 text-xl font-extrabold">{lp ? t('carry_on') : t('start')} ▶</span>
         </div>
       </Link>
 
-      <section className="card !p-3 space-y-2" data-testid="level">
-        <p className="text-center font-bold">{t('level_now', { c: t(`course_${level.id}`) })}</p>
-        <div className="grid grid-cols-2 gap-2">
-          <button className="btn btn-ghost !min-h-12" disabled={!easier} data-testid="easier" onClick={() => easier && nav(`/estacion/${goCourse(easier.id)}`)}>◀ {t('easier')}</button>
-          <button className="btn btn-ghost !min-h-12" disabled={!harder} data-testid="harder" onClick={() => harder && nav(`/estacion/${goCourse(harder.id)}`)}>{t('harder')} ▶</button>
+      <section className="space-y-2" aria-labelledby="h-subj">
+        <div className="flex items-center justify-between gap-2">
+          <h2 id="h-subj" className="text-lg font-extrabold">{t('subjects_of', { c: t(courseKey(course.id)) })}</h2>
+          <Link to="/curso" className="text-sm font-bold text-[var(--color-accent)]" data-testid="change-course">{t('change_course')} ›</Link>
         </div>
-      </section>
-
-      <section className="space-y-2" aria-labelledby="h-topics">
-        <div className="flex items-center justify-between"><h2 id="h-topics" className="text-lg font-extrabold">{t('nav_topics')}</h2><Link to="/temas" className="text-sm font-bold text-[var(--color-accent)]">{t('see_all')} ›</Link></div>
-        <div className="grid grid-cols-2 gap-2">
-          {ISLANDS.map((i) => {
-            const st = STATIONS.filter((x) => x.island === i.id);
-            const done = st.filter((x) => statusOf(s.progress[x.id]) === 'done').length;
-            return (
-              <Link key={i.id} to={`/tema/${i.id}`} data-island={i.id} className="tile flex flex-col gap-1 !p-3" data-testid={`home-topic-${i.id}`}>
-                <span className="flex items-center gap-2"><span className="text-2xl" aria-hidden>{i.emoji}</span><span className="font-extrabold text-sm leading-tight" style={{ color: 'var(--isl)' }}>{t(i.title)}</span></span>
-                <span className="text-xs">{t('topic_count', { d: done, n: st.length })}</span>
-                <span className="tile-bar"><i style={{ width: `${(done / st.length) * 100}%` }} /></span>
-              </Link>
-            );
-          })}
-          <Link to="/mapa" className="tile col-span-2 flex flex-col justify-center gap-1 !p-3" data-island="A" data-testid="to-world">
-            <span className="flex items-center gap-2"><span className="text-2xl" aria-hidden>📏</span><span className="font-extrabold text-sm leading-tight" style={{ color: 'var(--isl)' }}>{t('my_line')}</span></span>
-          </Link>
-        </div>
+        <SubjectTiles courseId={course.id} />
       </section>
       <BottomNav />
     </main>

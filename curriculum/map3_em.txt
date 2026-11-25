@@ -1,0 +1,231 @@
+= 1E
+# Matemáticas
+## Números
+Naturales y enteros: leer, ordenar, comparar | Naturals i enters: llegir, ordenar, comparar | Whole numbers and integers: reading, ordering, comparing @EM1
+Valor absoluto | Valor absolut | Absolute value @EM5
+Criterios de divisibilidad | Criteris de divisibilitat | Divisibility rules @EM3
+Factorizar; mcm y mcd | Factoritzar; mcm i mcd | Prime factors; LCM and HCF @EM15
+Operaciones con enteros | Operacions amb enters | Calculating with integers @EM13,EM16
+Fracciones: representar y comparar | Fraccions: representar i comparar | Fractions: representing and comparing @EM2,EM11
+Fracciones y decimales | Fraccions i decimals | Fractions and decimals @EM6,EM17
+Potencias de números naturales | Potències de nombres naturals | Powers of whole numbers @EM19
+Proporcionalidad y porcentajes | Proporcionalitat i percentatges | Proportion and percentages @EM21
+Cálculo mental y estimación | Càlcul mental i estimació | Mental maths and estimation @EM25,EM18
+## Álgebra
+Del lenguaje común al algebraico | Del llenguatge comú a l'algebraic | From words to algebra @EM27
+Monomios | Monomis | Monomials @EM28
+Expresiones equivalentes | Expressions equivalents | Equivalent expressions @EM33
+Ecuaciones de primer grado | Equacions de primer grau | Linear equations @EM32
+## Medida
+Unidades y estimación | Unitats i estimació | Units and estimation @EM39,EM42
+Medir con la estrategia adecuada | Mesurar amb l'estratègia adequada | Measuring with the right strategy @EM40,EM43
+## Geometría
+Ángulos en grados y minutos | Angles en graus i minuts | Angles in degrees and minutes @EM48
+Clasificar figuras planas | Classificar figures planes | Classifying flat shapes @EM45
+Perímetros y áreas | Perímetres i àrees | Perimeter and area @EM44,EM61
+Circunferencia, círculo, arcos y sectores | Circumferència, cercle, arcs i sectors | Circles, arcs and sectors @EM53
+Construir figuras con geometría dinámica | Construir figures amb geometria dinàmica | Building shapes with dynamic geometry @EM59
+## Funciones
+Variables y relaciones | Variables i relacions | Variables and relationships @EM62
+Coordenadas y gráficas | Coordenades i gràfiques | Coordinates and graphs @EM63,EM67
+## Probabilidad
+Suceso seguro, imposible y contrario | Succés segur, impossible i contrari | Certain, impossible and complementary events @EM75
+Espacio muestral | Espai mostral | Sample space @EM69
+Probabilidad por experimentación | Probabilitat per experimentació | Probability from experiments @EM74
+## Estadística
+Variables estadísticas | Variables estadístiques | Types of data @EM84
+Tablas de frecuencias y gráficos | Taules de freqüències i gràfics | Frequency tables and charts @EM86
+Media, mediana y moda | Mitjana, mediana i moda | Mean, median and mode @EM88
+## Pensamiento computacional
+Instrucciones y patrones | Instruccions i patrons | Instructions and patterns @EM97,EM98
+Juegos de lógica | Jocs de lògica | Logic games @EM100
+
+= 2E
+# Matemáticas
+## Números
+Números racionales: operaciones | Nombres racionals: operacions | Rational numbers: calculating @EM13,EM2
+Fracción irreducible y decimales periódicos | Fracció irreductible i decimals periòdics | Simplest form and recurring decimals @EM6,EM17
+Potencias de exponente entero | Potències d'exponent enter | Powers with integer exponents @EM9,EM19
+Raíces y radicales sencillos | Arrels i radicals senzills | Roots and simple surds @EM9
+Notación científica | Notació científica | Standard form @EM8
+Racionales en la recta | Racionals en la recta | Rational numbers on the number line @EM11
+Proporcionalidad y porcentajes | Proporcionalitat i percentatges | Proportion and percentages @EM21
+Prioridad de operaciones | Prioritat d'operacions | Order of operations @EM16,EM18
+Cálculo mental | Càlcul mental | Mental maths @EM25
+## Álgebra
+Patrones y generalización | Patrons i generalització | Patterns and generalising @EM27
+Operar con monomios y binomios | Operar amb monomis i binomis | Working with monomials and binomials @EM28
+Ecuaciones de primer grado | Equacions de primer grau | Linear equations @EM32,EM33
+Ecuaciones de segundo grado | Equacions de segon grau | Quadratic equations @EM32
+Sistemas de ecuaciones | Sistemes d'equacions | Simultaneous equations @EM35
+## Medida
+Conversiones y escalas | Conversions i escales | Conversions and scales @EM42,EM39
+Medir con la estrategia adecuada | Mesurar amb l'estratègia adequada | Measuring with the right strategy @EM43,EM40
+## Geometría
+Teorema de Pitágoras | Teorema de Pitàgores | Pythagoras' theorem @EM51
+Semejanza y escalas | Semblança i escales | Similarity and scales @EM46
+Prismas, pirámides, cilindros y conos | Prismes, piràmides, cilindres i cons | Prisms, pyramids, cylinders and cones @EM54
+Geometría en la vida real | Geometria en la vida real | Geometry in real life @EM61,EM59
+## Funciones
+Funciones lineales | Funcions lineals | Linear functions @EM63
+Interpretar gráficas | Interpretar gràfiques | Reading graphs @EM62,EM67
+## Probabilidad
+Espacio muestral | Espai mostral | Sample space @EM69
+Contar casos | Comptar casos | Counting outcomes @EM80
+Regla de Laplace | Regla de Laplace | Laplace's rule @EM71
+## Estadística
+Población y muestra | Població i mostra | Population and sample @EM85,EM90
+Gráficos con y sin ordenador | Gràfics amb ordinador i sense | Charts with and without a computer @EM86,EM84
+Medidas de centralización | Mesures de centralització | Averages @EM88
+## Pensamiento computacional
+Algoritmos | Algorismes | Algorithms @EM97,EM98
+Juegos de lógica | Jocs de lògica | Logic games @EM100
+
+= 3E
+# Matemáticas
+## Números
+Racionales y valor absoluto | Racionals i valor absolut | Rational numbers and absolute value @EM2,EM5,EM13
+Decimales periódicos a fracción | Decimals periòdics a fracció | Recurring decimals to fractions @EM6,EM17
+Irracionales y números reales | Irracionals i nombres reals | Irrational and real numbers @EM4,EM7
+Recta real e intervalos | Recta real i intervals | The real line and intervals @EM12
+Potencias de exponente fraccionario | Potències d'exponent fraccionari | Fractional powers @EM10,EM19,EM20
+Operar con irracionales | Operar amb irracionals | Calculating with surds @EM14
+Notación científica | Notació científica | Standard form @EM8
+Simplificar expresiones numéricas | Simplificar expressions numèriques | Simplifying numerical expressions @EM16,EM18,EM25
+Porcentajes: aumentos y disminuciones | Percentatges: augments i disminucions | Percentage increase and decrease @EM21,EM22
+Interés simple | Interés simple | Simple interest @EM23
+## Álgebra
+Sucesiones | Successions | Sequences @EM96,EM27
+Identidades notables | Identitats notables | Special products @EM29,EM33
+Polinomios: suma, resta y producto | Polinomis: suma, resta i producte | Polynomials: adding, subtracting, multiplying @EM30
+Ecuaciones de primer y segundo grado | Equacions de primer i segon grau | Linear and quadratic equations @EM32
+Sistemas y su interpretación gráfica | Sistemes i la seua interpretació gràfica | Simultaneous equations and their graphs @EM36
+## Medida
+Precisión y error | Precisió i error | Accuracy and error @EM41,EM39,EM43
+Unidades y escalas | Unitats i escales | Units and scales @EM42
+## Geometría
+Áreas de figuras planas | Àrees de figures planes | Area of flat shapes @EM44,EM53
+Teorema de Tales y semejanza | Teorema de Tales i semblança | Thales' theorem and similarity @EM46,EM47
+Ángulos en radianes | Angles en radians | Angles in radians @EM49
+Movimientos en el plano | Moviments en el pla | Transformations on the plane @EM50
+Pitágoras en problemas | Pitàgores en problemes | Pythagoras in problems @EM51,EM61
+Elementos notables del triángulo | Elements notables del triangle | Special lines and points of a triangle @EM52,EM59
+Áreas y volúmenes de cuerpos | Àrees i volums de cossos | Surface area and volume of solids @EM55
+## Funciones
+Variables y funciones | Variables i funcions | Variables and functions @EM62,EM66
+La recta: pendiente y cortes | La recta: pendent i talls | Straight lines: gradient and intercepts @EM63,EM65
+Funciones no lineales | Funcions no lineals | Non-linear functions @EM64,EM67
+## Probabilidad
+Espacio muestral | Espai mostral | Sample space @EM69
+Experimentos compuestos: tablas y árboles | Experiments compostos: taules i arbres | Combined events: tables and trees @EM70,EM72
+Regla de la suma y del producto | Regla de la suma i del producte | Sum and product rules @EM81
+Sucesos compatibles e incompatibles | Successos compatibles i incompatibles | Mutually exclusive events @EM76
+Ley de los grandes números | Llei dels grans nombres | The law of large numbers @EM73
+Riesgo y decisiones | Risc i decisions | Risk and decisions @EM83
+## Estadística
+Variables y muestreo | Variables i mostreig | Data and sampling @EM84,EM85,EM90
+Tablas y gráficos con hoja de cálculo | Taules i gràfics amb full de càlcul | Tables and charts with a spreadsheet @EM87
+Medidas de centralización | Mesures de centralització | Averages @EM88
+Medidas de dispersión | Mesures de dispersió | Measures of spread @EM89
+## Pensamiento computacional
+Diseñar y programar algoritmos | Dissenyar i programar algorismes | Designing and programming algorithms @EM97,EM98,EM99
+Juegos de lógica | Jocs de lògica | Logic games @EM100
+
+= 4E
+# Matemáticas A
+## Números
+Números reales | Nombres reals | Real numbers @EM4,EM7,EM12
+Potencias y radicales | Potències i radicals | Powers and surds @EM10,EM14,EM20
+Notación científica | Notació científica | Standard form @EM8
+Operaciones combinadas | Operacions combinades | Mixed calculations @EM16,EM17,EM18,EM25
+Porcentajes en la vida real | Percentatges en la vida real | Percentages in real life @EM21,EM22
+Interés simple | Interés simple | Simple interest @EM23
+## Álgebra
+Sucesiones | Successions | Sequences @EM96,EM27
+Polinomios e identidades notables | Polinomis i identitats notables | Polynomials and special products @EM29,EM30,EM33
+Valor numérico y raíces | Valor numèric i arrels | Evaluating and roots @EM31
+Factorizar polinomios | Factoritzar polinomis | Factorising polynomials @EM37
+Sistemas de ecuaciones | Sistemes d'equacions | Simultaneous equations @EM36
+Inecuaciones | Inequacions | Inequalities @EM34
+## Medida
+Error, unidades y escalas | Error, unitats i escales | Error, units and scales @EM41,EM42,EM43
+## Geometría
+Ángulos y radianes | Angles i radians | Angles and radians @EM49
+Movimientos en el plano | Moviments en el pla | Transformations on the plane @EM50
+Pitágoras y el triángulo | Pitàgores i el triangle | Pythagoras and triangles @EM51,EM52
+Razones trigonométricas | Raons trigonomètriques | Trigonometric ratios @EM60
+Áreas y volúmenes | Àrees i volums | Surface area and volume @EM55
+Esfera y coordenadas geográficas | Esfera i coordenades geogràfiques | Spheres and geographical coordinates @EM56
+Vectores y rectas | Vectors i rectes | Vectors and straight lines @EM57,EM58
+Geometría en la vida real | Geometria en la vida real | Geometry in real life @EM59,EM61
+## Funciones
+Variables y funciones | Variables i funcions | Variables and functions @EM62,EM66
+Funciones lineales | Funcions lineals | Linear functions @EM63
+Funciones no lineales | Funcions no lineals | Non-linear functions @EM64,EM67
+Modelizar con funciones | Modelitzar amb funcions | Modelling with functions @EM68
+## Probabilidad
+Espacio muestral | Espai mostral | Sample space @EM69
+Experimentos compuestos | Experiments compostos | Combined events @EM70,EM72,EM81
+Operaciones con sucesos | Operacions amb successos | Working with events @EM76,EM77,EM78
+Probabilidad condicionada | Probabilitat condicionada | Conditional probability @EM79
+Ley de los grandes números | Llei dels grans nombres | The law of large numbers @EM73
+## Estadística
+Diseñar un estudio estadístico | Dissenyar un estudi estadístic | Designing a statistical study @EM84,EM85
+Tablas y gráficos con hoja de cálculo | Taules i gràfics amb full de càlcul | Tables and charts with a spreadsheet @EM87
+Medidas de dispersión | Mesures de dispersió | Measures of spread @EM89
+Interpretar estudios estadísticos | Interpretar estudis estadístics | Reading statistical studies @EM95
+## Pensamiento computacional
+Algoritmos | Algorismes | Algorithms @EM97,EM98,EM99
+Juegos de lógica | Jocs de lògica | Logic games @EM100
+
+= 4E
+# Matemáticas B
+## Números
+Reales e intervalos | Reals i intervals | Real numbers and intervals @EM7,EM12
+Potencias y radicales | Potències i radicals | Powers and surds @EM10,EM14,EM20
+Notación científica | Notació científica | Standard form @EM8
+Operaciones combinadas | Operacions combinades | Mixed calculations @EM16,EM17,EM18,EM25
+Porcentajes | Percentatges | Percentages @EM21,EM22
+Interés compuesto | Interés compost | Compound interest @EM24
+Logaritmos | Logaritmes | Logarithms @EM26
+## Álgebra
+Sucesiones | Successions | Sequences @EM96,EM27
+Polinomios e identidades notables | Polinomis i identitats notables | Polynomials and special products @EM29,EM30,EM33
+Valor numérico y raíces | Valor numèric i arrels | Evaluating and roots @EM31
+Factorizar polinomios | Factoritzar polinomis | Factorising polynomials @EM37
+Fracciones algebraicas | Fraccions algebraiques | Algebraic fractions @EM38
+Sistemas de ecuaciones | Sistemes d'equacions | Simultaneous equations @EM36
+Inecuaciones | Inequacions | Inequalities @EM34
+## Medida
+Precisión y error | Precisió i error | Accuracy and error @EM41,EM43
+## Geometría
+Ángulos y radianes | Angles i radians | Angles and radians @EM49
+Movimientos en el plano | Moviments en el pla | Transformations on the plane @EM50
+Pitágoras y el triángulo | Pitàgores i el triangle | Pythagoras and triangles @EM51,EM52
+Trigonometría | Trigonometria | Trigonometry @EM60
+Esfera y coordenadas geográficas | Esfera i coordenades geogràfiques | Spheres and geographical coordinates @EM56
+Vectores | Vectors | Vectors @EM57
+Ecuaciones de la recta | Equacions de la recta | Equations of straight lines @EM58
+Geometría en contexto | Geometria en context | Geometry in context @EM59,EM61
+## Funciones
+Funciones lineales | Funcions lineals | Linear functions @EM63
+Funciones no lineales y propiedades | Funcions no lineals i propietats | Non-linear functions and their properties @EM64,EM66,EM67
+Modelizar con funciones | Modelitzar amb funcions | Modelling with functions @EM68
+## Probabilidad
+Experimentos compuestos | Experiments compostos | Combined events @EM70,EM72,EM81
+Combinatoria | Combinatòria | Combinatorics @EM82
+Operaciones con sucesos | Operacions amb successos | Working with events @EM76,EM77,EM78
+Probabilidad condicionada | Probabilitat condicionada | Conditional probability @EM79
+Ley de los grandes números | Llei dels grans nombres | The law of large numbers @EM73
+Riesgo y decisiones | Risc i decisions | Risk and decisions @EM83
+## Estadística
+Diseñar un estudio estadístico | Dissenyar un estudi estadístic | Designing a statistical study @EM84,EM85
+Tablas y gráficos con hoja de cálculo | Taules i gràfics amb full de càlcul | Tables and charts with a spreadsheet @EM87
+Medidas de dispersión | Mesures de dispersió | Measures of spread @EM89
+Comparar distribuciones; coeficiente de variación | Comparar distribucions; coeficient de variació | Comparing distributions; coefficient of variation @EM91,EM94
+Diagramas de dispersión y correlación | Diagrames de dispersió i correlació | Scatter graphs and correlation @EM92
+Regresión con herramientas digitales | Regressió amb eines digitals | Regression with digital tools @EM93
+Interpretar estudios estadísticos | Interpretar estudis estadístics | Reading statistical studies @EM95
+## Pensamiento computacional
+Algoritmos | Algorismes | Algorithms @EM97,EM98,EM99
+Juegos de lógica | Jocs de lògica | Logic games @EM100

@@ -18,6 +18,16 @@ export type Visual =
   | { type: 'balance'; left: string; right: string }
   /** A table of data (a timetable, a class's marks, a list in order). mark / mark2 = [row, column]; row -1 is the header row */
   | { type: 'table'; head: (string | Msg)[]; rows: (string | Msg)[][]; mark?: [number, number]; mark2?: [number, number] }
+  /** Objects to look at or count: one row per string of emoji */
+  | { type: 'emoji'; rows: string[]; big?: boolean }
+  /** An analogue clock */
+  | { type: 'clock'; h: number; m: number }
+  /** A flat shape: a regular polygon with n sides (0 = circle), or a custom one from points; optional side labels */
+  | { type: 'shape'; sides?: number; pts?: [number, number][]; labels?: string[]; dash?: boolean; fill?: number; of?: number }
+  /** A fraction drawn as a bar or a circle split in d equal parts, n of them coloured */
+  | { type: 'frac'; n: number; d: number; shape?: 'bar' | 'circle'; wholes?: number }
+  /** A square grid with labelled points, an optional path and axes numbered from 0 */
+  | { type: 'grid'; w: number; h: number; pts?: { x: number; y: number; label: string }[]; path?: [number, number][]; axes?: boolean; neg?: boolean }
   | { type: 'bars'; rows: { parts: { v: number; label: string; shade?: boolean }[]; name?: Msg }[]; total?: string; diff?: string; groups?: boolean };
 
 export type Item = {

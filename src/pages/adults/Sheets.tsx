@@ -1,26 +1,28 @@
 import { useState } from 'react';
 import { useT } from '@/i18n';
-import { stationById } from '@/data/stations';
 import { useApp } from '@/stores/app';
 import { TopBar } from '@/components/Layout';
-import { StationSelect } from '@/components/StationSelect';
+import { LessonPicker, useLessonContent } from '@/components/LessonPicker';
 import { printPage } from '@/services/print';
 import { worksheetHtml } from '@/components/printItems';
 import { APP_NAME } from '@/config';
 
-/** Paper first: worksheets with new exercises every time + answers + a QR back to the station (one way only),
+/** Paper first: worksheets with new exercises every time + answers + a QR back to the lesson (one way only),
  *  and a 0–100 number-line display for the classroom wall. */
 export default function Sheets() {
   const { t, lang } = useT();
-  const last = useApp((s) => s.last ?? s.suggested ?? 'A1');
-  const [id, setId] = useState(last);
+  const last = useApp((s) => s.lastLesson);
+  const course = useApp((s) => s.course);
+  const [id, setId] = useState<string | null>(last);
+  const content = useLessonContent(id);
   const [count, setCount] = useState(8);
   const [guided, setGuided] = useState(true);
   const [busy, setBusy] = useState(false);
 
   const print = async () => {
+    if (!id || !content) return;
     setBusy(true);
-    try { printPage(lang, t('sec_sheets'), await worksheetHtml(lang, stationById(id)!, (Date.now() ^ (Math.random() * 1e9)) >>> 0, count, guided)); }
+    try { printPage(lang, t('sec_sheets'), await worksheetHtml(lang, id, content, (Date.now() ^ (Math.random() * 1e9)) >>> 0, count, guided)); }
     finally { setBusy(false); }
   };
 
@@ -45,13 +47,13 @@ export default function Sheets() {
       <main className="max-w-xl mx-auto px-4 space-y-4">
         <p className="rounded-2xl p-3 bg-[var(--color-sky-pale)] text-base">{t('f_intro')}</p>
         <section className="card space-y-3">
-          <StationSelect value={id} onChange={setId} label={t('f_station')} testId="sheet-station" />
+          <LessonPicker value={id} onChange={setId} startCourse={course} testId="sheet-lesson" />
           <div className="flex items-center gap-2"><span className="flex-1">{t('f_count')}</span>
             {[6, 8, 10].map((n) => <button key={n} className={`btn ${count === n ? 'btn-primary' : 'btn-ghost'} !min-h-10 !px-4`} onClick={() => setCount(n)}>{n}</button>)}
           </div>
           <label className="flex items-center gap-3 cursor-pointer"><span className="flex-1">{t('f_guided')}</span>
             <input type="checkbox" role="switch" className="w-6 h-6 accent-[var(--color-accent)]" checked={guided} onChange={(e) => setGuided(e.target.checked)} /></label>
-          <button className="btn btn-primary w-full" onClick={() => void print()} disabled={busy} data-testid="print-sheet">🖨️ {t('f_print')}</button>
+          <button className="btn btn-primary w-full" onClick={() => void print()} disabled={busy || !content} data-testid="print-sheet">🖨️ {t('f_print')}</button>
           <p className="text-sm text-[var(--color-muted)]">{t('f_paper_first')}</p>
         </section>
         <section className="card space-y-3">

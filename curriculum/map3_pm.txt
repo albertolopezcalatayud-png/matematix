@@ -1,0 +1,237 @@
+= 1P
+# Matemáticas
+## Números y operaciones
+Contar hasta 20 | Comptar fins a 20 | Counting to 20 @PM1
+La decena | La desena | Tens @PM2
+Números hasta 99: decenas y unidades | Nombres fins a 99: desenes i unitats | Numbers to 99: tens and ones @PM4
+Mayor, menor e igual | Major, menor i igual | Greater, less and equal @PM6,PM12
+Anterior y posterior | Anterior i posterior | Before and after @PM6
+Pares e impares | Parells i imparells | Odd and even @PM3
+Descomponer números | Descompondre nombres | Splitting numbers @PM3
+Sumar hasta 20 | Sumar fins a 20 | Adding to 20 @PM9,PM15
+Restar hasta 20 | Restar fins a 20 | Subtracting to 20 @PM9,PM15
+Problemas de juntar y quitar | Problemes d'ajuntar i llevar | Joining and taking away problems @PM9,PM25
+## Medida
+Medir con palmos y pasos | Mesurar amb pams i passos | Measuring with hand spans and steps @PM26
+Largo y corto, alto y bajo | Llarg i curt, alt i baix | Long and short, tall and short @PM27,PM29
+Pesa más, pesa menos | Pesa més, pesa menys | Heavier and lighter @PM27,PM29
+Lleno y vacío | Ple i buit | Full and empty @PM27,PM29
+Días de la semana y meses | Dies de la setmana i mesos | Days of the week and months @PM29,PM30
+Las horas en punto | Les hores en punt | O'clock times @PM29,PM30
+## Geometría
+Dentro, fuera, encima, debajo | Dins, fora, damunt, davall | Inside, outside, above, below @PM31
+Derecha e izquierda | Dreta i esquerra | Right and left @PM31
+Líneas rectas y curvas | Línies rectes i corbes | Straight and curved lines @PM35
+Figuras planas: lados y vértices | Figures planes: costats i vèrtexs | Flat shapes: sides and corners @PM33
+Componer figuras con piezas | Compondre figures amb peces | Making shapes from pieces @PM37,PM46
+## Estadística y probabilidad
+¿Seguro, posible o imposible? | Segur, possible o impossible? | Certain, possible or impossible? @PM47,PM48
+Preguntar y contar | Preguntar i comptar | Asking and counting @PM55,PM56
+Leer pictogramas | Llegir pictogrames | Reading pictograms @PM58,PM59
+## Álgebra y pensamiento computacional
+Series y patrones | Sèries i patrons | Sequences and patterns @PM64
+Instrucciones paso a paso | Instruccions pas a pas | Step-by-step instructions @PM64
+¿Qué número falta? | Quin nombre falta? | Which number is missing? @PM69,PM12
+Juegos de estrategia | Jocs d'estratègia | Strategy games @PM68
+
+= 2P
+# Matemáticas
+## Números y operaciones
+Las centenas: números hasta 999 | Les centenes: nombres fins a 999 | Hundreds: numbers to 999 @PM4
+Comparar y ordenar hasta 999 | Comparar i ordenar fins a 999 | Comparing and ordering to 999 @PM6
+Sumar llevando | Sumar portant | Adding with regrouping @PM9,PM15
+Restar llevando | Restar portant | Subtracting with regrouping @PM9,PM15
+Dobles y mitades | Dobles i meitats | Doubles and halves @PM10
+Multiplicar es sumar veces iguales | Multiplicar és sumar vegades iguals | Multiplying is adding equal groups @PM10
+Repartir en partes iguales | Repartir en parts iguals | Sharing equally @PM10
+Cálculo mental: sumar y restar 10 y 100 | Càlcul mental: sumar i restar 10 i 100 | Mental maths: adding and subtracting 10 and 100 @PM15
+Problemas de dos pasos | Problemes de dos passos | Two-step problems @PM9,PM25
+## Medida
+Estimar medidas | Estimar mesures | Estimating measurements @PM27
+El metro y el centímetro | El metre i el centímetre | Metres and centimetres @PM29,PM30
+El kilo y el litro | El quilo i el litre | Kilograms and litres @PM29,PM30
+El reloj: en punto y media | El rellotge: en punt i mitja | The clock: o'clock and half past @PM29,PM30
+Euros y céntimos | Euros i cèntims | Euros and cents @PM25,PM30
+## Geometría
+Polígonos | Polígons | Polygons @PM33
+La circunferencia y el círculo | La circumferència i el cercle | Circles @PM39
+Recorridos en una cuadrícula | Recorreguts en una quadrícula | Routes on a grid @PM31
+Componer y descomponer figuras | Compondre i descompondre figures | Putting shapes together and apart @PM37,PM46
+Rectas y curvas en objetos | Rectes i corbes en objectes | Straight and curved lines in objects @PM35
+## Estadística y probabilidad
+¿Qué es más probable? | Què és més probable? | What is more likely? @PM48,PM47
+Tablas de recuento | Taules de recompte | Tally charts @PM56,PM55
+Diagramas de barras | Diagrames de barres | Bar charts @PM57,PM59
+## Álgebra y pensamiento computacional
+Patrones con números | Patrons amb nombres | Number patterns @PM64
+Algoritmos: órdenes para moverse | Algorismes: ordres per a moure's | Algorithms: instructions for moving @PM64
+Igualdades con huecos | Igualtats amb buits | Equations with gaps @PM12,PM69
+Juegos de estrategia | Jocs d'estratègia | Strategy games @PM68
+
+= 3P
+# Matemáticas
+## Números y operaciones
+Números hasta 9 999 | Nombres fins a 9 999 | Numbers to 9,999 @PM5,PM4
+Comparar y ordenar en la recta | Comparar i ordenar en la recta | Comparing and ordering on the number line @PM6,PM20
+Redondear y estimar | Arredonir i estimar | Rounding and estimating @PM15
+Sumas y restas con números grandes | Sumes i restes amb nombres grans | Adding and subtracting larger numbers @PM9
+Las tablas de multiplicar | Les taules de multiplicar | Times tables @PM11
+Multiplicar por una cifra | Multiplicar per una xifra | Multiplying by a one-digit number @PM11
+Propiedades: orden y agrupación | Propietats: ordre i agrupació | Properties: order and grouping @PM14
+La división: repartir | La divisió: repartir | Division: sharing @PM11
+Dividir por una cifra | Dividir per una xifra | Dividing by a one-digit number @PM11
+Fracciones: mitad, tercio y cuarto | Fraccions: meitat, terç i quart | Fractions: halves, thirds and quarters @PM16
+Problemas con las cuatro operaciones | Problemes amb les quatre operacions | Problems with the four operations @PM25,PM12
+## Medida
+Metro, decímetro, centímetro y milímetro | Metre, decímetre, centímetre i mil·límetre | Metres, decimetres, centimetres and millimetres @PM29,PM30
+Instrumentos de medida | Instruments de mesura | Measuring instruments @PM28,PM27
+Kilo, gramo y litro | Quilo, gram i litre | Kilograms, grams and litres @PM29,PM30
+El reloj: cuartos y minutos | El rellotge: quarts i minuts | The clock: quarters and minutes @PM29
+Dinero: pagar y recibir el cambio | Diners: pagar i rebre el canvi | Money: paying and getting change @PM25
+## Geometría
+Rectas, curvas, paralelas y perpendiculares | Rectes, corbes, paral·leles i perpendiculars | Straight, curved, parallel and perpendicular lines @PM36,PM35
+Ángulos: recto, agudo y obtuso | Angles: recte, agut i obtús | Angles: right, acute and obtuse @PM41
+Clasificar triángulos | Classificar triangles | Classifying triangles @PM41
+Cuadriláteros; figuras cóncavas y convexas | Quadrilàters; figures còncaves i convexes | Quadrilaterals; concave and convex shapes @PM33,PM44
+El perímetro | El perímetre | Perimeter @PM38
+Coordenadas en una cuadrícula | Coordenades en una quadrícula | Coordinates on a grid @PM32
+Circunferencia y círculo: elementos | Circumferència i cercle: elements | Circles: their parts @PM39
+## Estadística y probabilidad
+Suceso y suceso elemental | Succés i succés elemental | Events and outcomes @PM47,PM49
+Experimentos con dados y monedas | Experiments amb daus i monedes | Experiments with dice and coins @PM53,PM48
+Encuestas y tablas de frecuencias | Enquestes i taules de freqüències | Surveys and frequency tables @PM55,PM56
+Diagramas de barras | Diagrames de barres | Bar charts @PM57,PM59
+La moda | La moda | The mode @PM60
+## Álgebra y pensamiento computacional
+Patrones y reglas | Patrons i regles | Patterns and rules @PM64,PM65
+¿Qué número falta? | Quin nombre falta? | Which number is missing? @PM69
+Algoritmos con repeticiones | Algorismes amb repeticions | Algorithms with repeats @PM66
+Juegos de estrategia | Jocs d'estratègia | Strategy games @PM68
+
+= 4P
+# Matemáticas
+## Números y operaciones
+Números hasta 999 999 | Nombres fins a 999 999 | Numbers to 999,999 @PM5
+Múltiplos y divisores | Múltiples i divisors | Multiples and factors @PM7
+Multiplicar por dos cifras | Multiplicar per dues xifres | Multiplying by a two-digit number @PM11,PM14
+División con resto y su prueba | Divisió amb residu i la seua prova | Division with remainders and checking @PM11
+Fracciones: numerador y denominador | Fraccions: numerador i denominador | Fractions: numerator and denominator @PM16
+Comparar fracciones | Comparar fraccions | Comparing fractions @PM20
+Fracción de una cantidad | Fracció d'una quantitat | Fraction of an amount @PM16,PM25
+Décimas y centésimas | Dècimes i centèsimes | Tenths and hundredths @PM17
+Sumar y restar decimales | Sumar i restar decimals | Adding and subtracting decimals @PM17
+Multiplicar y dividir por 10, 100 y 1 000 | Multiplicar i dividir per 10, 100 i 1 000 | Multiplying and dividing by 10, 100 and 1,000 @PM19
+Cálculo mental y estimación | Càlcul mental i estimació | Mental maths and estimation @PM15
+Problemas con fracciones y decimales | Problemes amb fraccions i decimals | Problems with fractions and decimals @PM25,PM12
+## Medida
+Unidades de longitud: conversiones | Unitats de longitud: conversions | Units of length: converting @PM30
+Masa y capacidad: conversiones | Massa i capacitat: conversions | Mass and capacity: converting @PM29,PM30
+Horas, minutos y segundos | Hores, minuts i segons | Hours, minutes and seconds @PM29
+Medir ángulos | Mesurar angles | Measuring angles @PM41,PM28
+Área contando cuadrados | Àrea comptant quadrats | Area by counting squares @PM38,PM29
+## Geometría
+Polígonos regulares | Polígons regulars | Regular polygons @PM33
+Componer y descomponer polígonos | Compondre i descompondre polígons | Putting polygons together and apart @PM37
+Poliedros: caras, aristas y vértices | Poliedres: cares, arestes i vèrtexs | Polyhedra: faces, edges and vertices @PM34
+Giros, traslaciones y simetrías | Girs, translacions i simetries | Rotations, translations and reflections @PM42,PM46
+Mapas y puntos cardinales | Mapes i punts cardinals | Maps and compass points @PM32
+Posiciones de rectas | Posicions de rectes | Positions of lines @PM36
+## Estadística y probabilidad
+Espacio muestral | Espai mostral | Sample space @PM50
+Comparar probabilidades | Comparar probabilitats | Comparing probabilities @PM48,PM53
+Recoger datos con una encuesta | Recollir dades amb una enquesta | Collecting data with a survey @PM55,PM56
+Gráficos de líneas y de sectores | Gràfics de línies i de sectors | Line graphs and pie charts @PM58,PM59
+Media, mediana y moda | Mitjana, mediana i moda | Mean, median and mode @PM60
+El rango | El rang | The range @PM61
+## Álgebra y pensamiento computacional
+Sucesiones numéricas | Successions numèriques | Number sequences @PM65,PM64
+Valores desconocidos | Valors desconeguts | Unknown values @PM69
+Programar con bloques | Programar amb blocs | Block programming @PM66
+Juegos de lógica | Jocs de lògica | Logic games @PM68
+
+= 5P
+# Matemáticas
+## Números y operaciones
+Números de más de seis cifras | Nombres de més de sis xifres | Numbers with more than six digits @PM5
+Múltiplos, divisores y criterios de divisibilidad | Múltiples, divisors i criteris de divisibilitat | Multiples, factors and divisibility rules @PM7
+Números primos y compuestos | Nombres primers i compostos | Prime and composite numbers @PM7
+Potencias: cuadrados y cubos | Potències: quadrats i cubs | Powers: squares and cubes @PM13
+Fracciones equivalentes | Fraccions equivalents | Equivalent fractions @PM22
+Comparar y ordenar fracciones | Comparar i ordenar fraccions | Comparing and ordering fractions @PM20,PM16
+Sumar y restar fracciones | Sumar i restar fraccions | Adding and subtracting fractions @PM24
+Milésimas | Mil·lèsimes | Thousandths @PM17
+Redondear decimales | Arredonir decimals | Rounding decimals @PM18
+Multiplicar y dividir decimales | Multiplicar i dividir decimals | Multiplying and dividing decimals @PM17
+Multiplicar y dividir por 10, 100 y 1 000 | Multiplicar i dividir per 10, 100 i 1 000 | Multiplying and dividing by 10, 100 and 1,000 @PM19
+Propiedades y orden de las operaciones | Propietats i ordre de les operacions | Properties and order of operations @PM14,PM12,PM11
+Cálculo mental y estimación | Càlcul mental i estimació | Mental maths and estimation @PM15
+## Medida
+Sistema métrico decimal | Sistema mètric decimal | The metric system @PM29,PM30
+Superficie: m², dm² y cm² | Superfície: m², dm² i cm² | Area: m², dm² and cm² @PM29,PM38
+Elegir el instrumento de medida | Triar l'instrument de mesura | Choosing a measuring instrument @PM28
+Medida del tiempo | Mesura del temps | Measuring time @PM29
+## Geometría
+Medir ángulos con el transportador | Mesurar angles amb el transportador | Measuring angles with a protractor @PM41
+Área del rectángulo y del triángulo | Àrea del rectangle i del triangle | Area of rectangles and triangles @PM38
+Coordenadas cartesianas | Coordenades cartesianes | Coordinates @PM32
+Posiciones de rectas en el plano | Posicions de rectes en el pla | Positions of lines on a plane @PM36
+Poliedros regulares | Poliedres regulars | Regular polyhedra @PM34
+Desarrollos de prismas y pirámides | Desenvolupaments de prismes i piràmides | Nets of prisms and pyramids @PM45
+Figuras semejantes | Figures semblants | Similar shapes @PM43
+Componer figuras con geometría dinámica | Compondre figures amb geometria dinàmica | Making shapes with dynamic geometry @PM37,PM46,PM33
+Circunferencia y círculo | Circumferència i cercle | Circles @PM39
+Figuras cóncavas y convexas | Figures còncaves i convexes | Concave and convex shapes @PM44
+## Estadística y probabilidad
+Azar o no azar | Atzar o no atzar | Chance or no chance @PM47
+Sucesos y espacio muestral | Successos i espai mostral | Events and sample space @PM49,PM50
+La probabilidad como medida | La probabilitat com a mesura | Probability as a measure @PM52
+Experimentar para estimar | Experimentar per a estimar | Experimenting to estimate @PM53
+Encuestas y recuento | Enquestes i recompte | Surveys and tallies @PM55,PM56
+Diagramas de sectores | Diagrames de sectors | Pie charts @PM58,PM59
+Media, moda y mediana | Mitjana, moda i mediana | Mean, mode and median @PM60
+El rango | El rang | The range @PM61
+## Álgebra y pensamiento computacional
+Sucesiones y patrones | Successions i patrons | Sequences and patterns @PM65
+Valores desconocidos | Valors desconeguts | Unknown values @PM69,PM12
+Crear algoritmos | Crear algorismes | Creating algorithms @PM66
+Programar con bloques y hoja de cálculo | Programar amb blocs i full de càlcul | Programming with blocks and spreadsheets @PM67
+Juegos de estrategia | Jocs d'estratègia | Strategy games @PM68
+
+= 6P
+# Matemáticas
+## Números y operaciones
+Números negativos | Nombres negatius | Negative numbers @PM8
+Potencias de 10 | Potències de 10 | Powers of 10 @PM13
+Mínimo común múltiplo y máximo común divisor | Mínim comú múltiple i màxim comú divisor | Lowest common multiple and highest common factor @PM7
+Fracciones, decimales y porcentajes | Fraccions, decimals i percentatges | Fractions, decimals and percentages @PM21
+Porcentajes y descuentos | Percentatges i descomptes | Percentages and discounts @PM21,PM25
+Proporcionalidad directa | Proporcionalitat directa | Direct proportion @PM23
+Regla de tres | Regla de tres | The rule of three @PM23
+Operaciones con fracciones | Operacions amb fraccions | Calculating with fractions @PM24,PM16,PM22
+Operaciones con decimales | Operacions amb decimals | Calculating with decimals @PM17,PM18,PM19
+Problemas de varias operaciones | Problemes de diverses operacions | Multi-step problems @PM11,PM14,PM12,PM25
+## Medida
+Conversiones de unidades | Conversions d'unitats | Converting units @PM30
+Volumen y capacidad | Volum i capacitat | Volume and capacity @PM29
+Problemas de tiempo | Problemes de temps | Time problems @PM29
+Medir con precisión | Mesurar amb precisió | Measuring accurately @PM28
+## Geometría
+Área de polígonos | Àrea de polígons | Area of polygons @PM38,PM37
+El número π y la longitud de la circunferencia | El nombre π i la longitud de la circumferència | Pi and the circumference @PM40,PM39
+Área del círculo | Àrea del cercle | Area of a circle @PM40
+Escalas y planos | Escales i plànols | Scales and plans @PM43,PM32
+Transformaciones geométricas | Transformacions geomètriques | Geometric transformations @PM42,PM46
+Poliedros y cuerpos redondos | Poliedres i cossos rodons | Polyhedra and curved solids @PM34,PM33
+## Estadística y probabilidad
+Regla de Laplace | Regla de Laplace | Laplace's rule @PM54,PM52
+Tablas de contingencia y diagramas de árbol | Taules de contingència i diagrames d'arbre | Two-way tables and tree diagrams @PM51,PM50
+Población y muestra | Població i mostra | Population and sample @PM62
+Variables continuas e histogramas | Variables contínues i histogrames | Continuous data and histograms @PM63
+Media, mediana, moda y rango | Mitjana, mediana, moda i rang | Mean, median, mode and range @PM60,PM61
+Interpretar gráficos | Interpretar gràfics | Reading charts and graphs @PM59,PM58
+## Álgebra y pensamiento computacional
+Sucesiones | Successions | Sequences @PM65
+Ecuaciones sencillas: el valor desconocido | Equacions senzilles: el valor desconegut | Simple equations: the unknown value @PM69
+Algoritmos y diagramas de flujo | Algorismes i diagrames de flux | Algorithms and flowcharts @PM66
+Hoja de cálculo | Full de càlcul | Spreadsheets @PM67
+Juegos de estrategia | Jocs d'estratègia | Strategy games @PM68

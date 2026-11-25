@@ -1,0 +1,57 @@
+# Biología y Geología ESO, Decreto 66/2024 (reparto 1.º/3.º orientativo). 1=1.º, 3=3.º
+B1 Metodología | 1 3 | Científicas y científicos en biología y geología
+B1 Metodología | 1 3 | Herramientas digitales para buscar y comunicar
+B1 Metodología | 1 3 | Lenguaje y vocabulario científico
+B1 Metodología | 1 3 | (varios) Método científico, observación, hipótesis, experimentos
+B1 Metodología | 1 3 | Observación de fenómenos naturales
+B1 Metodología | 1 3 | Laboratorio: instrumentos, técnicas y normas de seguridad
+B2 Cuerpo humano | 3 | Niveles de organización; célula, tejido, órgano, aparato; pluricelular
+B2 Cuerpo humano | 3 | Salud y enfermedad; infecciosas y no infecciosas; higiene y prevención
+B2 Cuerpo humano | 3 | Sistema inmunitario; vacunas; trasplantes y donación
+B2 Cuerpo humano | 3 | Homeostasis
+B2 Cuerpo humano | 3 | Nutrientes, alimentos, dieta saludable; trastornos de la conducta alimentaria
+B2 Cuerpo humano | 3 | Nutrición: aparatos digestivo, respiratorio, circulatorio y excretor
+B2 Cuerpo humano | 3 | Relación: receptores, sistema nervioso, endocrino, locomotor; prevención de lesiones
+B2 Cuerpo humano | 3 | Sustancias adictivas: tabaco, alcohol, drogas
+B2 Cuerpo humano | 3 | Reproducción humana: aparato reproductor, ciclo menstrual, fecundación, embarazo, parto; anticonceptivos
+B2 Cuerpo humano | 3 | Alteraciones y enfermedades de nutrición, relación y reproducción; hábitos
+B2 Cuerpo humano | 3 | Cambios físicos y psíquicos en la adolescencia
+B2 Cuerpo humano | 3 | Relaciones y sexualidad: derechos e igualdad; salud y bienestar sexual
+B3 Seres vivos | 1 | Ser vivo como sistema: propiedades; nutrición, relación, reproducción
+B3 Seres vivos | 1 3 | Teoría celular; tipos de célula (procariota, eucariota animal y vegetal)
+B3 Seres vivos | 1 | Nutrición autótrofa y heterótrofa
+B3 Seres vivos | 1 | Ciclos biológicos y reproducción de bacterias, hongos, protoctistas, plantas, animales
+B3 Seres vivos | 1 | Niveles de organización de los seres vivos
+B3 Seres vivos | 1 | Clasificación: criterios naturales
+B3 Seres vivos | 1 | Nomenclatura binomial; especie
+B3 Seres vivos | 1 | Sistema de clasificación taxonómica; categorías
+B3 Seres vivos | 1 | Dominios y reinos
+B3 Seres vivos | 1 | Principales grupos de cada reino; rasgos y adaptaciones
+B3 Seres vivos | 1 | Biodiversidad y su conservación
+B3 Seres vivos | 3 | Ecodependencia; todas las formas de vida y salud humana
+B3 Seres vivos | 1 | Reconocer especies del entorno: guías, claves dicotómicas
+B4 La Tierra | 1 3 | La Tierra como sistema; procesos geológicos externos y modelado del relieve
+B4 La Tierra | 1 | La Tierra en el universo
+B4 La Tierra | 1 | Materiales de la Tierra: origen y tipos (minerales y rocas)
+B4 La Tierra | 1 | Estructura de la Tierra
+B4 La Tierra | 1 3 | Dinámica interna: manifestaciones de la energía interna
+B4 La Tierra | 1 3 | Capas fluidas: atmósfera e hidrosfera
+B4 La Tierra | 1 3 | Tiempo geológico: escalas; historia de la Tierra y evolución de la vida
+B4 La Tierra | 1 3 | Recursos y riesgos geológicos
+B5 Ecología | 1 | Ecosistema: componentes bióticos y abióticos; relaciones; estructura trófica
+B5 Ecología | 1 3 | Ciclos de materia y flujos de energía
+B5 Ecología | 1 | Funciones de la atmósfera y la hidrosfera para la vida
+B5 Ecología | 3 | Interacciones atmósfera-hidrosfera-geosfera-biosfera; el suelo
+B5 Ecología | 1 | Problemas ambientales: contaminación, desertización, cambio climático, biodiversidad, recursos
+B5 Ecología | 1 | Los ODS y los problemas ambientales
+B5 Ecología | 1 | Acciones de protección del medio ambiente
+B5 Ecología | 1 3 | Corresponsabilidad en la protección ambiental
+B5 Ecología | 3 | Medio ambiente y salud
+B5 Ecología | 3 | Desigualdad entre países y salud; brecha nutricional
+# 4.º ESO (optativa), addenda
+B4.A Proyecto | 4 | Preguntas, hipótesis, diseño experimental, modelos, comunicación
+B4.B Célula | 4 | Teoría celular; tipos; célula eucariota; ciclo celular; mitosis y meiosis
+B4.C Genética | 4 | ADN y ARN; dogma central; mutaciones; Mendel; herencia humana
+B4.D Evolución | 4 | Origen de la vida; pruebas de la evolución; selección natural; ingeniería genética; especiación
+B4.E Ecosistemas | 4 | Adaptaciones; poblaciones y comunidades; flujos; ciclos biogeoquímicos; sostenibilidad
+B4.F Geología | 4 | Relieve; estructura de la geosfera; deformación; tectónica de placas; tiempo geológico; origen del universo

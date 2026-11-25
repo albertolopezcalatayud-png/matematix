@@ -1,6 +1,7 @@
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import type { Msg, Visual } from '@/engine/types';
 import { fmtScaled, useT } from '@/i18n';
+import { ClockView, EmojiView, FracView, GridView, ShapeView } from './VisualsMore';
 
 const W = 360, PAD = 22;
 const ACC = 'var(--color-accent)', FG = 'var(--color-fg)', MUTED = 'var(--color-muted)', PEACH = 'var(--color-peach)', MINT = 'var(--color-mint)';
@@ -248,6 +249,11 @@ function TableView({ v, describe }: { v: Extract<Visual, { type: 'table' }>; des
 
 export function VisualView({ v, describe }: { v: Visual; describe: string }) {
   if (v.type === 'table') return <TableView v={v} describe={describe} />;
+  if (v.type === 'emoji') return <EmojiView v={v} describe={describe} />;
+  if (v.type === 'clock') return <ClockView v={v} describe={describe} />;
+  if (v.type === 'shape') return <ShapeView v={v} describe={describe} />;
+  if (v.type === 'frac') return <FracView v={v} describe={describe} />;
+  if (v.type === 'grid') return <GridView v={v} describe={describe} />;
   if (v.type === 'line') return <NumberLine v={v} describe={describe} />;
   if (v.type === 'bars') return <BarsView v={v} describe={describe} />;
   if (v.type === 'ladder') return <LadderView v={v} describe={describe} />;

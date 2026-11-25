@@ -1,0 +1,195 @@
+= 1E
+# Biología y Geología
+## Proyecto científico
+Científicas y científicos | Científiques i científics | Scientists @BG1,BG3
+El método científico | El mètode científic | The scientific method @BG4,BG5
+El laboratorio y sus normas | El laboratori i les seues normes | The laboratory and its rules @BG6
+Buscar y comunicar con herramientas digitales | Buscar i comunicar amb eines digitals | Researching and presenting with digital tools @BG2
+## Los seres vivos
+¿Qué es un ser vivo? | Què és un ésser viu? | What is a living thing? @BG19
+La célula | La cèl·lula | The cell @BG20
+Nutrición autótrofa y heterótrofa | Nutrició autòtrofa i heteròtrofa | Autotrophic and heterotrophic nutrition @BG21
+Niveles de organización | Nivells d'organització | Levels of organisation @BG23
+Clasificar seres vivos | Classificar éssers vius | Classifying living things @BG24,BG25,BG26
+Dominios y reinos | Dominis i regnes | Domains and kingdoms @BG27
+Bacterias, hongos y protoctistas | Bacteris, fongs i protoctists | Bacteria, fungi and protoctists @BG22
+Grupos de animales y plantas | Grups d'animals i plantes | Groups of animals and plants @BG28
+Claves dicotómicas | Claus dicotòmiques | Dichotomous keys @BG31
+La biodiversidad | La biodiversitat | Biodiversity @BG29
+## La Tierra
+La Tierra en el universo | La Terra en l'univers | The Earth in the Universe @BG33
+Estructura de la Tierra | Estructura de la Terra | Structure of the Earth @BG35
+Minerales y rocas | Minerals i roques | Minerals and rocks @BG34
+La energía interna de la Tierra | L'energia interna de la Terra | The Earth's internal energy @BG36
+El modelado del relieve | El modelatge del relleu | How landforms are shaped @BG32
+Atmósfera e hidrosfera | Atmosfera i hidrosfera | Atmosphere and hydrosphere @BG37,BG42
+El tiempo geológico | El temps geològic | Geological time @BG38
+Recursos y riesgos geológicos | Recursos i riscos geològics | Geological resources and hazards @BG39
+## Ecología y sostenibilidad
+El ecosistema | L'ecosistema | Ecosystems @BG40
+Ciclos de materia y flujo de energía | Cicles de matèria i flux d'energia | Matter cycles and energy flow @BG41
+Problemas ambientales | Problemes ambientals | Environmental problems @BG44
+Los ODS | Els ODS | The Sustainable Development Goals @BG45
+Proteger el medio ambiente | Protegir el medi ambient | Protecting the environment @BG46,BG47
+
+= 3E
+# Biología y Geología
+## Proyecto científico
+Científicas y científicos | Científiques i científics | Scientists @BG1,BG3
+Proyecto de investigación | Projecte d'investigació | Research project @BG4,BG5
+El laboratorio | El laboratori | The laboratory @BG6
+Buscar y comunicar | Buscar i comunicar | Researching and presenting @BG2
+## Cuerpo humano y salud
+Niveles de organización del cuerpo | Nivells d'organització del cos | Levels of organisation in the body @BG7
+Las células del cuerpo | Les cèl·lules del cos | Body cells @BG20
+Nutrientes y dieta saludable | Nutrients i dieta saludable | Nutrients and a healthy diet @BG11
+Aparatos de la nutrición | Aparells de la nutrició | Systems for nutrition @BG12
+Función de relación | Funció de relació | Sensing and responding @BG13
+Reproducción humana | Reproducció humana | Human reproduction @BG15
+Cambios en la adolescencia | Canvis en l'adolescència | Changes in adolescence @BG17
+Relaciones y sexualidad responsable | Relacions i sexualitat responsable | Relationships and responsible sexuality @BG18
+Enfermedades de los aparatos | Malalties dels aparells | Diseases of body systems @BG16
+Salud y enfermedad | Salut i malaltia | Health and disease @BG8
+Sistema inmunitario y vacunas | Sistema immunitari i vacunes | The immune system and vaccines @BG9
+Homeostasis | Homeòstasi | Homeostasis @BG10
+Sustancias adictivas | Substàncies addictives | Addictive substances @BG14
+## La Tierra
+Procesos geológicos externos | Processos geològics externs | External geological processes @BG32
+Energía interna | Energia interna | Internal energy @BG36
+Atmósfera e hidrosfera | Atmosfera i hidrosfera | Atmosphere and hydrosphere @BG37
+El suelo y las interacciones | El sòl i les interaccions | Soil and interactions @BG43
+El tiempo geológico | El temps geològic | Geological time @BG38
+Riesgos geológicos | Riscos geològics | Geological hazards @BG39
+## Ecología y salud
+Ciclos de materia y energía | Cicles de matèria i energia | Matter and energy cycles @BG41
+Ecodependencia | Ecodependència | Depending on nature @BG30
+Medio ambiente y salud | Medi ambient i salut | Environment and health @BG48
+Desigualdad y salud | Desigualtat i salut | Inequality and health @BG49
+Corresponsabilidad ambiental | Corresponsabilitat ambiental | Shared environmental responsibility @BG47
+
+= 4E
+# Biología y Geología
+## Proyecto científico
+Hipótesis y diseño experimental | Hipòtesis i disseny experimental | Hypotheses and experimental design @BG50
+## La célula
+Tipos de células | Tipus de cèl·lules | Types of cells @BG51
+Ciclo celular: mitosis y meiosis | Cicle cel·lular: mitosi i meiosi | The cell cycle: mitosis and meiosis @BG51
+## Genética
+ADN y ARN | ADN i ARN | DNA and RNA @BG52
+Mutaciones | Mutacions | Mutations @BG52
+Leyes de Mendel | Lleis de Mendel | Mendel's laws @BG52
+Herencia humana | Herència humana | Human inheritance @BG52
+## Evolución
+Origen de la vida | Origen de la vida | The origin of life @BG53
+Pruebas de la evolución | Proves de l'evolució | Evidence for evolution @BG53
+Selección natural | Selecció natural | Natural selection @BG53
+## Ecología
+Adaptaciones | Adaptacions | Adaptations @BG54
+Poblaciones y comunidades | Poblacions i comunitats | Populations and communities @BG54
+Ciclos biogeoquímicos | Cicles biogeoquímics | Biogeochemical cycles @BG54
+## Geología
+Estructura de la geosfera | Estructura de la geosfera | Structure of the geosphere @BG55
+Tectónica de placas | Tectònica de plaques | Plate tectonics @BG55
+El relieve | El relleu | Landforms @BG55
+
+= 2E
+# Física y Química
+## Destrezas científicas
+Magnitudes y unidades | Magnituds i unitats | Quantities and units @FQ1
+Medir volúmenes | Mesurar volums | Measuring volume @FQ2,FQ3,FQ4
+Medida, error y gráficas | Mesura, error i gràfiques | Measurement, error and graphs @FQ68
+Científicas y científicos | Científiques i científics | Scientists @FQ67
+Proyecto de investigación | Projecte d'investigació | Research project @FQ69
+## La materia
+Densidad | Densitat | Density @FQ5,FQ6
+Estados de la materia | Estats de la matèria | States of matter @FQ7,FQ10
+Cambios de estado | Canvis d'estat | Changes of state @FQ8,FQ9
+Mezclas y disoluciones | Mescles i dissolucions | Mixtures and solutions @FQ15
+Sustancias puras | Substàncies pures | Pure substances @FQ16
+Separar mezclas | Separar mescles | Separating mixtures @FQ17
+Concentración | Concentració | Concentration @FQ24
+Solubilidad | Solubilitat | Solubility @FQ25
+Sustancias simples y compuestas | Substàncies simples i compostes | Elements and compounds @FQ18,FQ19,FQ20,FQ26
+Dibujar la materia: partículas | Dibuixar la matèria: partícules | Drawing matter: particles @FQ23
+Elemento, átomo y masa atómica | Element, àtom i massa atòmica | Elements, atoms and atomic mass @FQ28,FQ27
+La tabla periódica | La taula periòdica | The periodic table @FQ29,FQ30,FQ33
+Los elementos en el universo | Els elements en l'univers | Elements in the Universe @FQ31,FQ32
+## El cambio químico
+¿Qué es una reacción química? | Què és una reacció química? | What is a chemical reaction? @FQ21,FQ34
+Tipos de reacciones | Tipus de reaccions | Types of reactions @FQ35
+Conservación de la masa | Conservació de la massa | Conservation of mass @FQ36
+Velocidad de reacción | Velocitat de reacció | Rate of reaction @FQ37
+Combustión | Combustió | Combustion @FQ38
+Oxidación | Oxidació | Oxidation @FQ39
+Ácidos y bases | Àcids i bases | Acids and bases @FQ40
+Sustancias importantes | Substàncies importants | Important substances @FQ22
+## Movimiento y fuerzas
+Sistema de referencia y rapidez | Sistema de referència i rapidesa | Frames of reference and speed @FQ56
+Gráficas espacio-tiempo | Gràfiques espai-temps | Distance–time graphs @FQ57
+Rapidez y velocidad | Rapidesa i velocitat | Speed and velocity @FQ58
+Aceleración | Acceleració | Acceleration @FQ59
+Caída libre | Caiguda lliure | Free fall @FQ60
+Las fuerzas | Les forces | Forces @FQ61
+Fuerza y aceleración | Força i acceleració | Force and acceleration @FQ62
+Fuerzas eléctricas y magnéticas | Forces elèctriques i magnètiques | Electric and magnetic forces @FQ63
+
+= 3E
+# Física y Química
+## Destrezas científicas
+Científicas y científicos | Científiques i científics | Scientists @FQ67
+Medida, error y gráficas | Mesura, error i gràfiques | Measurement, error and graphs @FQ68
+Proyecto de investigación | Projecte d'investigació | Research project @FQ69
+## La materia
+Los gases y el modelo cinético | Els gasos i el model cinètic | Gases and the kinetic model @FQ11
+Leyes de los gases | Lleis dels gasos | The gas laws @FQ12
+Condensación y licuefacción | Condensació i liqüefacció | Condensation and liquefaction @FQ13
+La atmósfera | L'atmosfera | The atmosphere @FQ14
+Modelo atómico de Dalton | Model atòmic de Dalton | Dalton's atomic model @FQ41,FQ45
+Sustancias y reacciones | Substàncies i reaccions | Substances and reactions @FQ42
+Leyes ponderales | Lleis ponderals | Laws of chemical combination @FQ43
+Fórmulas y ecuaciones ajustadas | Fórmules i equacions ajustades | Formulae and balanced equations @FQ46
+El hidrógeno como energía | L'hidrogen com a energia | Hydrogen as an energy source @FQ44
+## La energía
+La energía y sus formas | L'energia i les seues formes | Energy and its forms @FQ47
+Corriente eléctrica | Corrent elèctric | Electric current @FQ48
+Ley de Ohm | Llei d'Ohm | Ohm's law @FQ49
+Potencia y consumo eléctrico | Potència i consum elèctric | Power and electricity use @FQ50
+Producir electricidad | Produir electricitat | Generating electricity @FQ51
+Calor y temperatura | Calor i temperatura | Heat and temperature @FQ52
+Transmisión del calor | Transmissió de la calor | Heat transfer @FQ53
+Rendimiento de máquinas | Rendiment de màquines | Efficiency of machines @FQ54
+Uso racional de la energía | Ús racional de l'energia | Using energy wisely @FQ55
+## La interacción
+Carga eléctrica | Càrrega elèctrica | Electric charge @FQ64
+Ley de Coulomb | Llei de Coulomb | Coulomb's law @FQ65
+Magnetismo | Magnetisme | Magnetism @FQ66
+
+= 4E
+# Física y Química
+## Destrezas científicas
+Hipótesis y fuentes fiables | Hipòtesis i fonts fiables | Hypotheses and reliable sources @FQ70
+## La materia
+Modelos atómicos | Models atòmics | Atomic models @FQ71
+Isótopos e iones | Isòtops i ions | Isotopes and ions @FQ72
+Sistema periódico | Sistema periòdic | The periodic table @FQ73
+Enlace químico | Enllaç químic | Chemical bonding @FQ74
+Formulación inorgánica | Formulació inorgànica | Naming inorganic compounds @FQ75
+## El cambio químico
+Ajuste de ecuaciones | Ajust d'equacions | Balancing equations @FQ76
+El mol | El mol | The mole @FQ77
+Reacciones exotérmicas y endotérmicas | Reaccions exotèrmiques i endotèrmiques | Exothermic and endothermic reactions @FQ78
+Química del carbono | Química del carboni | Carbon chemistry @FQ79
+Polímeros y macromoléculas | Polímers i macromolècules | Polymers and macromolecules @FQ80
+## Movimiento y fuerzas
+Posición y desplazamiento | Posició i desplaçament | Position and displacement @FQ81
+Movimiento rectilíneo uniforme | Moviment rectilini uniforme | Uniform motion @FQ82
+Movimiento acelerado y caída libre | Moviment accelerat i caiguda lliure | Accelerated motion and free fall @FQ83
+Ley de Hooke y equilibrio | Llei de Hooke i equilibri | Hooke's law and equilibrium @FQ84
+Leyes de Newton | Lleis de Newton | Newton's laws @FQ85
+Gravitación | Gravitació | Gravitation @FQ86
+Presión y fluidos | Pressió i fluids | Pressure and fluids @FQ87
+## La energía
+Trabajo y potencia | Treball i potència | Work and power @FQ88
+Energía mecánica | Energia mecànica | Mechanical energy @FQ89
+Ondas y sonido | Ones i so | Waves and sound @FQ90
+La luz | La llum | Light @FQ91

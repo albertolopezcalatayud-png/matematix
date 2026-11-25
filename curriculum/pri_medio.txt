@@ -1,0 +1,79 @@
+# Conocimiento del Medio (Primaria), Decreto 106/2022. Ciclos: 1=1.º-2.º, 2=3.º-4.º, 3=5.º-6.º
+CC Seres vivos | 1 | Seres vivos y objetos inertes
+CC Seres vivos | 1 | Plantas y animales: diferencias básicas
+CC Seres vivos | 1 | Hábitat y necesidades básicas; respeto por el hábitat
+CC Seres vivos | 2 | Clasificación de los seres vivos: grandes reinos
+CC Seres vivos | 2 | Plantas: subgrupos, adaptación, nutrición, relación, reproducción
+CC Seres vivos | 2 | Animales: subgrupos, adaptación, nutrición, relación, reproducción
+CC Seres vivos | 3 | La célula
+CC Seres vivos | 3 | La cadena alimentaria
+CC Ecosistemas | 1 2 3 | Ecología; cuidado de espacios naturales, animales y plantas
+CC Ecosistemas | 2 3 | Ecosistemas: factores bióticos y abióticos; equilibrio y conservación
+CC Ecosistemas | 2 3 | Paisaje y sus agentes; acción humana; desarrollo sostenible; huella ecológica
+CC Ecosistemas | 3 | Extinción de especies: causas y consecuencias
+CC Sostenible | 1 | Cesta de la compra; bienes de primera necesidad; consumo responsable
+CC Sostenible | 2 | Consumo responsable de bienes y servicios
+CC Sostenible | 2 | Huella ecológica del consumo
+CC Sostenible | 2 | Reutilizar, reducir y reciclar
+CC Sostenible | 2 | Corresponsabilidad en la protección del medio
+CC Sostenible | 3 | Equilibrio entre desarrollo social, económico y medio ambiente
+CC Actividad científica | 1 | Curiosidad, predicciones guiadas, fuentes, instrumentos, registro, vocabulario
+CC Actividad científica | 2 3 | Observar y predecir; experimentos guiados; comunicar resultados; pensamiento crítico
+CC Actividad científica | 1 2 3 | Profesiones científicas y STEM con perspectiva de género
+CC Sostenible | 3 | Derechos y deberes como consumidor ecológico
+CC Sostenible | 3 | Publicidad y etiquetado de productos
+CC Cuerpo humano | 1 | Partes del cuerpo (cabeza, tronco, extremidades); los sentidos
+CC Cuerpo humano | 1 | Hábitos saludables: alimentación, descanso, actividad, higiene
+CC Cuerpo humano | 1 | Salud y enfermedades más comunes
+CC Cuerpo humano | 2 | Esqueleto, musculatura y articulaciones
+CC Cuerpo humano | 2 | Órganos principales y sus funciones
+CC Cuerpo humano | 2 | Bienestar y hábitos: alimentación variada, higiene, ejercicio, descanso
+CC Cuerpo humano | 3 | Sistemas y aparatos del cuerpo; equilibrio
+CC Cuerpo humano | 3 | Hábitos de salud y nutrición; cuidado de uno mismo y del entorno
+CC Cuerpo humano | 3 | Aparato reproductor y sexualidad responsable
+CC Emocional | 1 2 3 | Educación emocional (emociones, diversidad, empatía, afectivo-sexual) — tutoría, no ejercicios
+CC Materia | 1 | Propiedades de los materiales según su uso
+CC Materia | 2 | Dureza, flexibilidad, masa, volumen; materiales naturales y artificiales
+CC Materia | 3 | Masa, volumen y densidad
+CC Energía | 1 | Energía cercana: luz y sonido; uso responsable
+CC Energía | 2 | Tipos de energía: sonido, luz, calor; electricidad; consumo responsable
+CC Energía | 3 | Fuerzas y movimiento; deformaciones; velocidad; gravedad
+CC Energía | 3 | Transformación de la energía; renovables y no renovables
+CC Máquinas | 1 | Uso seguro de objetos; construir estructuras
+CC Máquinas | 2 | Máquinas simples; aplicaciones; balanzas y pesos
+CC Máquinas | 2 | Grandes inventos (perspectiva de género)
+CC Máquinas | 2 3 | Ciencia y tecnología para un desarrollo sostenible
+CC Máquinas | 3 | Instrumentos de medida y cálculo; elementos de máquinas y estructuras; avances
+TD Digitalización | 1 | Ciencia y tecnología en la vida diaria; comunicarse de forma segura
+TD Digitalización | 2 3 | Correo, chat y foros seguros; netiqueta
+TD Digitalización | 2 3 | Buscadores; almacenar datos; documentos
+TD Digitalización | 3 | Presentaciones y vídeos; mecanografía; entorno personal de aprendizaje
+TD Digitalización | 2 3 | Problemas técnicos sencillos
+TD Seguridad | 2 3 | Bienestar digital; prevenir adicciones; ciberacoso
+TD Seguridad | 3 | Huella digital, propiedad intelectual, datos personales
+TD Seguridad | 2 3 | Contraseñas, imágenes, publicidad, spam, phishing
+TD Seguridad | 3 | Contactos desconocidos, enlaces y descargas dudosas
+TD TIC | 2 3 | Buscar información de forma segura y contrastada
+TD TIC | 3 | Recoger, almacenar y representar datos
+TD Proyectos | 1 2 3 | Proyecto de diseño: observar, identificar problema, idear, prototipar, evaluar, presentar
+TD Computacional | 1 2 3 | Descomposición de problemas
+TD Computacional | 2 3 | Abstracción; pensamiento algorítmico
+TD Computacional | 3 | Patrones; lógica con valores sí/no (verdadero/falso)
+TD Tecnología | 1 2 3 | Materiales y herramientas de uso escolar seguro
+TD Tecnología | 2 3 | Dispositivos digitales para un proyecto
+TD Tecnología | 3 | Operadores mecánicos, sensores y motores; realidad virtual/aumentada, 3D; circuitos eléctricos
+TD Programación | 1 2 3 | Programación por bloques desenchufada y con robots sencillos
+TD Programación | 2 3 | Programación por bloques en entornos digitales
+TS Representación | 1 | Planos y mapas sencillos; la Tierra en mapas
+TS Representación | 2 3 | Representación cartográfica
+TS Clima | 1 | Cambio estacional; variables meteorológicas (registro y datos); tiempo y clima
+TS Clima | 1 | Cambio climático: causas e impacto
+TS Clima | 2 | Factores climáticos; conciencia del impacto del cambio climático
+TS Clima | 3 | Distribución de los climas; acciones frente al cambio climático
+TS Tierra | 1 2 3 | La Tierra: concepto geológico y geográfico
+TS Tierra | 2 3 | El Sistema Solar
+TS Tierra | 3 | El Universo
+TS Tierra | 1 | Estados del agua
+TS Tierra | 1 2 3 | Uso responsable del agua
+TS Tierra | 2 | Relieve: elementos básicos; local y nacional; cuidado del paisaje
+TS Tierra | 3 | Relieve europeo; paisajes agropecuarios y turísticos

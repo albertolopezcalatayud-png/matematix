@@ -1,0 +1,99 @@
+= 1E
+# Tecnología y Digitalización
+## Proceso tecnológico
+Buscar y filtrar información | Buscar i filtrar informació | Finding and filtering information @TD1
+Fases del proyecto técnico | Fases del projecte tècnic | Stages of a technology project @TD3
+Diseñar y construir un prototipo | Dissenyar i construir un prototip | Designing and building a prototype @TD4
+Dibujo: vistas, perspectiva y bocetos | Dibuix: vistes, perspectiva i esbossos | Drawing: views, perspective and sketches @TD32
+Documentar el proyecto | Documentar el projecte | Documenting the project @TD29
+## Materiales y estructuras
+Materiales y sus propiedades | Materials i les seues propietats | Materials and their properties @TD20
+Estructuras y esfuerzos | Estructures i esforços | Structures and forces @TD22
+Herramientas y seguridad | Eines i seguretat | Tools and safety @TD19
+## Máquinas y electricidad
+Palancas y mecanismos | Palanques i mecanismes | Levers and mechanisms @TD24
+Relación de transmisión | Relació de transmissió | Gear ratio @TD25
+Circuitos eléctricos | Circuits elèctrics | Electric circuits @TD27
+## Digitalización
+Partes del ordenador | Parts de l'ordinador | Parts of a computer @TD6
+Plataformas de aprendizaje | Plataformes d'aprenentatge | Learning platforms @TD8
+Textos, hojas de cálculo y diapositivas | Textos, fulls de càlcul i diapositives | Documents, spreadsheets and slides @TD30
+Hoja de cálculo: fórmulas y gráficos | Full de càlcul: fórmules i gràfics | Spreadsheets: formulae and charts @TD31
+Proteger dispositivos y datos | Protegir dispositius i dades | Protecting devices and data @TD9
+Identidad y bienestar digital | Identitat i benestar digital | Digital identity and wellbeing @TD10
+Convivir en la red | Conviure en la xarxa | Getting along online @TD11
+## Pensamiento computacional
+Modelar problemas | Modelitzar problemes | Modelling problems @TD13
+Programación por bloques | Programació per blocs | Block programming @TD15
+Bucles, variables y condiciones | Bucles, variables i condicions | Loops, variables and conditions @TD16
+Robótica e IA en la sociedad | Robòtica i IA en la societat | Robotics and AI in society @TD18
+## Tecnología y sociedad
+Historia de la tecnología y reciclaje | Història de la tecnologia i reciclatge | History of technology and recycling @TD34
+
+= 3E
+# Tecnología y Digitalización
+## Proceso tecnológico
+Buscar y filtrar información | Buscar i filtrar informació | Finding and filtering information @TD1
+Diseñar y construir un prototipo | Dissenyar i construir un prototip | Designing and building a prototype @TD4
+Fabricación digital | Fabricació digital | Digital fabrication @TD5
+Escalas, acotación y dibujo por ordenador | Escales, acotació i dibuix per ordinador | Scales, dimensions and computer drawing @TD33
+Documentar y presentar | Documentar i presentar | Documenting and presenting @TD29
+## Materiales y estructuras
+Plásticos | Plàstics | Plastics @TD21
+Apoyos y esfuerzos | Suports i esforços | Supports and loads @TD23
+Herramientas y seguridad | Eines i seguretat | Tools and safety @TD19
+## Máquinas y electricidad
+Relación de transmisión | Relació de transmissió | Gear ratio @TD25
+Magnitudes eléctricas y ley de Ohm | Magnituds elèctriques i llei d'Ohm | Electrical quantities and Ohm's law @TD26
+Diseñar circuitos | Dissenyar circuits | Designing circuits @TD27
+Electrónica analógica | Electrònica analògica | Analogue electronics @TD28
+## Digitalización
+Sistemas operativos y redes | Sistemes operatius i xarxes | Operating systems and networks @TD7
+Proteger dispositivos y datos | Protegir dispositius i dades | Protecting devices and data @TD9
+Convivir en la red | Conviure en la xarxa | Getting along online @TD11
+Software libre y propietario | Programari lliure i privatiu | Free and proprietary software @TD12
+Hoja de cálculo: funciones y gráficos | Full de càlcul: funcions i gràfics | Spreadsheets: functions and charts @TD31
+## Pensamiento computacional
+Modelar problemas | Modelitzar problemes | Modelling problems @TD13
+Algoritmos y diagramas de flujo | Algorismes i diagrames de flux | Algorithms and flowcharts @TD14
+Variables, condiciones y bucles | Variables, condicions i bucles | Variables, conditions and loops @TD16
+Apps, robots y tarjetas controladoras | Apps, robots i targetes controladores | Apps, robots and controller boards @TD17
+Robótica, IA e internet de las cosas | Robòtica, IA i internet de les coses | Robotics, AI and the internet of things @TD18
+Introducción a la inteligencia artificial | Introducció a la intel·ligència artificial | Introduction to artificial intelligence @TD2
+## Tecnología y sociedad
+Tecnología e impacto ambiental | Tecnologia i impacte ambiental | Technology and the environment @TD34
+La energía: producción e impacto | L'energia: producció i impacte | Energy: generation and impact @TD35
+
+= 4E
+# Tecnología
+## Proyectos
+Gestión de proyectos y ciclo de vida | Gestió de projectes i cicle de vida | Project management and product life cycle @TC1
+Diseño 3D y fabricación | Disseny 3D i fabricació | 3D design and manufacturing @TC1
+## Electrónica y fluidos
+Electrónica analógica y digital | Electrònica analògica i digital | Analogue and digital electronics @TC2
+Neumática e hidráulica | Pneumàtica i hidràulica | Pneumatics and hydraulics @TC2
+## Control y robótica
+Sensores, actuadores y controladores | Sensors, actuadors i controladors | Sensors, actuators and controllers @TC3
+Internet de las cosas e IA | Internet de les coses i IA | The internet of things and AI @TC3
+## Instalaciones de la vivienda
+Instalaciones de una vivienda | Instal·lacions d'un habitatge | Services in a home @TC4
+Domótica y ahorro | Domòtica i estalvi | Home automation and saving energy @TC4
+## Tecnología sostenible
+Obsolescencia y arquitectura bioclimática | Obsolescència i arquitectura bioclimàtica | Obsolescence and climate-friendly buildings @TC5
+Transporte eficiente | Transport eficient | Efficient transport @TC5
+
+= 4E
+# Digitalización
+## Dispositivos y redes
+Información digital y unidades | Informació digital i unitats | Digital information and units @DG1
+Ordenadores, sistemas operativos y redes | Ordinadors, sistemes operatius i xarxes | Computers, operating systems and networks @DG1
+## Crear y colaborar
+Buscar, contrastar y licencias | Buscar, contrastar i llicències | Searching, checking and licences @DG2
+Crear contenidos y programar apps | Crear continguts i programar apps | Creating content and programming apps @DG2
+## Seguridad y bienestar
+Seguridad y privacidad | Seguretat i privacitat | Security and privacy @DG3
+Identidad digital y bienestar | Identitat digital i benestar | Digital identity and wellbeing @DG3
+## Ciudadanía digital
+Bulos y noticias falsas | Enganys i notícies falses | Hoaxes and fake news @DG4
+Administración electrónica y fraudes | Administració electrònica i fraus | E-government and fraud @DG4
+Ética de los datos y la IA | Ètica de les dades i la IA | Ethics of data and AI @DG4

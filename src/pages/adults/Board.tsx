@@ -1,19 +1,22 @@
 import { useRef, useState } from 'react';
 import { useT, fmtNum } from '@/i18n';
 import { TopBar } from '@/components/Layout';
-import { ModelSteps } from '@/components/ModelSteps';
+import { LessonExample, LessonPicker } from '@/components/LessonPicker';
+import { useApp } from '@/stores/app';
 import { tone } from '@/services/sound';
 
 const W = 1000, PAD = 40, Y = 150;
 const PRESETS: [number, number][] = [[0, 10], [0, 20], [0, 100], [0, 1000], [-10, 10]];
 
-/** Whiteboard mode: one big number line for the whole class. Tap to mark, jump with the buttons (each jump sounds;
- *  every ten is an octave higher), the worked examples of every station in large print. */
+/** Whiteboard mode: any lesson's explanation and worked example in large print, and one big number line as a visual aid
+ *  (tap to mark, jump with the buttons; each jump sounds, every ten an octave higher). */
 export default function Board() {
   const { t, lang } = useT();
   const [[min, max], setRange] = useState<[number, number]>([0, 20]);
   const [at, setAt] = useState<number | null>(null);
   const [jumps, setJumps] = useState<[number, number][]>([]);
+  const [lesson, setLesson] = useState<string | null>(useApp.getState().lastLesson);
+  const course = useApp((s) => s.course);
   const box = useRef<HTMLDivElement>(null);
   const span = max - min;
   const x = (v: number) => PAD + ((v - min) / span) * (W - 2 * PAD);
@@ -32,6 +35,11 @@ export default function Board() {
       <TopBar title={t('sec_board')} back="/adultos" />
       <main className="max-w-5xl mx-auto px-4 space-y-4">
         <p className="rounded-2xl p-3 bg-[var(--color-sky-pale)] text-base">{t('b_intro')}</p>
+        <section className="card space-y-3" data-testid="board-lesson">
+          <h2 className="font-extrabold">{t('b_example')}</h2>
+          <LessonPicker value={lesson} onChange={setLesson} startCourse={course} testId="board-pick" />
+          <LessonExample id={lesson} big />
+        </section>
         <div ref={box} className="card space-y-3 bg-[var(--color-card)]" data-testid="board">
           <div className="flex flex-wrap gap-2 items-center">
             {PRESETS.map(([a, b]) => <button key={`${a}-${b}`} className={`btn ${a === min && b === max ? 'btn-primary' : 'btn-ghost'} !min-h-10`} onClick={() => { setRange([a, b]); setAt(null); setJumps([]); }}>{fmtNum(lang, a)}–{fmtNum(lang, b)}</button>)}
@@ -53,10 +61,6 @@ export default function Board() {
             <button className="btn btn-ghost !min-h-14" onClick={() => { setAt(null); setJumps([]); }}>{t('b_clear')}</button>
           </div>
         </div>
-        <section className="card space-y-3">
-          <h2 className="font-extrabold">{t('b_example')}</h2>
-          <ModelSteps big />
-        </section>
       </main>
     </div>
   );

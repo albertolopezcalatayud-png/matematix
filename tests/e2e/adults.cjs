@@ -25,18 +25,18 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
     // two pupils, progress kept apart
     await p.getByTestId('hub-pupils').click(); await p.waitForTimeout(300);
     await p.getByTestId('alias').fill('Lince'); await p.getByTestId('add-pupil').click();
-    await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('matematix')); s.state.progress = { A1: { goodDays: ['2026-11-20', '2026-11-21'], best: 5, sessions: 2 } }; s.state.minutes = { [new Date().toLocaleDateString('sv-SE')]: 9 }; localStorage.setItem('matematix', JSON.stringify(s)); });
+    await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('matematix')); s.state.course = '2P'; s.state.lessons = { '2P-M-3': { lv: 3, days: ['2026-11-20', '2026-11-21'] }, '2P-M-4': { lv: 1, days: ['2026-11-21'] } }; s.state.minutes = { [new Date().toLocaleDateString('sv-SE')]: 9 }; localStorage.setItem('matematix', JSON.stringify(s)); });
     await p.reload(); await p.waitForTimeout(400);
     await p.getByTestId('alias').fill('Nube'); await p.getByTestId('add-pupil').click(); await p.waitForTimeout(200);
     const st = await p.evaluate(() => JSON.parse(localStorage.getItem('matematix')).state);
     const ids = Object.keys(st.pupils).filter((k) => k !== '_me');
-    ok(ids.length === 2 && Object.keys(st.progress).length === 0, `${code}: the second pupil starts from scratch`);
+    ok(ids.length === 2 && Object.keys(st.lessons).length === 0, `${code}: the second pupil starts from scratch`);
     const lince = ids.find((k) => st.pupils[k].alias === 'Lince');
-    ok(st.pupils[lince].data.progress.A1 && !JSON.stringify(st).includes('"name"'), `${code}: the first pupil keeps their progress (nickname only)`);
+    ok(st.pupils[lince].data.lessons['2P-M-3'] && !JSON.stringify(st).includes('"name"'), `${code}: the first pupil keeps their progress (nickname only)`);
     await p.getByTestId('set-help').check();
     await p.getByTestId(`pupil-${lince}`).click(); await p.waitForTimeout(200);
     const st2 = await p.evaluate(() => JSON.parse(localStorage.getItem('matematix')).state);
-    ok(st2.progress.A1 && st2.help === 'normal', `${code}: switching back brings their progress and their own settings`);
+    ok(st2.lessons['2P-M-3'] && st2.help === 'normal', `${code}: switching back brings their progress and their own settings`);
     await p.getByTestId('print-session').click();
     const ss = await frame(p);
     ok(ss.includes('Lince') && ss.includes('PAP') || ss.includes('Lince') && code === 'en', `${code}: printable session sheet for the support plan`);
@@ -50,38 +50,45 @@ const SHOTS = process.env.SHOTS || '/tmp/mx-shots';
 
     // worksheets
     await p.getByTestId('hub-sheets').click(); await p.waitForTimeout(300);
-    await p.getByTestId('sheet-station').selectOption('C4');
+    await p.getByTestId('sheet-lesson-course').selectOption('3P');
+    await p.getByTestId('sheet-lesson-subject').selectOption('M');
+    await p.getByTestId('sheet-lesson-lesson').selectOption('3P-M-5'); await p.waitForTimeout(300);
     await p.getByTestId('print-sheet').click();
     const ws = await frame(p);
     const items = (ws.match(/class="no-break"/g) || []).length;
-    ok(items === 8 && ws.includes('<svg') && ws.includes('#/estacion/C4') === false && /<path[^>]+d="M/.test(ws), `${code}: worksheet with 8 exercises, drawings and a QR (${items})`);
+    ok(items === 8 && ws.includes('#/leccion/3P-M-5') === false && /<path[^>]+d="M/.test(ws), `${code}: worksheet with 8 exercises and a QR (${items})`);
     ok((ws.match(/<li /g) || []).length === 8, `${code}: separate answer sheet`);
-    await p.getByTestId('sheet-station').selectOption('A3');
+    await p.getByTestId('sheet-lesson-course').selectOption('3E');
+    await p.getByTestId('sheet-lesson-subject').selectOption('FQ'); await p.waitForTimeout(300);
     await p.getByTestId('print-sheet').click();
     const ws2 = await frame(p);
-    ok(ws2 !== ws && (ws2.match(/class="no-break"/g) || []).length === 8, `${code}: a number-line worksheet too, different each time`);
+    ok(ws2 !== ws && (ws2.match(/class="no-break"/g) || []).length === 8, `${code}: an ESO physics and chemistry worksheet too`);
     await p.getByTestId('print-mural').click();
     ok(((await frame(p)).match(/class="pg"/g) || []).length === 5, `${code}: wall display in 5 pages`);
     await p.screenshot({ path: `${SHOTS}/${code}-a-sheets.png`, fullPage: true });
 
     // whiteboard
     await p.goto(BASE + '#/adultos/pizarra'); await p.waitForTimeout(400);
+    await p.locator('[data-testid="board"] svg').scrollIntoViewIfNeeded(); await p.waitForTimeout(200);
     const box = await p.locator('[data-testid="board"] svg').boundingBox();
     await p.mouse.click(box.x + box.width * (40 + (7 / 20) * 920) / 1000, box.y + box.height * 0.6); await p.waitForTimeout(150);
     ok((await p.getByTestId('board-value').innerText()).trim() === '7', `${code}: tapping the whiteboard line marks 7`);
     await p.getByRole('button', { name: '+1' }).click();
     ok((await p.getByTestId('board-value').innerText()).trim() === '8', `${code}: jumps move along the line`);
-    await p.getByTestId('model-station').selectOption('D2');
-    ok((await p.getByTestId('model-step').innerText()).length > 10, `${code}: a station's worked example in large print`);
+    await p.getByTestId('board-pick-course').selectOption('4P');
+    await p.getByTestId('board-pick-subject').selectOption('M'); await p.waitForTimeout(400);
+    ok((await p.getByTestId('lesson-example').locator('li').count()) >= 2, `${code}: a lesson's worked example in large print`);
     await p.screenshot({ path: `${SHOTS}/${code}-a-board.png`, fullPage: true });
 
     // certificate, guide, family
     await p.goto(BASE + '#/adultos/certificado'); await p.waitForTimeout(400);
+    ok((await p.getByTestId('cert-list').innerText()).includes('·'), `${code}: the certificate lists completed lessons by year and subject`);
     await p.getByTestId('cert-name').fill('Ana'); await p.getByTestId('print-cert').click();
     const cert = await frame(p);
     ok(cert.includes('Ana') && !(await p.evaluate(() => localStorage.getItem('matematix'))).includes('Ana'), `${code}: certificate printed, the name is never stored`);
     await p.goto(BASE + '#/adultos/guia'); await p.waitForTimeout(400);
     ok((await p.getByTestId('guide').locator('li').count()) >= 30, `${code}: guide with signs, steps, classroom measures and hands-on ideas`);
+    ok((await p.getByTestId('lesson-example').count()) === 1, `${code}: the guide explains any lesson step by step`);
     await p.screenshot({ path: `${SHOTS}/${code}-a-guide.png`, fullPage: true });
     await p.goto(BASE + '#/adultos/casa'); await p.waitForTimeout(400);
     await p.getByTestId('print-race').click(); ok(((await frame(p)).match(/<rect/g) || []).length === 31, `${code}: race board 0–30`);

@@ -1,0 +1,93 @@
+# Física y Química ESO, Decreto 107/2022 (2.º y 3.º; 4.º optativa en addenda)
+B2 Materia | 2 | La materia y su medida: magnitudes, SI, cambios de unidades (masa, longitud, superficie, volumen)
+B2 Materia | 2 | Medida de volúmenes de líquidos: probetas, pipetas, buretas
+B2 Materia | 2 | Volumen de sólidos regulares e irregulares (geométrico y desplazamiento)
+B2 Materia | 2 | Volumen ocupado, capacidad y volumen de material
+B2 Materia | 2 | Relación masa-volumen; densidad; caracterizar sustancias
+B2 Materia | 2 | Densidad de un gas; densidades según el estado
+B2 Materia | 2 | Estados de la materia: sólido, líquido y gas; propiedades
+B2 Materia | 2 | Cambios de estado; ebullición y evaporación; gráficas de calentamiento y enfriamiento
+B2 Materia | 2 | Densidad, temperatura de fusión y de ebullición como propiedades características
+B2 Materia | 2 | Modelo cinético-corpuscular para explicar estados y cambios
+B2 Materia | 3 | Propiedades de los gases según el modelo cinético-corpuscular
+B2 Materia | 3 | Gases: presión, volumen, temperatura (Celsius y Kelvin); gráficas
+B2 Materia | 3 | Condensación y licuefacción
+B2 Materia | 3 | Composición de la atmósfera; contaminación atmosférica
+B2 Materia | 2 | Mezclas homogéneas y heterogéneas; disoluciones
+B2 Materia | 2 | Sustancias puras: propiedades características; gráficas temperatura-tiempo
+B2 Materia | 2 | Métodos de separación de mezclas
+B2 Materia | 2 | Sustancias puras simples y compuestas; hidrógeno, nitrógeno, oxígeno
+B2 Materia | 2 | Otras sustancias simples: helio, carbono, hierro, silicio, aluminio
+B2 Materia | 2 | Compuestos de interés: agua y amoniaco
+B2 Materia | 2 | Reacción química (vista macroscópica): formación y descomposición de compuestos
+B2 Materia | 2 | Sustancias importantes: agua, amoniaco, CO2, sal común, aspirina
+B2 Materia | 2 | Representación submicroscópica de mezclas y sustancias puras
+B2 Materia | 2 | Concentración de una disolución (masa soluto/masa disolución)
+B2 Materia | 2 | Solubilidad; disolución saturada; curvas de solubilidad
+B2 Materia | 2 | Clasificación de sustancias simples e importancia
+B2 Materia | 2 | Sustancias simples en la historia; nombres de los elementos
+B2 Materia | 2 | Elemento químico, átomo y masa atómica
+B2 Materia | 2 | Mendeléiev y la tabla periódica: periodos y grupos
+B2 Materia | 2 | Metales, no metales y semimetales
+B2 Materia | 2 | Abundancia de elementos en el universo, la Tierra y el cuerpo humano (Ca, Fe, Na, K, I)
+B2 Materia | 2 | Formas alotrópicas del carbono
+B2 Materia | 2 | Familias de la tabla periódica actual
+B2 Materia | 2 | Reacciones químicas: cambios observables (color, gases, energía)
+B2 Materia | 2 | Reacciones de descomposición, precipitación y formación en la vida cotidiana
+B2 Materia | 2 | Conservación de la masa en las reacciones
+B2 Materia | 2 | Velocidad de reacción: estado, concentración, temperatura, catalizador
+B2 Materia | 2 | Combustión de hidrocarburos: CO2 y agua
+B2 Materia | 2 | Oxidación de metales; descomposición de alimentos
+B2 Materia | 2 | Ácidos y bases; pH; neutralización; indicadores
+B2 Materia | 3 | Modelo atómico de Dalton: mezclas, sustancias puras, reacción química
+B2 Materia | 3 | Sustancia simple y compuesto; reacción química macroscópica
+B2 Materia | 3 | Conservación de la masa con gases; ley de las proporciones constantes; Lavoisier
+B2 Materia | 3 | El hidrógeno como fuente de energía
+B2 Materia | 3 | Modelo de Dalton: leyes ponderales, átomo, elemento
+B2 Materia | 3 | Fórmula química y ecuación química ajustada; coeficientes
+B3 Energía | 3 | La energía y el cambio; formas, transformaciones y conservación
+B3 Energía | 3 | Corriente eléctrica: intensidad y diferencia de potencial
+B3 Energía | 3 | Circuitos; ley de Ohm; resistencia; asociación de resistencias
+B3 Energía | 3 | Ley de Joule; potencia eléctrica; consumo de energía; precio de la electricidad
+B3 Energía | 3 | Producción de corriente eléctrica; fenómenos electromagnéticos
+B3 Energía | 3 | Calor: equilibrio térmico; calor, masa y temperatura; procesos exo/endotérmicos
+B3 Energía | 3 | Calor y cambios de estado; conducción, convección, radiación; aislantes
+B3 Energía | 3 | Rendimiento de máquinas
+B3 Energía | 3 | Uso racional de la energía; renovables y no renovables
+B4 Interacciones | 2 | Sistema de referencia; rapidez media e instantánea
+B4 Interacciones | 2 | Gráficas espacio-tiempo con rapidez constante
+B4 Interacciones | 2 | Rapidez y velocidad
+B4 Interacciones | 2 | Aceleración; gráficas velocidad-tiempo; aceleración en la vida diaria
+B4 Interacciones | 2 | Caída libre
+B4 Interacciones | 2 | Fuerzas como interacción; deformaciones; medida de fuerzas
+B4 Interacciones | 2 | Fuerza y aceleración; elementos de seguridad
+B4 Interacciones | 2 | Introducción a fuerzas eléctricas y magnéticas
+B4 Interacciones | 3 | Interacción eléctrica: carga, atracción y repulsión, electrostática
+B4 Interacciones | 3 | Ley de Coulomb
+B4 Interacciones | 3 | Interacción magnética
+B1 Metodología | 2 3 | Científicos y científicas; herramientas digitales; lenguaje científico
+B1 Metodología | 2 3 | Laboratorio: variables, medida, error, tablas y gráficas; seguridad
+B1 Metodología | 2 3 | Proyecto de investigación: pregunta, hipótesis, comprobación, comunicación
+# 4.º ESO (optativa), addenda
+B1 Metodología | 4 | Preguntas, hipótesis; fuentes fiables; correlación y causalidad; modelos científicos
+B2 Materia | 4 | Modelos atómicos: Dalton, Thomson, Rutherford; electrón, radiactividad
+B2 Materia | 4 | Neutrón, isótopos, cationes y aniones
+B2 Materia | 4 | Sistema periódico: periodicidad, electrones de valencia
+B2 Materia | 4 | Enlace iónico y covalente; estructuras de Lewis
+B2 Materia | 4 | Formulación y nomenclatura de compuestos binarios
+B2 Materia | 4 | Ajuste de ecuaciones; reacciones reversibles
+B2 Materia | 4 | Mol; masa atómica, molecular y molar; cálculos masa-masa
+B2 Materia | 4 | Reacciones exotérmicas y endotérmicas
+B2 Materia | 4 | Química del carbono: hidrocarburos, alcoholes, ácidos; formulación IUPAC
+B2 Materia | 4 | Polímeros y plásticos; macromoléculas de los seres vivos
+B3 Interacciones | 4 | Posición, trayectoria, desplazamiento; sistema de referencia
+B3 Interacciones | 4 | MRU: gráficas posición-tiempo; encuentros
+B3 Interacciones | 4 | MRUA y caída libre; gráficas velocidad-tiempo
+B3 Interacciones | 4 | Ley de Hooke; equilibrio; representación de fuerzas; centro de gravedad
+B3 Interacciones | 4 | Principios de la dinámica (Newton); rozamiento
+B3 Interacciones | 4 | Gravitación universal; masa y peso
+B3 Interacciones | 4 | Fluidos y presión; hidrostática; Pascal; Arquímedes y flotación
+B4 Energía | 4 | Trabajo y potencia
+B4 Energía | 4 | Energía cinética, potencial y conservación de la energía mecánica
+B4 Energía | 4 | Ondas mecánicas; el sonido y sus aplicaciones
+B4 Energía | 4 | La luz: reflexión y refracción; espectro electromagnético

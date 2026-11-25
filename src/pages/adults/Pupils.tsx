@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useT } from '@/i18n';
-import { statusOf, today, useApp, type StationProgress } from '@/stores/app';
-import { ISLANDS, STATIONS } from '@/data/stations';
+import { lessonStatus, today, useApp, type LessonProgress } from '@/stores/app';
 import { TopBar } from '@/components/Layout';
-import { COURSES, courseById } from '@/data/courses';
+import { courseKey } from '@/components/CoursePicker';
+import { COURSE_IDS, SUBJ_EMOJI, tr } from '@/course';
+import { counts as countLessons, startedBySubject } from '@/course/progress';
 import { esc, printPage } from '@/services/print';
 
 const EMOJI = ['🦊', '🐢', '🦉', '🐬', '🦁', '🐝', '🐙', '🦄', '🐸', '🐼', '🚀', '⭐', '🌈', '🍀', '⚽', '🎸'];
@@ -13,7 +14,7 @@ const weekMinutes = (minutes: Record<string, number>) => [...Array(7)].reduce((a
 /** PT / AL / refuerzo: several children on one device. Each one has a nickname + emoji (never a real name), their own
  *  progress and settings. The active child's data lives in the main store; switching swaps it. */
 export default function Pupils() {
-  const { t, m, lang } = useT();
+  const { t, lang } = useT();
   const nav = useNavigate();
   const s = useApp();
   const [alias, setAlias] = useState('');
@@ -23,23 +24,19 @@ export default function Pupils() {
   const name = (id: string | null) => (id && s.pupils[id] ? `${s.pupils[id].emoji} ${s.pupils[id].alias}` : t('p_me'));
 
   const add = () => { if (!alias.trim()) return; const id = s.addPupil(alias.trim().slice(0, 20), emoji); s.switchPupil(id); setAlias(''); setEmoji(EMOJI[(EMOJI.indexOf(emoji) + 1) % EMOJI.length]); };
-  const counts = (progress: Record<string, StationProgress>) => {
-    const st = STATIONS.map((x) => statusOf(progress[x.id]));
-    return { d: st.filter((x) => x === 'done').length, g: st.filter((x) => x === 'doing').length };
-  };
+  const counts = (lessons: Record<string, LessonProgress>) => countLessons(lessons);
 
   const printSheet = () => {
-    const rows = STATIONS.filter((x) => statusOf(s.progress[x.id]) !== 'todo' || x.id === s.suggested)
-      .map((x) => { const p = s.progress[x.id]; return `<tr><td>${ISLANDS.find((i) => i.id === x.island)!.emoji} ${esc(m(x.title))}</td><td>${t(`st_${statusOf(p)}`)}</td><td>${p?.goodDays.map((d) => d.slice(5).split('-').reverse().join('/')).join(', ') || '—'}</td></tr>`; }).join('');
+    const rows = startedBySubject(s.lessons).flatMap((g) => g.items.map((x) => `<tr><td>${SUBJ_EMOJI[g.subject.code] ?? ''} ${esc(tr(lang, g.subject.title))} (${esc(t(courseKey(g.course)))})</td><td>${esc(tr(lang, x.lesson.title))}</td><td>${t(`st_${lessonStatus(x.p)}`)}</td><td>${(x.p.days ?? []).slice(-6).map((d) => d.slice(5).split('-').reverse().join('/')).join(', ')}</td></tr>`)).join('');
     const box = (k: string) => `<h2>${t(k)}</h2><div class="line"></div><div class="line"></div>`;
     printPage(lang, t('ss_title'), `<div class="pg"><h1>${t('ss_title')}</h1><p class="small">${t('ss_note')}</p>
       <p><b>${t('ss_pupil')}:</b> ${esc(name(s.active))} &nbsp; <b>${t('ss_date')}:</b> ${today().split('-').reverse().join('/')}</p>
       <p>${t('ss_minutes', { m: weekMinutes(s.minutes) })}</p>
-      <table style="width:100%;border-collapse:collapse;font-size:10.5pt" border="1" cellpadding="5"><tr><th align="left">${t('ss_station')}</th><th align="left">${t('ss_state')}</th><th align="left">${t('ss_days')}</th></tr>${rows || `<tr><td colspan="3">—</td></tr>`}</table>
+      <table style="width:100%;border-collapse:collapse;font-size:10.5pt" border="1" cellpadding="5"><tr><th align="left">${t('lp_subject')}</th><th align="left">${t('ss_station')}</th><th align="left">${t('ss_state')}</th><th align="left">${t('ss_days')}</th></tr>${rows || `<tr><td colspan="4">—</td></tr>`}</table>
       ${box('ss_strategies')}${box('ss_supports')}${box('ss_hands')}${box('ss_next')}</div>`);
   };
 
-  const c = counts(s.progress);
+  const c = counts(s.lessons);
   return (
     <div className="min-h-dvh pb-10">
       <TopBar title={t('sec_pupils')} back="/adultos" />
@@ -51,7 +48,7 @@ export default function Pupils() {
           {[[null, null] as const, ...list].map(([id]) => {
             const on = s.active === id;
             const data = on ? s : id ? s.pupils[id].data : s.pupils['_me']?.data ?? (s.active ? {} : s);
-            const k = counts((data.progress ?? {}) as Record<string, StationProgress>);
+            const k = counts((data.lessons ?? {}) as Record<string, LessonProgress>);
             return (
               <div key={id ?? 'me'} className={`flex items-center gap-2 rounded-2xl p-2 ${on ? 'bg-[var(--color-accent-pale)]' : ''}`}>
                 <button className="flex-1 text-left" onClick={() => s.switchPupil(id)} data-testid={`pupil-${id ?? 'me'}`} aria-pressed={on}>
@@ -82,9 +79,9 @@ export default function Pupils() {
           <p className="text-sm text-[var(--color-muted)]">{t('p_progress', { d: c.d, g: c.g, m: weekMinutes(s.minutes) })}</p>
           <label className="flex items-center gap-3 py-2"><span className="flex-1">{t('course_q')}</span>
             <select className="rounded-2xl border-2 border-[var(--color-border)] bg-[var(--color-card)] px-3 min-h-11" value={s.course ?? ''} data-testid="pupil-course"
-              onChange={(e) => { const c = courseById(e.target.value); s.set(c ? { course: c.id, suggested: c.start, last: null } : { course: null }); }}>
+              onChange={(e) => s.set({ course: COURSE_IDS.includes(e.target.value) ? e.target.value : null })}>
               <option value="">—</option>
-              {COURSES.map((c) => <option key={c.id} value={c.id}>{t(`course_${c.id}`)}</option>)}
+              {COURSE_IDS.map((c) => <option key={c} value={c}>{t(courseKey(c))}</option>)}
             </select></label>
           {([['help', s.help === 'more', (v: boolean) => s.set({ help: v ? 'more' : 'normal' })], ['voice', s.voice, (v: boolean) => s.set({ voice: v })], ['sound', s.sound, (v: boolean) => s.set({ sound: v })],
             ['large', s.large, (v: boolean) => s.set({ large: v })], ['motion', s.motion === 'reduce', (v: boolean) => s.set({ motion: v ? 'reduce' : 'auto' })]] as const).map(([k, v, on]) => (
