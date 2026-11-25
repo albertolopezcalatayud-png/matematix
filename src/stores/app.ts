@@ -20,7 +20,7 @@ type PupilKey = (typeof PUPIL_KEYS)[number];
 export interface Pupil { alias: string; emoji: string; data: Partial<Pick<AppState, PupilKey>> }
 
 /** A lesson: the highest level passed (0 none, 3 = complete) and the best first-time score in each level. */
-export interface LessonProgress { lv: number; best: [number, number, number]; runs: number }
+export interface LessonProgress { lv: number; best: [number, number, number]; runs: number; days?: string[] }
 
 interface AppState {
   lang: Lang | null;
@@ -97,7 +97,8 @@ export const useApp = create<AppState>()(
         const best = [...cur.best] as [number, number, number];
         best[level - 1] = Math.max(best[level - 1], rightFirst);
         const lv = rightFirst >= MASTER_RIGHT ? Math.max(cur.lv, level) : cur.lv;
-        return { lastLesson: lesson, lessons: { ...s.lessons, [lesson]: { lv, best, runs: cur.runs + 1 } } };
+        const d = today(); const days = [...(cur.days ?? []).filter((x) => x !== d), d].slice(-30);
+        return { lastLesson: lesson, lessons: { ...s.lessons, [lesson]: { lv, best, runs: cur.runs + 1, days } } };
       }),
       markQSeen: (lesson, keys) => set((s) => {
         const fresh = new Set(keys);

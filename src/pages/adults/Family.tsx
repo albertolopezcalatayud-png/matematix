@@ -1,13 +1,14 @@
 import { useT } from '@/i18n';
-import { STATIONS } from '@/data/stations';
+import { useState } from 'react';
 import { useApp } from '@/stores/app';
+import { findLesson, tr } from '@/course';
+import { lastDays, practisedOn } from '@/course/progress';
 import { TopBar } from '@/components/Layout';
 import { Bullets } from '@/components/Bullets';
-import { ModelSteps } from '@/components/ModelSteps';
+import { LessonExample, LessonPicker } from '@/components/LessonPicker';
 import { esc, printPage } from '@/services/print';
 import { APP_NAME } from '@/config';
 
-const days7 = () => [...Array(7)].map((_, i) => new Date(Date.now() - i * 864e5).toLocaleDateString('sv-SE'));
 const frame = (n: number, x: number, y: number, c = 4.2) => {
   let s = '';
   for (let i = 0; i < 10; i++) {
@@ -21,9 +22,11 @@ const frame = (n: number, x: number, y: number, c = 4.2) => {
 /** For families: 10-minute challenges with everyday things, two printable games, how it is explained at school,
  *  and a weekly "what I can do" card with no marks. Paper and conversation first. */
 export default function Family() {
-  const { t, m, lang } = useT();
-  const progress = useApp((s) => s.progress);
+  const { t, lang } = useT();
+  const lessons = useApp((s) => s.lessons);
   const minutes = useApp((s) => s.minutes);
+  const course = useApp((s) => s.course);
+  const [lesson, setLesson] = useState<string | null>(useApp.getState().lastLesson);
 
   const race = () => {
     // a winding 0–30 track: three rows of 11 squares, gold on 5, 15, 25 (jump to the next ten)
@@ -44,11 +47,10 @@ export default function Family() {
   };
 
   const week = () => {
-    const d = new Set(days7());
-    const lit = STATIONS.filter((s) => progress[s.id]?.goodDays.some((x) => d.has(x)));
-    const mins = days7().reduce((a, x) => a + (minutes[x] ?? 0), 0);
+    const lit = practisedOn(lessons, lastDays(7)).map((id) => findLesson(id)).filter((x) => !!x);
+    const mins = lastDays(7).reduce((a, x) => a + (minutes[x] ?? 0), 0);
     printPage(lang, t('h_week_title'), `<div style="border:2.5mm solid #FFE3A3;border-radius:8mm;padding:10mm;max-width:150mm;margin:auto">
-      <h1>✦ ${t('h_week_title')}</h1>${lit.length ? `<ul style="font-size:15pt;line-height:1.7">${lit.map((s) => `<li>${esc(m(s.title))}</li>`).join('')}</ul>` : `<p style="font-size:14pt">${t('h_week_none')}</p>`}
+      <h1>✦ ${t('h_week_title')}</h1>${lit.length ? `<ul style="font-size:15pt;line-height:1.7">${lit.map((x) => `<li>${esc(tr(lang, x.lesson.title))}</li>`).join('')}</ul>` : `<p style="font-size:14pt">${t('h_week_none')}</p>`}
       <p>${t('h_week_min', { m: mins })}</p><h2>${t('h_week_wish')}</h2><div class="line"></div><div class="line"></div><p class="small">${APP_NAME}</p></div>`);
   };
 
@@ -65,7 +67,7 @@ export default function Family() {
         <section className="card space-y-2"><h2 className="font-extrabold">✦ {t('h_week')}</h2><p className="text-base">{t('h_week_d')}</p>
           <button className="btn btn-primary w-full" onClick={week} data-testid="print-week">🖨️ {t('h_print')}</button>
           <p className="text-sm text-[var(--color-muted)]">{t('h_fridge')}</p></section>
-        <section className="card space-y-3"><h2 className="font-extrabold">🪜 {t('sec_explain')}</h2><p className="text-base">{t('h_explain_d')}</p><ModelSteps /></section>
+        <section className="card space-y-3"><h2 className="font-extrabold">🪜 {t('sec_explain')}</h2><p className="text-base">{t('h_explain_d')}</p><LessonPicker value={lesson} onChange={setLesson} startCourse={course} testId="family-pick" /><LessonExample id={lesson} /></section>
       </main>
     </div>
   );
