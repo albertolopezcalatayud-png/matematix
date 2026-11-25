@@ -42,6 +42,48 @@ function fractionWords(lang: Lang, a: number, b: number): string {
 }
 
 /** Turns symbols into words so the voice reads "8 más 5" and not "8 plus sign 5". */
+/** Unit symbols said as words, so a voice never spells them letter by letter ("cm" → "centímetros").
+ *  Units of two or more letters anywhere as a whole word; one-letter units (m, g, L, h, s, N, J, W, V) only after a
+ *  number or in "de m a cm" / "from m to cm", so a variable such as "m" in "y = mx" or "la pendiente m" is left alone. */
+const UNITS: Record<string, [string, string, string]> = {
+  km: ['kilómetros', 'quilòmetres', 'kilometres'], hm: ['hectómetros', 'hectòmetres', 'hectometres'], dam: ['decámetros', 'decàmetres', 'decametres'],
+  dm: ['decímetros', 'decímetres', 'decimetres'], cm: ['centímetros', 'centímetres', 'centimetres'], mm: ['milímetros', 'mil·límetres', 'millimetres'],
+  kg: ['kilos', 'quilos', 'kilograms'], hg: ['hectogramos', 'hectograms', 'hectograms'], dag: ['decagramos', 'decagrams', 'decagrams'], dg: ['decigramos', 'decigrams', 'decigrams'],
+  cg: ['centigramos', 'centigrams', 'centigrams'], mg: ['miligramos', 'mil·ligrams', 'milligrams'],
+  kL: ['kilolitros', 'quilolitres', 'kilolitres'], hL: ['hectolitros', 'hectolitres', 'hectolitres'], daL: ['decalitros', 'decalitres', 'decalitres'],
+  dL: ['decilitros', 'decilitres', 'decilitres'], cL: ['centilitros', 'centilitres', 'centilitres'], mL: ['mililitros', 'mil·lilitres', 'millilitres'],
+  ml: ['mililitros', 'mil·lilitres', 'millilitres'], cl: ['centilitros', 'centilitres', 'centilitres'], dl: ['decilitros', 'decilitres', 'decilitres'],
+  km2: ['kilómetros cuadrados', 'quilòmetres quadrats', 'square kilometres'], min: ['minutos', 'minuts', 'minutes'], ms: ['milisegundos', 'mil·lisegons', 'milliseconds'],
+  kWh: ['kilovatios hora', 'quilowatts hora', 'kilowatt hours'], kW: ['kilovatios', 'quilowatts', 'kilowatts'], kJ: ['kilojulios', 'quilojoules', 'kilojoules'],
+  kPa: ['kilopascales', 'quilopascals', 'kilopascals'], Pa: ['pascales', 'pascals', 'pascals'], atm: ['atmósferas', 'atmosferes', 'atmospheres'],
+  mol: ['moles', 'mols', 'moles'], Hz: ['hercios', 'hertzs', 'hertz'], kHz: ['kilohercios', 'quilohertzs', 'kilohertz'], mA: ['miliamperios', 'mil·liampers', 'milliamps'],
+  GB: ['gigas', 'gigues', 'gigabytes'], MB: ['megas', 'megues', 'megabytes'], KB: ['kilobytes', 'quilobytes', 'kilobytes'], kB: ['kilobytes', 'quilobytes', 'kilobytes'],
+};
+const UNIT1: Record<string, [string, string, string]> = {
+  m: ['metros', 'metres', 'metres'], g: ['gramos', 'grams', 'grams'], L: ['litros', 'litres', 'litres'], l: ['litros', 'litres', 'litres'],
+  h: ['horas', 'hores', 'hours'], s: ['segundos', 'segons', 'seconds'], N: ['newtons', 'newtons', 'newtons'], J: ['julios', 'joules', 'joules'],
+  W: ['vatios', 'watts', 'watts'], V: ['voltios', 'volts', 'volts'], A: ['amperios', 'ampers', 'amps'],
+};
+const SQ: [string, string, string][] = [['cuadrados', 'quadrats', 'square'], ['cúbicos', 'cúbics', 'cubic']];
+function unitWords(lang: Lang, text: string): string {
+  const i = lang === 'es' ? 0 : lang === 'ca' ? 1 : 2;
+  const say = (w: [string, string, string], pow?: string) => {
+    if (!pow) return w[i];
+    const p = SQ[pow === '²' ? 0 : 1][i];
+    return lang === 'en' ? `${p} ${w[i]}` : `${w[i]} ${p}`;
+  };
+  const many = Object.keys(UNITS).sort((a, b) => b.length - a.length).join('|');
+  text = text.replace(new RegExp(`(?<![\\p{L}\\d])(${many})([²³])?(?![\\p{L}])`, 'gu'), (_, u: string, pw?: string) => say(UNITS[u], pw));
+  const one = Object.keys(UNIT1).join('|');
+  text = text.replace(new RegExp(`(\\d)\\s(${one})([²³])?(?![\\p{L}\\d])`, 'gu'), (_, d: string, u: string, pw?: string) => `${d} ${say(UNIT1[u], pw)}`);
+  const from = { es: '(?:de|en)', ca: '(?:de|en)', en: '(?:from|in|to)' }[lang];
+  const to = { es: '(?:a|en)', ca: '(?:a|en)', en: '(?:to|into)' }[lang];
+  text = text.replace(new RegExp(`(^|\\s)(${from}) (m|g|L|l)(?= ${to}\\s)`, 'giu'), (_, a: string, b: string, u: string) => `${a}${b} ${UNIT1[u][i]}`);
+  text = text.replace(new RegExp(`(^|\\s)(${to}) (m|g|L|l)(?=[\\s.,;:?!)]|$)`, 'giu'), (_, a: string, b: string, u: string) => `${a}${b} ${UNIT1[u][i]}`);
+  text = text.replace(/(\d)\s?Ω/g, (_, d: string) => `${d} ${['ohmios', 'ohms', 'ohms'][i]}`);
+  return text;
+}
+
 export function speakable(lang: Lang, text: string): string {
   const w = { es: ['más', 'menos', 'por', 'es igual a', 'cuánto'], ca: ['més', 'menys', 'per', 'és igual a', 'quant'], en: ['plus', 'minus', 'times', 'equals', 'what'] }[lang];
   const sup = (x: string) => x.split('').map((c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).join('');
@@ -49,6 +91,7 @@ export function speakable(lang: Lang, text: string): string {
   text = text.replace(/10([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g, (_, e) => `10 ${pw[0]} ${sup(e)}`).replace(/10ⁿ/g, `10 ${pw[0]} n`).replace(/·/g, ` ${pw[1]} `).replace(/÷/g, ` ${pw[2]} `);
   const U: Record<string, [string, string, string]> = { 'km/h': ['kilómetros por hora', 'quilòmetres per hora', 'kilometres per hour'], 'g/cm³': ['gramos por centímetro cúbico', 'grams per centímetre cúbic', 'grams per cubic centimetre'], 'g/L': ['gramos por litro', 'grams per litre', 'grams per litre'], 'cm³': ['centímetros cúbicos', 'centímetres cúbics', 'cubic centimetres'], '°C': ['grados', 'graus', 'degrees'] };
   for (const [u, w3] of Object.entries(U)) text = text.split(u).join(w3[lang === 'es' ? 0 : lang === 'ca' ? 1 : 2]);
+  text = unitWords(lang, text);
   return text.replace(/(\d+)\/(\d+)/g, (_, a, b) => fractionWords(lang, Number(a), Number(b))).replace(/\+/g, ` ${w[0]} `).replace(/−/g, ` ${w[1]} `).replace(/×/g, ` ${w[2]} `).replace(/=/g, ` ${w[3]} `).replace(/(^|[\s=])\?(?=\s|$)/g, `$1 ${w[4]}`).replace(/\s+/g, ' ').trim();
 }
 

@@ -30,7 +30,6 @@ export default function LessonPage() {
 function LessonBody({ id, where, content }: { id: string; where: NonNullable<ReturnType<typeof findLesson>>; content: LessonContent | null | undefined }) {
   const { t, lang } = useT();
   const nav = useNavigate();
-  const voice = useApp((s) => s.voice);
   const progress = useApp((s) => s.lessons[id]);
   const finishLevel = useApp((s) => s.finishLevel);
   const markQSeen = useApp((s) => s.markQSeen);
@@ -95,7 +94,7 @@ function LessonBody({ id, where, content }: { id: string; where: NonNullable<Ret
                 <div className="flex gap-2">
                   <button className="btn btn-ghost !px-3" onClick={() => void speak(lang, [tr(lang, ex.q), ...ex.steps.slice(0, step + 1).map((s) => tr(lang, s))])} aria-label={t('listen')}>🔊</button>
                   {step + 1 < ex.steps.length
-                    ? <button className="btn btn-primary flex-1" data-testid="next-step" onClick={() => { setStep(step + 1); if (voice) void speak(lang, tr(lang, ex.steps[step + 1])); }}>{t('show_next_step')} ▶</button>
+                    ? <button className="btn btn-primary flex-1" data-testid="next-step" onClick={() => setStep(step + 1)}>{t('show_next_step')} ▶</button>
                     : <button className="btn btn-primary flex-1" data-testid="to-levels" onClick={() => setStage('levels')}>{t('to_practice')} ▶</button>}
                 </div>
               </section>
@@ -181,7 +180,6 @@ const ansKey = (a: Ans) => (typeof a === 'number' ? `n${a}` : typeof a === 'stri
 
 function QExercise({ qq, level, seed, onDone, keys }: { qq: Q; level: Level; seed: number; onDone: (firstTry: boolean) => void; keys: { comma: boolean; minus: boolean; frac: boolean } }) {
   const { t, lang } = useT();
-  const voice = useApp((s) => s.voice);
   const typed = level > 1 && !qq.mc && isTypeable(qq.a);
   const options = useMemo(() => optionsFor(qq, level, rng(seed + 17)), [qq, level, seed]);
   const [value, setValue] = useState<Ans | null>(null);
@@ -192,14 +190,13 @@ function QExercise({ qq, level, seed, onDone, keys }: { qq: Q; level: Level; see
   const prompt = tr(lang, qq.q);
   const hint = tr(lang, qq.hint);
   const oneTry = level === 3;
-  useEffect(() => { if (voice) void speak(lang, prompt); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const answer = showAns(lang, qq.a);
   const check = (v: Ans | string) => {
     const ok = typeof v === 'string' && typed ? typedIsRight(qq.a, v) : ansKey(v as Ans) === ansKey(qq.a);
-    if (ok) { setState('right'); if (voice) void speak(lang, t(okMsg)); }
-    else if (tries === 0 && !oneTry) { setTries(1); setState('wrong'); if (voice) void speak(lang, [t('try_again'), hint]); }
-    else { setState('shown'); if (voice) void speak(lang, [t('answer_was', { n: answer }), hint]); }
+    if (ok) setState('right');
+    else if (tries === 0 && !oneTry) { setTries(1); setState('wrong'); }
+    else setState('shown');
   };
   const locked = state === 'right' || state === 'shown';
   const showHint = level === 1 || state === 'wrong' || state === 'shown';
