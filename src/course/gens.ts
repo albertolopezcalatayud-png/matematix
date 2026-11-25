@@ -2,7 +2,7 @@
 // (the same kind of exercise with bigger numbers, more steps or less help).
 import type { Visual } from '@/engine/types';
 import type { Q, T3 } from './types';
-import { addQ, compareQ, DAYS, gcd, int, mc, N, NAMES, near, pick, pickN, q, round, rowsOf, S, subQ, T, THINGS, thing, X, type Li, type R } from './lib';
+import { addQ, compareQ, DAYS, gcd, int, lcm, mc, N, NAMES, near, pick, pickN, q, round, rowsOf, S, subQ, T, THINGS, thing, X, type Li, type R } from './lib';
 
 export type Gen = (r: R) => Q;
 export const line = (min: number, max: number, step: number, labelStep = step, point?: number): Visual => {
@@ -150,8 +150,8 @@ export const fractions = (kinds: ('read' | 'of' | 'compare' | 'equiv' | 'addsame
   if (k === 'equiv') { const f = int(r, 2, 5), a = `${n * f}/${d * f}`; return q(X((l) => [`¿Qué fracción es equivalente a ${n}/${d}?`, `Quina fracció és equivalent a ${n}/${d}?`, `Which fraction is equivalent to ${n}/${d}?`][l]), a, [`${n + f}/${d + f}`, `${n * f}/${d}`, `${n}/${d * f}`].filter((x) => x !== a),
     X((l) => [`Multiplica arriba y abajo por el mismo número: ×${f}.`, `Multiplica dalt i baix pel mateix nombre: ×${f}.`, `Multiply top and bottom by the same number: ×${f}.`][l]), { mc: true }); }
   // addsame: a/d + b/d
-  const a = int(r, 1, d - 1), b = int(r, 1, Math.max(1, d - a)); const s = `${a + b}/${d}`;
-  return q(X(() => `${a}/${d} + ${b}/${d} = ?`), s, [`${a + b}/${d + d}`, `${a * b}/${d}`, `${Math.abs(a - b)}/${d}`].filter((x) => x !== s && !x.startsWith('0/')).concat([`${a + b + 1}/${d}`]),
+  const dd = Math.max(3, d), a = int(r, 1, dd - 2), b = int(r, 1, dd - 1 - a); const s = `${a + b}/${dd}`;
+  return q(X(() => `${a}/${dd} + ${b}/${dd} = ?`), s, [`${a + b}/${dd + dd}`, `${a * b}/${dd}`, `${Math.abs(a - b)}/${dd}`].filter((x) => x !== s && !x.startsWith('0/')).concat([`${a + b + 1}/${dd}`]),
     T('Con el mismo denominador, se suman los numeradores y el denominador se queda igual.', 'Amb el mateix denominador, se sumen els numeradors i el denominador es queda igual.', 'With the same denominator, add the numerators and keep the denominator.'));
 };
 /** Decimals: read the place, compare, add/subtract, × and ÷ by 10, 100, 1000, round. */
@@ -164,7 +164,7 @@ export const decimals = (kinds: ('place' | 'compare' | 'add' | 'sub' | 'mul10' |
     return q(X((l) => `${N(l, a)} ${k === 'add' ? '+' : '−'} ${N(l, b)} = ?`), ans, near(r, ans, { step: 1 / f, spread: 9, also: [round(ans + 1, places), round(ans - 0.1, places)], min: 0 }), T('Coloca las comas una debajo de otra y opera como siempre.', 'Col·loca les comes una davall de l’altra i opera com sempre.', 'Line up the decimal points and work as usual.')); }
   if (k === 'mul10') { const v = rnd(0.1, 99), m = pick(r, [10, 100, 1000]), mul = r() < 0.5, ans = round(mul ? v * m : v / m, 6);
     return q(X((l) => `${N(l, v)} ${mul ? '×' : '÷'} ${N(l, m)} = ?`), ans, near(r, ans, { also: [round(mul ? v / m : v * m, 6), round(mul ? v * m * 10 : v / m / 10, 6), round(mul ? v * m / 10 : v / m * 10, 6)], step: ans / 10 || 1 }),
-      X((l) => [`${mul ? 'Multiplicar' : 'Dividir'} por ${N(l, m)} mueve la coma ${String(m).length - 1} lugares a la ${mul ? 'derecha' : 'izquierda'}.`, `${mul ? 'Multiplicar' : 'Dividir'} per ${N(l, m)} mou la coma ${String(m).length - 1} llocs a la ${mul ? 'dreta' : 'esquerra'}.`, `${mul ? 'Multiplying' : 'Dividing'} by ${N(l, m)} moves the decimal point ${String(m).length - 1} places to the ${mul ? 'right' : 'left'}.`][l])); }
+      X((l) => [`${mul ? 'Multiplicar' : 'Dividir'} por ${N(l, m)} mueve la coma ${String(m).length - 1} ${m === 10 ? 'lugar' : 'lugares'} a la ${mul ? 'derecha' : 'izquierda'}.`, `${mul ? 'Multiplicar' : 'Dividir'} per ${N(l, m)} mou la coma ${String(m).length - 1} ${m === 10 ? 'lloc' : 'llocs'} a la ${mul ? 'dreta' : 'esquerra'}.`, `${mul ? 'Multiplying' : 'Dividing'} by ${N(l, m)} moves the decimal point ${String(m).length - 1} ${m === 10 ? 'place' : 'places'} to the ${mul ? 'right' : 'left'}.`][l])); }
   if (k === 'round') { const v = rnd(1, 99); const to = pick(r, [0, 1].filter((x) => x < places)); const ans = round(v, to);
     return q(X((l) => to === 0 ? [`Redondea ${N(l, v)} a las unidades.`, `Arredonix ${N(l, v)} a les unitats.`, `Round ${N(l, v)} to the nearest whole number.`][l] : [`Redondea ${N(l, v)} a las décimas.`, `Arredonix ${N(l, v)} a les dècimes.`, `Round ${N(l, v)} to the nearest tenth.`][l]), ans,
       near(r, ans, { step: 10 ** -to, also: [Math.floor(v * 10 ** to) / 10 ** to, Math.ceil(v * 10 ** to) / 10 ** to].map((x) => round(x, to)) }), T('Mira la cifra siguiente: si es 5 o más, sube; si es menos de 5, se queda.', 'Mira la xifra següent: si és 5 o més, puja; si és menys de 5, es queda.', 'Look at the next digit: 5 or more rounds up; less than 5 stays.')); }
@@ -438,4 +438,153 @@ export const lineGraph = (): Gen => (r) => {
   if (k === 0) return q(X((l) => [`¿Qué temperatura (°C) había a las ${hours[i]}?`, `Quina temperatura (°C) feia a les ${hours[i]}?`, `What was the temperature (°C) at ${hours[i]}?`][l]), ys[i], near(r, ys[i], { also: ys.filter((y) => y !== ys[i]), min: 0 }), T('Busca la hora abajo, sube hasta el punto y mira a la izquierda.', 'Busca l’hora baix, puja fins al punt i mira a l’esquerra.', 'Find the time at the bottom, go up to the point and read across to the left.'), { visual: v });
   if (k === 1) { const m = ys.indexOf(Math.max(...ys)); return mc(T('¿A qué hora hizo más calor?', 'A quina hora va fer més calor?', 'At what time was it warmest?'), S(hours[m]), hours.filter((_, j) => j !== m).map(S), T('Busca el punto más alto de la línea.', 'Busca el punt més alt de la línia.', 'Find the highest point on the line.'), { visual: v }); }
   const d = ys[3] - ys[0]; return q(X((l) => [`¿Cuántos grados subió la temperatura de las 8 h a las 14 h?`, `Quants graus va pujar la temperatura de les 8 h a les 14 h?`, `By how many degrees did it warm up from 8 h to 14 h?`][l]), d, near(r, d, { also: [ys[3], ys[0]], min: 0 }), T('Lee los dos valores y resta.', 'Llig els dos valors i resta.', 'Read both values and subtract.'), { visual: v });
+};
+
+/* ───────────── Cycle 3 (5.º–6.º) ───────────── */
+/** Squares, cubes and powers of 10; square roots of perfect squares. */
+export const powers = (kinds: ('sq' | 'cube' | 'p10' | 'root' | 'read')[]): Gen => (r) => {
+  const k = pick(r, kinds);
+  if (k === 'sq') { const b = int(r, 2, 15); return q(X((l) => `${N(l, b)}² = ?`), b * b, near(r, b * b, { also: [2 * b, b + 2, b * b + b] }), X((l) => [`${b}² es ${b} × ${b}, no ${b} × 2.`, `${b}² és ${b} × ${b}, no ${b} × 2.`, `${b}² means ${b} × ${b}, not ${b} × 2.`][l])); }
+  if (k === 'cube') { const b = int(r, 2, 6); return q(X((l) => `${N(l, b)}³ = ?`), b ** 3, near(r, b ** 3, { also: [3 * b, b * b, b ** 3 + b] }), X((l) => [`${b}³ es ${b} × ${b} × ${b}.`, `${b}³ és ${b} × ${b} × ${b}.`, `${b}³ means ${b} × ${b} × ${b}.`][l])); }
+  if (k === 'p10') { const e = int(r, 2, 6); return q(S(`10${'⁰¹²³⁴⁵⁶⁷⁸⁹'[e]} = ?`), 10 ** e, [10 ** (e - 1), 10 ** (e + 1), 10 * e], X((l) => [`Es un 1 seguido de ${e} ceros.`, `És un 1 seguit de ${e} zeros.`, `It is a 1 followed by ${e} zeros.`][l])); }
+  if (k === 'root') { const b = int(r, 2, 15); return q(X((l) => `√${N(l, b * b)} = ?`), b, near(r, b, { also: [b * b / 2, b + 1].filter(Number.isInteger), min: 1 }), X((l) => [`¿Qué número multiplicado por sí mismo da ${b * b}?`, `Quin nombre multiplicat per ell mateix dona ${b * b}?`, `What number times itself makes ${b * b}?`][l])); }
+  const b = int(r, 2, 9), e = int(r, 2, 5); return mc(X((l) => [`¿Cómo se escribe ${Array(e).fill(b).join(' × ')} en forma de potencia?`, `Com s’escriu ${Array(e).fill(b).join(' × ')} en forma de potència?`, `How do you write ${Array(e).fill(b).join(' × ')} as a power?`][l]), S(`${b}${'⁰¹²³⁴⁵⁶⁷⁸⁹'[e]}`), [S(`${e}${'⁰¹²³⁴⁵⁶⁷⁸⁹'[b]}`), S(`${b} × ${e}`), S(`${b}${'⁰¹²³⁴⁵⁶⁷⁸⁹'[e + 1]}`)].filter((x) => x[0] !== `${b}${'⁰¹²³⁴⁵⁶⁷⁸⁹'[e]}`), T('La base es el número que se repite y el exponente, cuántas veces.', 'La base és el nombre que es repetix i l’exponent, quantes vegades.', 'The base is the number repeated and the exponent is how many times.'));
+};
+/** Add/subtract fractions with different denominators (one a multiple of the other, or small coprime ones). */
+export const fracAddSub = (): Gen => (r) => {
+  const d1 = pick(r, [2, 3, 4, 5, 6]), m = pick(r, [2, 3]), d2 = r() < 0.6 ? d1 * m : pick(r, [2, 3, 4, 5].filter((x) => x !== d1));
+  const L = (d1 * d2) / gcd(d1, d2); const a = int(r, 1, d1 - 1 || 1), b = int(r, 1, d2 - 1 || 1); const add = r() < 0.6 || a / d1 <= b / d2;
+  const numr = add ? a * (L / d1) + b * (L / d2) : a * (L / d1) - b * (L / d2); const g = gcd(Math.abs(numr), L);
+  const ans = `${numr / g}/${L / g}`;
+  const wrong = [`${add ? a + b : Math.abs(a - b)}/${d1 + d2}`, `${numr}/${L * 2}`, `${add ? a + b : Math.abs(a - b)}/${L}`, `${numr + 1}/${L}`].filter((x) => x !== ans && !x.startsWith('0/') && x !== `${numr}/${L}`);
+  return q(X(() => `${a}/${d1} ${add ? '+' : '−'} ${b}/${d2} = ?`), ans, wrong, X((l) => [`Busca un denominador común (${L}), convierte las dos fracciones y después ${add ? 'suma' : 'resta'} los numeradores. Simplifica si puedes.`, `Busca un denominador comú (${L}), convertix les dues fraccions i després ${add ? 'suma' : 'resta'} els numeradors. Simplifica si pots.`, `Find a common denominator (${L}), convert both fractions, then ${add ? 'add' : 'subtract'} the numerators. Simplify if you can.`][l]));
+};
+/** Simplify a fraction. */
+export const simplify = (): Gen => (r) => {
+  const d = int(r, 2, 9), n = int(r, 1, d - 1); if (gcd(n, d) > 1) return simplify()(r); const f = int(r, 2, 6); const ans = `${n}/${d}`;
+  return q(X((l) => [`Simplifica ${n * f}/${d * f} todo lo posible.`, `Simplifica ${n * f}/${d * f} tant com puguis.`, `Simplify ${n * f}/${d * f} as far as possible.`][l]).map((s, i) => (i === 1 ? s.replace('puguis', 'pugues') : s)) as unknown as T3, ans,
+    [`${n * f}/${d}`, `${n}/${d * f}`, `${n + 1}/${d}`, `${n * 2}/${d * 2}`].filter((x) => x !== ans), X((l) => [`Divide arriba y abajo por el mismo número (aquí, ${f}).`, `Dividix dalt i baix pel mateix nombre (ací, ${f}).`, `Divide top and bottom by the same number (here, ${f}).`][l]));
+};
+/** Percentages: of an amount, discount, fraction ↔ percentage ↔ decimal. */
+export const percent = (kinds: ('of' | 'discount' | 'convert' | 'increase' | 'whatpct')[]): Gen => (r) => {
+  const k = pick(r, kinds);
+  if (k === 'of') { const p = pick(r, [10, 20, 25, 50, 75, 5, 30, 40]), base = pick(r, [20, 40, 60, 80, 100, 120, 200, 300, 400]); const a = (p * base) / 100;
+    return q(X((l) => [`¿Cuánto es el ${p} % de ${N(l, base)}?`, `Quant és el ${p} % de ${N(l, base)}?`, `What is ${p}% of ${N(l, base)}?`][l]), a, near(r, a, { also: [p, base - a, a * 10, base / p].filter((x) => Number.isInteger(x) && x !== a) }), X((l) => [`${p} % es ${p} de cada 100: ${base} × ${p} ÷ 100.`, `${p} % és ${p} de cada 100: ${base} × ${p} ÷ 100.`, `${p}% means ${p} out of every 100: ${base} × ${p} ÷ 100.`][l])); }
+  if (k === 'discount') { const p = pick(r, [10, 20, 25, 50, 30]), price = pick(r, [20, 40, 60, 80, 100, 120, 150, 200]); const fin = price - (p * price) / 100;
+    return q(X((l) => [`Unas zapatillas cuestan ${N(l, price)} € y tienen un descuento del ${p} %. ¿Cuánto pagas?`, `Unes sabatilles costen ${N(l, price)} € i tenen un descompte del ${p} %. Quant pagues?`, `Trainers cost €${N(l, price)} with a ${p}% discount. How much do you pay?`][l]), fin, near(r, fin, { also: [(p * price) / 100, price - p, price + (p * price) / 100] }), X((l) => [`Calcula el descuento (${p} % de ${price} = ${(p * price) / 100}) y réstalo del precio.`, `Calcula el descompte (${p} % de ${price} = ${(p * price) / 100}) i resta’l del preu.`, `Work out the discount (${p}% of ${price} = ${(p * price) / 100}) and subtract it from the price.`][l])); }
+  if (k === 'increase') { const p = pick(r, [10, 20, 25, 50]), base = pick(r, [40, 80, 100, 200, 300]); const fin = base + (p * base) / 100;
+    return q(X((l) => [`Un precio de ${N(l, base)} € sube un ${p} %. ¿Cuál es el nuevo precio?`, `Un preu de ${N(l, base)} € puja un ${p} %. Quin és el preu nou?`, `A price of €${N(l, base)} goes up by ${p}%. What is the new price?`][l]), fin, near(r, fin, { also: [base + p, (p * base) / 100, base - (p * base) / 100] }), T('Calcula el aumento y súmalo al precio.', 'Calcula l’augment i suma’l al preu.', 'Work out the increase and add it to the price.')); }
+  if (k === 'whatpct') { const tot = pick(r, [20, 25, 40, 50]), part = int(r, 1, tot - 1), p = (part * 100) / tot; if (!Number.isInteger(p)) return percent(['of'])(r);
+    return q(X((l) => [`En una clase de ${tot} alumnos, ${part} llevan gafas. ¿Qué porcentaje lleva gafas?`, `En una classe de ${tot} alumnes, ${part} porten ulleres. Quin percentatge porta ulleres?`, `In a class of ${tot} pupils, ${part} wear glasses. What percentage wear glasses?`][l]), p, near(r, p, { also: [part, 100 - p], step: 5, min: 1 }), X((l) => [`${part} de ${tot}: pásalo a «de cada 100» multiplicando arriba y abajo por ${100 / tot}.`, `${part} de ${tot}: passa-ho a «de cada 100» multiplicant dalt i baix per ${100 / tot}.`, `${part} out of ${tot}: turn it into "out of 100" by multiplying top and bottom by ${100 / tot}.`][l])); }
+  const CV: [string, string, number][] = [['1/2', '50 %', 0.5], ['1/4', '25 %', 0.25], ['3/4', '75 %', 0.75], ['1/10', '10 %', 0.1], ['1/5', '20 %', 0.2], ['2/5', '40 %', 0.4]];
+  const [f, p, d] = pick(r, CV); const others = CV.filter((x) => x[1] !== p);
+  return r() < 0.5 ? mc(X((l) => [`¿Qué porcentaje es la fracción ${f}?`, `Quin percentatge és la fracció ${f}?`, `What percentage is the fraction ${f}?`][l]), S(p), pickN(r, others, 3).map((x) => S(x[1])), T('Busca una fracción equivalente con denominador 100.', 'Busca una fracció equivalent amb denominador 100.', 'Find an equivalent fraction with denominator 100.'))
+    : q(X((l) => [`Escribe ${p} como número decimal.`, `Escriu ${p} com a nombre decimal.`, `Write ${p} as a decimal.`][l]), d, pickN(r, others, 3).map((x) => x[2]), T('Divide entre 100: mueve la coma dos lugares a la izquierda.', 'Dividix entre 100: mou la coma dos llocs a l’esquerra.', 'Divide by 100: move the decimal point two places left.'));
+};
+/** Direct proportion: rule of three, unit value, tables. */
+export const proportion = (): Gen => (r) => {
+  const ITEMS: [T3, T3][] = [[T('cuadernos', 'quaderns', 'exercise books'), T('€', '€', '€')], [T('kilos de naranjas', 'quilos de taronges', 'kilos of oranges'), T('€', '€', '€')], [T('entradas', 'entrades', 'tickets'), T('€', '€', '€')]];
+  const [it] = pick(r, ITEMS); const unit = int(r, 2, 9), a = int(r, 2, 6), b = int(r, 3, 12); if (a === b) return proportion()(r);
+  if (r() < 0.6) return q(X((l) => [`${a} ${it[0]} cuestan ${N(l, a * unit)} €. ¿Cuánto cuestan ${b}?`, `${a} ${it[1]} costen ${N(l, a * unit)} €. Quant en costen ${b}?`, `${a} ${it[2]} cost €${N(l, a * unit)}. How much do ${b} cost?`][l]), b * unit, near(r, b * unit, { also: [a * unit + b, b * a, (a * unit * a) / b].filter((x) => Number.isInteger(x) && x > 0) }),
+    X((l) => [`Primero halla lo que cuesta 1: ${a * unit} ÷ ${a} = ${unit}. Después multiplica por ${b}.`, `Primer troba el que costa 1: ${a * unit} ÷ ${a} = ${unit}. Després multiplica per ${b}.`, `First find the cost of 1: ${a * unit} ÷ ${a} = ${unit}. Then multiply by ${b}.`][l]), { visual: { type: 'table', head: [it[LIFIX], '€'], rows: [[String(a), String(a * unit)], ['1', '?'], [String(b), '?']] } });
+  const k = int(r, 2, 5), x = int(r, 2, 9); return q(X((l) => [`En una tabla de proporcionalidad, 1 → ${k}. ¿Qué corresponde a ${x}?`, `En una taula de proporcionalitat, 1 → ${k}. Què correspon a ${x}?`, `In a proportion table, 1 → ${k}. What goes with ${x}?`][l]), k * x, near(r, k * x, { also: [k + x, x] }), X((l) => [`Cada valor se multiplica por ${k}.`, `Cada valor es multiplica per ${k}.`, `Each value is multiplied by ${k}.`][l]));
+};
+const LIFIX = 0;
+/** Negative numbers: compare, order, temperatures, positions on the line. */
+export const negatives = (): Gen => (r) => {
+  const k = int(r, 0, 2);
+  if (k === 0) { const a = int(r, -15, 10), b = int(r, -15, 10); if (a === b) return negatives()(r); return compareQ(r, [a, b, int(r, -15, 10)].filter((x, i, arr) => arr.indexOf(x) === i), r() < 0.5, T('En la recta, más a la derecha es mayor: −2 es mayor que −7.', 'En la recta, més a la dreta és major: −2 és major que −7.', 'On the number line, further right is bigger: −2 is bigger than −7.'), { visual: line(-15, 10, 1, 5) }); }
+  if (k === 1) { const t = int(r, -8, 6), d = int(r, 2, 12), up = r() < 0.5, ans = up ? t + d : t - d; return q(X((l) => [`Por la mañana hay ${N(l, t)} °C. ${up ? 'Sube' : 'Baja'} ${d} grados. ¿Qué temperatura hay ahora?`, `Pel matí fa ${N(l, t)} °C. ${up ? 'Puja' : 'Baixa'} ${d} graus. Quina temperatura fa ara?`, `In the morning it is ${N(l, t)} °C. It ${up ? 'rises' : 'falls'} ${d} degrees. What is the temperature now?`][l]), ans, near(r, ans, { min: -30, also: [-ans, up ? t - d : t + d] }), T('Muévete por la recta: subir es ir a la derecha; bajar, a la izquierda.', 'Mou-te per la recta: pujar és anar a la dreta; baixar, a l’esquerra.', 'Move along the line: rising is right; falling is left.'), { aid: line(-20, 20, 1, 5, t) }); }
+  const v = int(r, -9, -1); return q(T('¿Qué número marca la flecha?', 'Quin nombre marca la fletxa?', 'Which number is the arrow pointing to?'), v, near(r, v, { min: -12, also: [-v, v + 1] }), T('A la izquierda del 0 los números son negativos: cuenta hacia la izquierda desde 0.', 'A l’esquerra del 0 els nombres són negatius: compta cap a l’esquerra des de 0.', 'Left of 0 the numbers are negative: count left from 0.'), { visual: line(-10, 5, 1, 5, v), mc: false });
+};
+/** LCM and HCF of two small numbers. */
+export const lcmGcd = (): Gen => (r) => {
+  const isL = r() < 0.5; const a = int(r, 2, 12), b = int(r, 2, 15); if (a === b) return lcmGcd()(r); const ans = isL ? lcm(a, b) : gcd(a, b);
+  return q(X((l) => isL ? [`m.c.m. (${a}, ${b}) = ?`, `m.c.m. (${a}, ${b}) = ?`, `LCM of ${a} and ${b} = ?`][l] : [`m.c.d. (${a}, ${b}) = ?`, `m.c.d. (${a}, ${b}) = ?`, `HCF of ${a} and ${b} = ?`][l]), ans, near(r, ans, { min: 1, also: [a * b, gcd(a, b), lcm(a, b), Math.max(a, b)].filter((x) => x !== ans) }),
+    isL ? T('El mínimo común múltiplo es el número más pequeño que está en las dos tablas.', 'El mínim comú múltiple és el nombre més xicotet que està en les dues taules.', 'The lowest common multiple is the smallest number in both times tables.') : T('El máximo común divisor es el número más grande que divide a los dos.', 'El màxim comú divisor és el nombre més gran que dividix els dos.', 'The highest common factor is the biggest number that divides both.'));
+};
+/** Order of operations (brackets, × ÷ before + −). */
+export const orderOps = (max = 10): Gen => (r) => {
+  const a = int(r, 2, max), b = int(r, 2, max), c = int(r, 2, max), k = int(r, 0, 2);
+  if (k === 0) return q(X((l) => `${N(l, a)} + ${N(l, b)} × ${N(l, c)} = ?`), a + b * c, near(r, a + b * c, { also: [(a + b) * c] }), T('Primero se multiplica, después se suma.', 'Primer es multiplica, després se suma.', 'Multiply first, then add.'));
+  if (k === 1) return q(X((l) => `(${N(l, a)} + ${N(l, b)}) × ${N(l, c)} = ?`), (a + b) * c, near(r, (a + b) * c, { also: [a + b * c] }), T('Primero lo que hay dentro del paréntesis.', 'Primer el que hi ha dins del parèntesi.', 'Brackets first.'));
+  const big = a * b + c; return q(X((l) => `${N(l, big)} − ${N(l, a)} × ${N(l, b)} = ?`), c, near(r, c, { also: [(big - a) * b].filter((x) => x > 0), min: 0 }), T('La multiplicación va antes que la resta.', 'La multiplicació va abans que la resta.', 'Multiplication comes before subtraction.'));
+};
+/** Circle: circumference and area with π ≈ 3,14. */
+export const circle = (kinds: ('len' | 'area')[]): Gen => (r) => {
+  const k = pick(r, kinds), rad = int(r, 1, 10), useD = k === 'len' && r() < 0.5;
+  if (k === 'len') { const L = round(2 * 3.14 * rad, 2); return q(X((l) => useD ? [`¿Cuánto mide la circunferencia de diámetro ${N(l, 2 * rad)} cm? (π ≈ ${N(l, 3.14)})`, `Quant mesura la circumferència de diàmetre ${N(l, 2 * rad)} cm? (π ≈ ${N(l, 3.14)})`, `What is the circumference of a circle with diameter ${N(l, 2 * rad)} cm? (π ≈ ${N(l, 3.14)})`][l] : [`¿Cuánto mide la circunferencia de radio ${N(l, rad)} cm? (π ≈ ${N(l, 3.14)})`, `Quant mesura la circumferència de radi ${N(l, rad)} cm? (π ≈ ${N(l, 3.14)})`, `What is the circumference of a circle with radius ${N(l, rad)} cm? (π ≈ ${N(l, 3.14)})`][l]), L,
+    [round(3.14 * rad, 2), round(3.14 * rad * rad, 2), round(4 * 3.14 * rad, 2)].filter((x) => x !== L), T('Longitud = π × diámetro = 2 × π × radio.', 'Longitud = π × diàmetre = 2 × π × radi.', 'Circumference = π × diameter = 2 × π × radius.'), { mc: true }); }
+  const A = round(3.14 * rad * rad, 2); return q(X((l) => [`¿Cuál es el área de un círculo de radio ${N(l, rad)} cm? (π ≈ ${N(l, 3.14)})`, `Quina és l’àrea d’un cercle de radi ${N(l, rad)} cm? (π ≈ ${N(l, 3.14)})`, `What is the area of a circle with radius ${N(l, rad)} cm? (π ≈ ${N(l, 3.14)})`][l]), A,
+    [round(2 * 3.14 * rad, 2), round(3.14 * 2 * rad * 2 * rad, 2), round(3.14 * rad, 2)].filter((x) => x !== A), T('Área = π × radio × radio.', 'Àrea = π × radi × radi.', 'Area = π × radius × radius.'), { mc: true });
+};
+/** Volume of cuboids and unit conversions of volume/capacity. */
+export const volume = (): Gen => (r) => {
+  const a = int(r, 2, 8), b = int(r, 2, 8), c = int(r, 2, 8);
+  if (r() < 0.6) return q(X((l) => [`¿Cuál es el volumen de una caja de ${a} cm × ${b} cm × ${c} cm (en cm³)?`, `Quin és el volum d’una caixa de ${a} cm × ${b} cm × ${c} cm (en cm³)?`, `What is the volume of a ${a} cm × ${b} cm × ${c} cm box (in cm³)?`][l]), a * b * c, near(r, a * b * c, { also: [a + b + c, a * b, 2 * (a * b + b * c + a * c)] }), T('Volumen = largo × ancho × alto.', 'Volum = llarg × ample × alt.', 'Volume = length × width × height.'));
+  const L = int(r, 1, 9); return q(X((l) => [`Un acuario de ${L} dm³, ¿cuántos litros de agua caben?`, `Un aquari de ${L} dm³, quants litres d’aigua hi caben?`, `A ${L} dm³ fish tank: how many litres of water does it hold?`][l]), L, [L * 10, L * 1000, L * 100], T('1 dm³ = 1 litro.', '1 dm³ = 1 litre.', '1 dm³ = 1 litre.'));
+};
+/** Scales on maps and plans. */
+export const scale = (): Gen => (r) => {
+  const s = pick(r, [100, 200, 500, 1000, 50000, 100000]), cm = int(r, 2, 12); const realCm = cm * s;
+  const unit = s >= 50000 ? 'km' : 'm', real = s >= 50000 ? realCm / 100000 : realCm / 100;
+  return q(X((l) => [`En un ${s >= 50000 ? 'mapa' : 'plano'} a escala 1:${N(l, s)}, una distancia mide ${cm} cm. ¿Cuántos ${unit} mide en la realidad?`, `En un ${s >= 50000 ? 'mapa' : 'plànol'} a escala 1:${N(l, s)}, una distància mesura ${cm} cm. Quants ${unit} mesura en la realitat?`, `On a ${s >= 50000 ? 'map' : 'plan'} at a scale of 1:${N(l, s)}, a distance is ${cm} cm. How many ${unit} is it in real life?`][l]), real,
+    near(r, real, { also: [real * 10, real / 10, cm * s], step: real || 1 }).filter((x) => x > 0), X((l) => [`Cada cm del ${s >= 50000 ? 'mapa' : 'plano'} son ${N(l, s)} cm reales. Multiplica y pasa a ${unit}.`, `Cada cm del ${s >= 50000 ? 'mapa' : 'plànol'} són ${N(l, s)} cm reals. Multiplica i passa a ${unit}.`, `Each cm on the ${s >= 50000 ? 'map' : 'plan'} is ${N(l, s)} cm in real life. Multiply and convert to ${unit}.`][l]));
+};
+/** Two-way tables and tree diagrams: count outcomes. */
+export const combos = (): Gen => (r) => {
+  const a = int(r, 2, 4), b = int(r, 2, 4);
+  const opts: [T3, T3][] = [[T('camisetas', 'samarretes', 'T-shirts'), T('pantalones', 'pantalons', 'pairs of trousers')], [T('primeros platos', 'primers plats', 'starters'), T('postres', 'postres', 'desserts')], [T('sabores de helado', 'sabors de gelat', 'ice-cream flavours'), T('tipos de cucurucho', 'tipus de cucurutxo', 'kinds of cone')]];
+  const [x, y] = pick(r, opts);
+  return q(X((l) => [`Tengo ${a} ${x[0]} y ${b} ${y[0]}. ¿Cuántas combinaciones distintas puedo hacer con uno de cada?`, `Tinc ${a} ${x[1]} i ${b} ${y[1]}. Quantes combinacions diferents puc fer amb un de cada?`, `I have ${a} ${x[2]} and ${b} ${y[2]}. How many different combinations can I make with one of each?`][l]), a * b, near(r, a * b, { also: [a + b, a * b + 1] }),
+    X((l) => [`Haz un diagrama de árbol: de cada una de las ${a} salen ${b} ramas. ${a} × ${b}.`, `Fes un diagrama d’arbre: de cadascuna de les ${a} ixen ${b} branques. ${a} × ${b}.`, `Draw a tree diagram: each of the ${a} has ${b} branches. ${a} × ${b}.`][l]),
+    { visual: { type: 'table', head: ['', ...Array.from({ length: b }, (_, j) => String.fromCharCode(65 + j))], rows: Array.from({ length: a }, (_, i) => [String(i + 1), ...Array.from({ length: b }, (_, j) => `${i + 1}${String.fromCharCode(65 + j)}`)]) } });
+};
+/** Divisibility rules (2, 3, 5, 9, 10). */
+export const divisibility = (): Gen => (r) => {
+  const d = pick(r, [2, 3, 5, 9, 10]); const yes = r() < 0.5; let n = int(r, 100, 999); if (yes) n = n - (n % d); else if (n % d === 0) n += 1;
+  const RULE: Record<number, T3> = { 2: T('Es divisible por 2 si acaba en cifra par.', 'És divisible per 2 si acaba en xifra parell.', 'It divides by 2 if it ends in an even digit.'), 3: T('Es divisible por 3 si la suma de sus cifras es múltiplo de 3.', 'És divisible per 3 si la suma de les xifres és múltiple de 3.', 'It divides by 3 if its digits add up to a multiple of 3.'), 5: T('Es divisible por 5 si acaba en 0 o en 5.', 'És divisible per 5 si acaba en 0 o en 5.', 'It divides by 5 if it ends in 0 or 5.'), 9: T('Es divisible por 9 si la suma de sus cifras es múltiplo de 9.', 'És divisible per 9 si la suma de les xifres és múltiple de 9.', 'It divides by 9 if its digits add up to a multiple of 9.'), 10: T('Es divisible por 10 si acaba en 0.', 'És divisible per 10 si acaba en 0.', 'It divides by 10 if it ends in 0.') };
+  const ok = n % d === 0;
+  return mc(X((l) => [`¿Es ${N(l, n)} divisible por ${d}?`, `${N(l, n)} és divisible per ${d}?`, `Is ${N(l, n)} divisible by ${d}?`][l]), ok ? T('Sí', 'Sí', 'Yes') : T('No', 'No', 'No'), [ok ? T('No', 'No', 'No') : T('Sí', 'Sí', 'Yes')], RULE[d]);
+};
+/** Area units: m², dm², cm² (each step ×100). */
+export const areaUnits = (): Gen => (r) => {
+  const P: [string, string, number][] = [['m²', 'dm²', 100], ['dm²', 'cm²', 100], ['m²', 'cm²', 10000], ['km²', 'hm²', 100], ['ha', 'm²', 10000]];
+  const [a, b, f] = pick(r, P); const v = int(r, 1, 9), down = r() < 0.6;
+  return down ? q(X((l) => `${N(l, v)} ${a} = ? ${b}`), v * f, [v * f / 10, v * f * 10, v * 10, v * 100].filter((x) => x !== v * f), X((l) => [`En superficie cada escalón es × 100. De ${a} a ${b}: × ${N(l, f)}.`, `En superfície cada graó és × 100. De ${a} a ${b}: × ${N(l, f)}.`, `For area each step is × 100. From ${a} to ${b}: × ${N(l, f)}.`][l]))
+    : q(X((l) => `${N(l, v * f)} ${b} = ? ${a}`), v, [v * 10, v * 100, round(v / 10, 2)].filter((x) => x !== v), X((l) => [`En superficie cada escalón es ÷ 100. De ${b} a ${a}: ÷ ${N(l, f)}.`, `En superfície cada graó és ÷ 100. De ${b} a ${a}: ÷ ${N(l, f)}.`, `For area each step is ÷ 100. From ${b} to ${a}: ÷ ${N(l, f)}.`][l]));
+};
+/** Similar shapes: scale factor and missing side. */
+export const similar = (): Gen => (r) => {
+  const k = int(r, 2, 4), a = int(r, 2, 8), b = int(r, 2, 8);
+  return q(X((l) => [`Un rectángulo de ${a} × ${b} cm se amplía al ${k === 2 ? 'doble' : k === 3 ? 'triple' : 'cuádruple'}. ¿Cuánto mide el lado que medía ${a} cm?`, `Un rectangle de ${a} × ${b} cm s’amplia al ${k === 2 ? 'doble' : k === 3 ? 'triple' : 'quàdruple'}. Quant mesura el costat que mesurava ${a} cm?`, `An ${a} × ${b} cm rectangle is enlarged ${k === 2 ? 'to double size' : k === 3 ? 'to three times the size' : 'to four times the size'}. How long is the side that was ${a} cm?`][l]), a * k, near(r, a * k, { also: [a + k, b * k, a * k * k] }),
+    X((l) => [`En figuras semejantes todos los lados se multiplican por el mismo número (×${k}).`, `En figures semblants tots els costats es multipliquen pel mateix nombre (×${k}).`, `In similar shapes every side is multiplied by the same number (×${k}).`][l]), { visual: { type: 'shape', pts: [[0, 0], [a, 0], [a, b], [0, b]], labels: [String(a), String(b), '', ''] } });
+};
+/** Probability as a number from 0 to 1 (or as a fraction). */
+export const probScale = (): Gen => (r) => {
+  const n = int(r, 4, 10), f = int(r, 0, n); const g = gcd(f, n);
+  const ans = f === 0 ? '0' : f === n ? '1' : `${f / g}/${n / g}`;
+  return q(X((l) => [`En una bolsa hay ${n} bolas y ${f} son rojas. ¿Cuál es la probabilidad de sacar roja? (0, 1 o una fracción simplificada)`, `En una bossa hi ha ${n} boles i ${f} són roges. Quina és la probabilitat de traure roja? (0, 1 o una fracció simplificada)`, `A bag holds ${n} balls and ${f} are red. What is the probability of red? (0, 1 or a fraction in its simplest form)`][l]), ans,
+    [`${n - f}/${n}`, `${f}/${n - f || 1}`, f === 0 ? '1' : '0', `1/${n}`].filter((x) => x !== ans && x !== `${f}/${n}`), T('Probabilidad = casos favorables ÷ casos posibles. Imposible = 0; seguro = 1.', 'Probabilitat = casos favorables ÷ casos possibles. Impossible = 0; segur = 1.', 'Probability = favourable outcomes ÷ possible outcomes. Impossible = 0; certain = 1.'), { visual: { type: 'emoji', rows: ['🔴'.repeat(f) + '⚪'.repeat(n - f)] } });
+};
+/** Relative frequency from an experiment. */
+export const relFreq = (): Gen => (r) => {
+  const n = pick(r, [10, 20, 50, 100]), h = int(r, 1, n - 1); const g = gcd(h, n);
+  return q(X((l) => [`Lanzo una chincheta ${n} veces y cae con la punta hacia arriba ${h} veces. ¿Cuál es la frecuencia relativa de «punta arriba»? (fracción simplificada)`, `Llance una xinxeta ${n} vegades i cau amb la punta cap amunt ${h} vegades. Quina és la freqüència relativa de «punta amunt»? (fracció simplificada)`, `I drop a drawing pin ${n} times and it lands point up ${h} times. What is the relative frequency of "point up"? (simplest form)`][l]), `${h / g}/${n / g}`,
+    [`${n - h}/${n}`, `${h}/${n - h}`, `1/${h}`].filter((x) => x !== `${h / g}/${n / g}`), T('Frecuencia relativa = veces que pasa ÷ veces que lo intento. Con muchas pruebas, se acerca a la probabilidad.', 'Freqüència relativa = vegades que passa ÷ vegades que ho intente. Amb moltes proves, s’acosta a la probabilitat.', 'Relative frequency = times it happens ÷ number of tries. With many tries it gets close to the probability.'));
+};
+/** Pie charts: what part of the whole, or how many people. */
+export const pieChart = (): Gen => (r) => {
+  const d = pick(r, [2, 4, 8, 10]), n = int(r, 1, d - 1), tot = d * int(r, 2, 10), ans = (tot / d) * n; const g = gcd(n, d);
+  return q(X((l) => [`El sector coloreado es ${n / g}/${d / g} del círculo. Si respondieron ${tot} personas, ¿cuántas eligieron esa opción?`, `El sector acolorit és ${n / g}/${d / g} del cercle. Si van respondre ${tot} persones, quantes van triar eixa opció?`, `The shaded slice is ${n / g}/${d / g} of the circle. If ${tot} people answered, how many chose that option?`][l]), ans, near(r, ans, { also: [tot - ans, tot / d], min: 1 }),
+    X((l) => [`${n / g}/${d / g} de ${tot}: divide ${tot} entre ${d / g} y multiplica por ${n / g}.`, `${n / g}/${d / g} de ${tot}: dividix ${tot} entre ${d / g} i multiplica per ${n / g}.`, `${n / g}/${d / g} of ${tot}: divide ${tot} by ${d / g} and multiply by ${n / g}.`][l]), { visual: { type: 'frac', n, d, shape: 'circle' } });
+};
+/** Spreadsheet formulas with cells. */
+export const spreadsheet = (): Gen => (r) => {
+  const a = int(r, 2, 20), b = int(r, 2, 20), c = int(r, 2, 9); const k = int(r, 0, 3);
+  const v: Visual = { type: 'table', head: ['', 'A', 'B', 'C'], rows: [['1', String(a), String(b), String(c)]] };
+  const F: [string, number][] = [['=A1+B1', a + b], ['=A1*C1', a * c], ['=SUMA(A1:C1)', a + b + c], ['=B1-C1', b - c]];
+  const [f, ans] = F[k];
+  return q(X((l) => [`En la hoja de cálculo, ¿qué número aparece en la celda con la fórmula ${l === 2 ? f.replace('SUMA', 'SUM') : l === 1 ? f : f}?`, `En el full de càlcul, quin nombre apareix en la cel·la amb la fórmula ${f}?`, `In the spreadsheet, what number appears in a cell with the formula ${f.replace('SUMA', 'SUM')}?`][l]), ans,
+    near(r, ans, { also: [a + b + c, a * b, a + c].filter((x) => x !== ans), min: -20 }), T('Cada celda se nombra por su columna (letra) y su fila (número). Sustituye y calcula. * es multiplicar.', 'Cada cel·la es nomena per la columna (lletra) i la fila (nombre). Substituïx i calcula. * és multiplicar.', 'Each cell is named by its column (letter) and row (number). Substitute and calculate. * means multiply.'), { visual: v });
 };
