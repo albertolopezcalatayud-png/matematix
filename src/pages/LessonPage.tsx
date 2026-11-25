@@ -207,7 +207,7 @@ function QExercise({ qq, level, seed, onDone, keys }: { qq: Q; level: Level; see
   const long = options.some((o) => isText(o) && tr(lang, o).length > 18);
 
   return (
-    <section className={`card isl-top space-y-4 pop ${state === 'right' ? 'burst' : ''}`} data-testid="exercise" data-answer={answer} data-typed={typed ? '1' : '0'}>
+    <section className={`card isl-top space-y-4 pop ${state === 'right' ? 'burst' : ''}`} data-testid="exercise" data-answer={answer} data-raw={isText(qq.a) ? "" : String(qq.a)} data-typed={typed ? "1" : "0"}>
       <div className="flex items-start gap-2">
         <h2 className={`${prompt.length > 80 ? 'text-xl' : 'text-2xl'} font-extrabold flex-1 leading-snug`} data-testid="prompt">{prompt}</h2>
         <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>
