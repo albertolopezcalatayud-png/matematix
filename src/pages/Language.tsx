@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { VOICE_ON } from '@/config';
 import { useT } from '@/i18n';
 import { useApp } from '@/stores/app';
 import { speak } from '@/services/speech';
@@ -25,7 +26,7 @@ export default function Language() {
           <div key={o.lang} className="flex gap-2">
             <button className={`btn flex-1 text-lg ${current === o.lang ? 'btn-primary' : 'btn-ghost'}`} data-testid={`lang-${o.lang}`} aria-pressed={current === o.lang}
               onClick={() => { set({ lang: o.lang }); nav(-1); }}>{current === o.lang ? '✓ ' : ''}{o.name}</button>
-            <button className="btn btn-ghost" aria-label={`${o.name}: ${o.hello}`} onClick={() => void speak(o.lang, o.hello)}>🔊</button>
+            {VOICE_ON && <button className="btn btn-ghost" aria-label={`${o.name}: ${o.hello}`} onClick={() => void speak(o.lang, o.hello)}>🔊</button>}
           </div>
         ))}
       </main>

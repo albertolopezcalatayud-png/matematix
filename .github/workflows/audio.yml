@@ -5,9 +5,6 @@ name: Natural voices
 # Only missing clips are generated; when time runs out it starts itself again and carries on.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths: ['src/course/**', 'src/i18n/**', 'scripts/audio/**', '.github/workflows/audio.yml']
 
 permissions:
   contents: write

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VOICE_ON } from '@/config';
 import { Link, useNavigate } from 'react-router-dom';
 import { useT } from '@/i18n';
 import { useApp } from '@/stores/app';
@@ -31,8 +32,8 @@ export default function Settings() {
             <span className="flex-1">{t('set_lang')}</span>
             <Link to="/idioma" className="btn btn-ghost !min-h-10">🌐 {s.lang === 'ca' ? 'Valencià' : s.lang === 'en' ? 'English (UK)' : 'Castellano'} ›</Link>
           </div>
-          <Toggle id="voice" label={t('set_voice')} value={s.voice} onChange={(v) => s.set({ voice: v })} />
-          {s.voice && <VoicePicker />}
+          {VOICE_ON && <Toggle id="voice" label={t('set_voice')} value={s.voice} onChange={(v) => s.set({ voice: v })} />}
+          {VOICE_ON && s.voice && <VoicePicker />}
           <Toggle id="size" label={t('set_size')} value={s.large} onChange={(v) => s.set({ large: v })} />
           <Toggle id="motion" label={t('set_motion')} value={s.motion === 'reduce'} onChange={(v) => s.set({ motion: v ? 'reduce' : 'auto' })} />
           <Toggle id="rest" label={t('set_rest')} value={s.rest} onChange={(v) => s.set({ rest: v })} />

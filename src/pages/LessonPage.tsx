@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { VOICE_ON } from '@/config';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useT } from '@/i18n';
 import { useApp } from '@/stores/app';
@@ -74,7 +75,7 @@ function LessonBody({ id, where, content }: { id: string; where: NonNullable<Ret
             <section className="card isl-top space-y-3 pop" data-testid="idea">
               <div className="flex items-start gap-2">
                 <h2 className="text-xl font-extrabold flex-1">💡 {t('explain_title')}</h2>
-                <button className="btn btn-ghost !min-h-10 !px-3" onClick={() => void speak(lang, content.explain.map((x) => tr(lang, x)))} aria-label={t('listen')}>🔊</button>
+                {VOICE_ON && <button className="btn btn-ghost !min-h-10 !px-3" onClick={() => void speak(lang, content.explain.map((x) => tr(lang, x)))} aria-label={t('listen')}>🔊</button>}
               </div>
               {content.explain.map((x, i) => <p key={i} className="text-lg leading-relaxed" data-testid="idea-text">{tr(lang, x)}</p>)}
             </section>
@@ -92,7 +93,7 @@ function LessonBody({ id, where, content }: { id: string; where: NonNullable<Ret
                   ))}
                 </ol>
                 <div className="flex gap-2">
-                  <button className="btn btn-ghost !px-3" onClick={() => void speak(lang, [tr(lang, ex.q), ...ex.steps.slice(0, step + 1).map((s) => tr(lang, s))])} aria-label={t('listen')}>🔊</button>
+                  {VOICE_ON && <button className="btn btn-ghost !px-3" onClick={() => void speak(lang, [tr(lang, ex.q), ...ex.steps.slice(0, step + 1).map((s) => tr(lang, s))])} aria-label={t('listen')}>🔊</button>}
                   {step + 1 < ex.steps.length
                     ? <button className="btn btn-primary flex-1" data-testid="next-step" onClick={() => setStep(step + 1)}>{t('show_next_step')} ▶</button>
                     : <button className="btn btn-primary flex-1" data-testid="to-levels" onClick={() => setStage('levels')}>{t('to_practice')} ▶</button>}
@@ -207,7 +208,7 @@ function QExercise({ qq, level, seed, onDone, keys }: { qq: Q; level: Level; see
     <section className={`card isl-top space-y-4 pop ${state === 'right' ? 'burst' : ''}`} data-testid="exercise" data-answer={answer} data-raw={isText(qq.a) ? "" : String(qq.a)} data-typed={typed ? "1" : "0"}>
       <div className="flex items-start gap-2">
         <h2 className={`${prompt.length > 80 ? 'text-xl' : 'text-2xl'} font-extrabold flex-1 leading-snug`} data-testid="prompt">{prompt}</h2>
-        <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>
+        {VOICE_ON && <button className="btn btn-ghost !min-h-11 !px-3" onClick={() => void speak(lang, prompt)} aria-label={t('listen')}>🔊</button>}
       </div>
 
       {(showHint || state !== 'ask') && (
