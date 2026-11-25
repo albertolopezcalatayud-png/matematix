@@ -85,6 +85,8 @@ function unitWords(lang: Lang, text: string): string {
 }
 
 export function speakable(lang: Lang, text: string): string {
+  // A symbol in brackets after its name is not read: «1 metro (m)» is said «1 metro», not «1 metro metros».
+  text = text.replace(/\s*\((?:[^()\s\d]{1,5}|°C|[a-zA-Z]{1,3}[²³])\)/gu, '');
   const w = { es: ['más', 'menos', 'por', 'es igual a', 'cuánto'], ca: ['més', 'menys', 'per', 'és igual a', 'quant'], en: ['plus', 'minus', 'times', 'equals', 'what'] }[lang];
   const sup = (x: string) => x.split('').map((c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).join('');
   const pw = { es: ['elevado a', 'por', 'entre'], ca: ['elevat a', 'per', 'entre'], en: ['to the power of', 'times', 'divided by'] }[lang];
