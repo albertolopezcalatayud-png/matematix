@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['src/data/**', 'src/i18n/**', 'scripts/audio/**', '.github/workflows/audio.yml']
+    paths: ['src/course/**', 'src/i18n/**', 'scripts/audio/**', '.github/workflows/audio.yml']
 
 permissions:
   contents: write
@@ -54,7 +54,7 @@ jobs:
           curl -sfL --retry 3 --max-time 900 $R/kokoro-v1.0.onnx -o /tmp/voices/kokoro-v1.0.onnx
           curl -sfL --retry 3 --max-time 900 $R/voices-v1.0.bin -o /tmp/voices/voices-v1.0.bin
       - name: Texts
-        run: npx tsx --tsconfig tsconfig.app.json scripts/audio/collect.ts > /tmp/texts.json && python -c "import json;d=json.load(open('/tmp/texts.json'));print({k:len(v) for k,v in d.items()})"
+        run: npx vite-node scripts/audio/collect.ts > /tmp/texts.json && python -c "import json;d=json.load(open('/tmp/texts.json'));print({k:len(v) for k,v in d.items()})"
       - name: Generate
         env: { MAX_MINUTES: "290" }
         run: python scripts/audio/generate.py /tmp/texts.json /tmp/voices audio-out
