@@ -126,3 +126,15 @@ export const Nq = (qq: string, a: number, w: number[], h: string, extra: Partial
 export const TF = (statement: string, isTrue: boolean, h: string): Q => tf(L(statement), isTrue, L(h));
 /** A whole written lesson. */
 export const lesson = (explain: string[], exQ: string, steps: string[], bank: Q[], visual?: Visual): LessonContent => ({ explain: explain.map(L), example: { q: L(exQ), steps: steps.map(L), ...(visual ? { visual } : {}) }, bank });
+
+/** Picks one of several generators at random. */
+export const mix = (...gs: ((r: R) => Q)[]) => (r: R): Q => gs[int(r, 0, gs.length - 1)](r);
+/** A lesson with a generator (and optionally a few written questions). */
+export const glesson = (explain: string[], exQ: string, steps: string[], make: (r: R) => Q, bank: Q[] = [], visual?: Visual): LessonContent => ({ ...lesson(explain, exQ, steps, bank, visual), make });
+
+/** Writes hyphen-minus before digits as a true minus sign (−) in every text of a question. */
+export const fixMinus = (qq: Q): Q => {
+  const g = (x: string) => x.replace(/(^|[(\s,=])-(\d)/g, '$1−$2'); const f = (t: T3): T3 => [g(t[0]), g(t[1]), g(t[2])];
+  const fa = (a: Ans): Ans => (Array.isArray(a) ? f(a as T3) : a);
+  return { ...qq, q: f(qq.q), a: fa(qq.a), wrong: qq.wrong.map(fa), hint: f(qq.hint) };
+};

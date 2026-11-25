@@ -2,7 +2,7 @@
 // (the same kind of exercise with bigger numbers, more steps or less help).
 import type { Visual } from '@/engine/types';
 import type { Q, T3 } from './types';
-import { addQ, compareQ, DAYS, gcd, int, lcm, mc, N, NAMES, near, pick, pickN, q, round, rowsOf, S, subQ, T, THINGS, thing, X, type Li, type R } from './lib';
+import { addQ, compareQ, DAYS, fixMinus, gcd, int, lcm, mc, N, NAMES, near, pick, pickN, q, round, rowsOf, S, subQ, T, THINGS, thing, X, type Li, type R } from './lib';
 
 export type Gen = (r: R) => Q;
 export const line = (min: number, max: number, step: number, labelStep = step, point?: number): Visual => {
@@ -253,7 +253,8 @@ export const area = (maxSide: number, kinds: ('count' | 'rect' | 'tri' | 'square
   return q(X((l) => [`¿Cuál es el área de un rectángulo de ${N(l, w)} ${unit} por ${N(l, h)} ${unit}?`, `Quina és l’àrea d’un rectangle de ${N(l, w)} ${unit} per ${N(l, h)} ${unit}?`, `What is the area of a ${N(l, w)} ${unit} by ${N(l, h)} ${unit} rectangle?`][l]), w * h, near(r, w * h, { also: [2 * (w + h), w + h] }), T('Área del rectángulo: largo × ancho.', 'Àrea del rectangle: llarg × ample.', 'Area of a rectangle: length × width.'), { visual: { type: 'shape', pts: [[0, 0], [w, 0], [w, h], [0, h]], labels: [String(w), String(h), '', ''] } });
 };
 /** Points on a grid: read coordinates, or move with instructions. */
-export const gridPoints = (size: number, moves: boolean, neg = false): Gen => (r) => {
+export const gridPoints = (size: number, moves: boolean, neg = false): Gen => (r) => fixMinus(gridPoints0(size, moves, neg)(r));
+const gridPoints0 = (size: number, moves: boolean, neg = false): Gen => (r) => {
   const x = int(r, neg ? -size : 0, size), y = int(r, neg ? -size : 0, size); const L = pick(r, ['A', 'B', 'C', 'P', 'M']);
   if (!moves) { const right = `(${x}, ${y})`; return mc(X((l) => [`¿Cuáles son las coordenadas del punto ${L}?`, `Quines són les coordenades del punt ${L}?`, `What are the coordinates of point ${L}?`][l]), S(right), [`(${y}, ${x})`, `(${x + 1}, ${y})`, `(${x}, ${y - 1})`, `(${-x}, ${y})`].filter((s) => s !== right).map(S),
     T('Primero cuenta hacia la derecha (x) y después hacia arriba (y).', 'Primer compta cap a la dreta (x) i després cap amunt (y).', 'First count across (x), then up (y).'), { visual: { type: 'grid', w: size, h: size, pts: [{ x, y, label: L }], axes: true, neg } }); }
@@ -288,7 +289,7 @@ export const barChart = (maxV: number, n = 4): Gen => (r) => {
 /** Tally / frequency table from a list of answers. */
 export const tally = (count: number): Gen => (r) => {
   const cats = pickN(r, CAT, 3); const list = Array.from({ length: count }, () => pick(r, cats)); const i = int(r, 0, 2); const f = list.filter((c) => c === cats[i]).length;
-  return q(X((l) => [`Estas son las frutas favoritas de un grupo. ¿Cuántas veces aparece la ${cats[i][1][0]}?`, `Estes són les fruites preferides d’un grup. Quantes vegades apareix la ${cats[i][1][1]}?`, `These are a group's favourite fruits. How many times does ${cats[i][1][2]} appear?`][l]), f,
+  return q(X((l) => [`Estas son las frutas favoritas de un grupo. ¿Cuántas veces aparece ${cats[i][0]}?`, `Estes són les fruites preferides d’un grup. Quantes vegades apareix ${cats[i][0]}?`, `These are a group's favourite fruits. How many times does ${cats[i][0]} appear?`][l]), f,
     near(r, f, { min: 0, also: cats.map((c) => list.filter((x) => x === c).length) }), T('Haz una marca por cada una que encuentres y cuenta las marcas (de 5 en 5).', 'Fes una marca per cada una que trobes i compta les marques (de 5 en 5).', 'Make a tally mark for each one you find and count the marks (in fives).'), { visual: { type: 'emoji', rows: rowsOf('', 0).concat(chunk(list.map((c) => c[0]), 8).map((x) => x.join(''))) } });
 };
 const chunk = <V,>(xs: V[], n: number) => Array.from({ length: Math.ceil(xs.length / n) }, (_, i) => xs.slice(i * n, i * n + n));
