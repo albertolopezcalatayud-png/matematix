@@ -10,6 +10,7 @@ import Progress from '@/pages/Progress';
 import Settings from '@/pages/Settings';
 import Who from '@/pages/Who';
 import { TopBar } from '@/components/Layout';
+import { VoiceStatus } from '@/components/VoicePicker';
 import { Capacitor } from '@capacitor/core';
 import { App as NativeApp } from '@capacitor/app';
 
@@ -57,6 +58,7 @@ export default function App() {
   return (
     <HashRouter>
       <Appearance />
+      <VoiceStatus />
       <Suspense fallback={<p className="p-6 text-center">…</p>}>
       <Routes>
         <Route path="/" element={<Home />} />

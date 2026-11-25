@@ -1,67 +1,46 @@
 import type { Lang } from '@/engine/types';
-import { HTML_LANG, speakable } from '@/i18n';
-import { playClip, stopClip } from './clips';
-import { Capacitor } from '@capacitor/core';
-import { TextToSpeech, QueueStrategy } from '@capacitor-community/text-to-speech';
+import { speakable } from '@/i18n';
+import { useApp } from '@/stores/app';
+import { synth, type Sex } from './tts';
 
-// The Android app's WebView has no Web Speech API: there the device's voice is reached through a plugin.
-const NATIVE = Capacitor.isNativePlatform();
-const TTS_TAG: Record<Lang, string> = { es: 'es-ES', ca: 'ca-ES', en: 'en-GB' };
+/** Reading aloud happens only when 🔊 is pressed, always with the same voice (the chosen female or male voice),
+ *  never with the device's own voice. Long texts are read sentence by sentence: the next sentence is prepared
+ *  while the current one plays, so the first words are heard soon. */
+export const sexFor = (lang: Lang): Sex => (useApp.getState().voices?.[lang] === 'm' ? 'm' : 'f');
 
-// The natural voice when there is a clip for the text, otherwise the device's voice. Several parts are read one
-// after another (each part can have its own clip: "Nearly. Look at the hint…" + the hint).
-let voices: SpeechSynthesisVoice[] = [];
-if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-  const load = () => { voices = window.speechSynthesis.getVoices(); };
-  load();
-  window.speechSynthesis.addEventListener?.('voiceschanged', load);
-}
-
-function pick(lang: Lang): SpeechSynthesisVoice | undefined {
-  const want = { es: ['es-ES', 'es'], ca: ['ca-ES', 'ca', 'es-ES'], en: ['en-GB', 'en'] }[lang];
-  for (const w of want) { const v = voices.find((x) => x.lang.replace('_', '-').toLowerCase().startsWith(w.toLowerCase())); if (v) return v; }
-  return undefined;
-}
-
-/** Device voices: a little slower for clarity, except Valencian, whose device voices already sound slow. */
-const RATE: Record<Lang, number> = { es: 0.9, ca: 1, en: 0.9 };
-
-async function nativeDevice(lang: Lang, text: string): Promise<void> {
-  const limit = Math.max(8000, text.length * 200);
-  await Promise.race([
-    TextToSpeech.speak({ text: speakable(lang, text), lang: TTS_TAG[lang], rate: RATE[lang], pitch: 1, volume: 1, category: 'playback', queueStrategy: QueueStrategy.Flush }).catch(() => {}),
-    new Promise((r) => setTimeout(r, limit)),
-  ]);
-}
-
-function device(lang: Lang, text: string): Promise<void> {
-  if (NATIVE) return nativeDevice(lang, text);
-  return new Promise((resolve) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return resolve();
-    const u = new SpeechSynthesisUtterance(speakable(lang, text));
-    const v = pick(lang);
-    if (v) u.voice = v;
-    u.lang = v?.lang ?? HTML_LANG[lang];
-    u.rate = RATE[lang];
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
-    window.speechSynthesis.speak(u);
-  });
+function sentences(text: string): string[] {
+  // Short pieces: the first one is ready sooner, so the voice starts quickly even on a modest phone.
+  return text.split(/(?<=[.!?…:;])\s+(?=\S)/u)
+    .flatMap((x) => (x.length > 70 ? x.split(/(?<=,)\s+(?=\S)/u) : [x]))
+    .map((x) => x.trim()).filter((x) => /[\p{L}\d]/u.test(x));
 }
 
 let run = 0;
-export async function speak(lang: Lang, text: string | string[]): Promise<void> {
+let current: HTMLAudioElement | null = null;
+
+function play(blob: Blob, my: number): Promise<void> {
+  return new Promise((resolve) => {
+    if (my !== run) return resolve();
+    const url = URL.createObjectURL(blob);
+    const a = new Audio(url);
+    current = a;
+    const end = () => { if (current === a) current = null; URL.revokeObjectURL(url); resolve(); };
+    a.onended = end; a.onerror = end; a.onpause = () => { if (my !== run) end(); };
+    a.play().catch(end);
+  });
+}
+
+export async function speak(lang: Lang, text: string | string[], sex: Sex = sexFor(lang)): Promise<void> {
   const my = ++run;
-  stopSpeech(false);
-  for (const part of Array.isArray(text) ? text : [text]) {
-    if (my !== run || !part.trim()) continue;
-    const played = await playClip(lang, part);
-    if (!played && my === run) await device(lang, part);
+  stopAudio();
+  const parts = (Array.isArray(text) ? text : [text]).flatMap((t) => sentences(speakable(lang, t)));
+  let next: Promise<Blob | null> | null = parts.length ? synth(lang, sex, parts[0]).catch(() => null) : null;
+  for (let i = 0; i < parts.length && my === run; i++) {
+    const blob = await next;
+    next = i + 1 < parts.length ? synth(lang, sex, parts[i + 1]).catch(() => null) : null;
+    if (blob && my === run) await play(blob, my);
   }
 }
-export function stopSpeech(bump = true) {
-  if (bump) run++;
-  stopClip();
-  if (NATIVE) void TextToSpeech.stop().catch(() => {});
-  else if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel();
-}
+
+function stopAudio() { if (current) { current.pause(); current.src = ''; current = null; } }
+export function stopSpeech() { run++; stopAudio(); }
